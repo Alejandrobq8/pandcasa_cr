@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pan d' Casa | Panadería Boutique</title>
+  <link rel="canonical" href="https://pandcasa.com/pages/queques.html">
+  <link rel="stylesheet" href="../dist/tailwind.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+  
+    /* page-transition */
+    @keyframes pageFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    main {
+      animation: pageFadeIn 0.4s ease both;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    body.page-exit main {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      main { animation: none; transition: none; }
+    }
+
+  </style>
+</head>
+<body class="bg-brand-cream text-brand-cocoa font-sans antialiased selection:bg-brand-gold/20 selection:text-brand-cocoa overflow-x-hidden">
+  <!-- Navbar -->
+  <header class="sticky top-0 z-50 bg-brand-cream/80 border-b border-brand-caramel/15">
+    <nav class="max-w-6xl mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/index.html" class="block">
+          <p class="font-serif text-2xl tracking-tight">Pan d’ Casa</p>
+          <p class="text-xs uppercase tracking-[0.25em] text-brand-caramel">Siempre fresco</p>
+        </a>
+      </div>
+      <div class="hidden lg:flex items-center gap-8 text-sm">
+        <a href="/index.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Inicio</a>
+        <a href="/pages/almuerzos.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Almuerzos</a>
+        <a href="/pages/panaderia.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Panadería</a>
+        <a href="/pages/postres.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Postres</a>
+        <a href="/pages/queques.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Queques</a>
+        <a href="/index.html#nosotros" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Nosotros</a>
+        <a href="/index.html#resenas" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Reseñas</a>
+        <a href="/index.html#contacto" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Contacto</a>
+      </div>
+      <div class="hidden lg:flex">
+        <a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="px-5 py-2 rounded-full bg-brand-cocoa text-brand-cream text-sm border border-transparent transition-all duration-200 hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">Ordenar ahora</a>
+      </div>
+      <button id="menuBtn" class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-brand-caramel/30 hover:border-brand-gold/70 transition" aria-label="Abrir menú">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </nav>
+    <div id="mobilePanel" class="fixed inset-0 z-50 hidden">
+      <div id="mobileOverlay" class="absolute inset-0 bg-brand-cocoa/30"></div>
+      <div class="absolute right-0 top-0 h-full w-72 bg-brand-cream/90 backdrop-blur-md border-l border-brand-caramel/20 p-6 flex flex-col">
+        <button id="menuClose" class="self-end w-9 h-9 rounded-full border border-brand-caramel/30" aria-label="Cerrar menú">
+          <svg class="w-5 h-5 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+        <div class="mt-6 flex flex-col gap-4 text-lg">
+          <a href="/index.html" class="py-2 border-b border-brand-caramel/10">Inicio</a>
+          <a href="/pages/almuerzos.html" class="py-2 border-b border-brand-caramel/10">Almuerzos</a>
+          <a href="/pages/panaderia.html" class="py-2 border-b border-brand-caramel/10">Panadería</a>
+          <a href="/pages/postres.html" class="py-2 border-b border-brand-caramel/10">Postres</a>
+          <a href="/pages/queques.html" class="py-2 border-b border-brand-caramel/10">Queques</a>
+          <a href="/index.html#nosotros" class="py-2 border-b border-brand-caramel/10">Nosotros</a>
+          <a href="/index.html#resenas" class="py-2 border-b border-brand-caramel/10">Reseñas</a>
+          <a href="/index.html#contacto" class="py-2 border-b border-brand-caramel/10">Contacto</a>
+        </div>
+        <a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="mt-6 px-5 py-3 rounded-full bg-brand-cocoa text-brand-cream text-center">Ordenar ahora</a>
+      </div>
+    </div>
+  </header>
+
+  
+  <main id="inicio" class="relative z-10">
+    <!-- Hero -->
+    <section class="pt-0 pb-12">
+      <div class="w-full">
+        <div class="relative h-56 md:h-80 w-full bg-brand-beige/40 border-y border-brand-caramel/15 overflow-hidden">
+          <img src="https://www.colbake.com/wp-content/uploads/2019/04/maquinaria-panaderia-colbake.jpg" alt="Pan d’ Casa" class="absolute inset-0 w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-brand-cocoa/70"></div>
+          <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+          <div class="relative h-full w-full flex items-center justify-center text-center px-6">
+            <div class="text-brand-cream max-w-2xl">
+              <p class="text-xs uppercase tracking-[0.35em] text-brand-gold">Pan d’ Casa</p>
+              <h1 class="mt-3 font-serif text-3xl md:text-5xl">Queques</h1>
+              <p class="mt-4 text-sm md:text-base text-brand-cream/85">Queques de casa, húmedos y delicados, horneados cada mañana.</p>
+              <div class="mt-6 flex flex-wrap justify-center gap-3">
+                <a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="px-5 py-3 rounded-full bg-brand-cream text-brand-cocoa text-sm tracking-wide transition hover:translate-y-[-2px] hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">Ordenar por WhatsApp</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Lista -->
+    <section class="bg-brand-beige">
+      <div class="max-w-6xl mx-auto px-6 lg:px-10 py-16">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div>
+            <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Selección del día</p>
+            <h2 class="mt-3 font-serif text-3xl md:text-4xl">Queques boutique</h2>
+          </div>
+          <p class="max-w-lg text-brand-cocoa/75">Piezas curadas para hoy. Pregunta por disponibilidad y recomendaciones.</p>
+        </div>
+        <div class="mt-10">
+        <div id="productGrid" data-category="queques" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-brand-cream">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10 py-12">
+      <div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-10">
+        <div>
+          <h3 class="font-serif text-2xl">Pan d’ Casa</h3>
+          <p class="mt-3 text-brand-cocoa/70">Escríbenos por medio de WhatsApp para atender tus dudas.</p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="px-6 py-3 rounded-full bg-brand-cocoa text-brand-cream text-sm tracking-wide transition hover:translate-y-[-2px] hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">Ir a WhatsApp</a>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-6 text-sm">
+          <div>
+            <p class="text-brand-caramel uppercase tracking-[0.2em] text-xs">Links</p>
+            <ul class="mt-3 space-y-2">
+              <li><a href="/index.html" class="hover:text-brand-gold">Inicio</a></li>
+              <li><a href="/pages/almuerzos.html" class="hover:text-brand-gold">Almuerzos</a></li>
+              <li><a href="/pages/panaderia.html" class="hover:text-brand-gold">Panadería</a></li>
+              <li><a href="/pages/postres.html" class="hover:text-brand-gold">Postres</a></li>
+              <li><a href="/pages/queques.html" class="hover:text-brand-gold">Queques</a></li>
+              <li><a href="/index.html#nosotros" class="hover:text-brand-gold">Nosotros</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-brand-caramel uppercase tracking-[0.2em] text-xs">Redes</p>
+            <ul class="mt-3 space-y-2">
+              <li><a href="#" class="hover:text-brand-gold">Instagram</a></li>
+              <li><a href="#" class="hover:text-brand-gold">TikTok</a></li>
+              <li><a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="hover:text-brand-gold">WhatsApp</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="mt-10 border-t border-brand-caramel/20 pt-6 text-sm text-brand-cocoa/70 flex flex-col md:flex-row md:items-center md:justify-between">
+        <p>© 2026 Pan d’ Casa. Siempre fresco.</p>
+        <p>Hecho con amor.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/app.js"></script>
+
+  <script>
+    (() => {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
+
+      const isModifiedClick = (event) => event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+      document.querySelectorAll('a[href]').forEach((link) => {
+        const href = link.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+        if (link.target === '_blank') return;
+        if (/^(mailto:|tel:|javascript:)/i.test(href)) return;
+        if (/^https?:\/\//i.test(href)) return;
+
+        link.addEventListener('click', (event) => {
+          if (isModifiedClick(event)) return;
+          event.preventDefault();
+          document.body.classList.add('page-exit');
+          setTimeout(() => {
+            window.location.href = href;
+          }, 220);
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

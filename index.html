@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pan d' Casa | Panadería Boutique</title>
+  <link rel="canonical" href="https://pandcasa.com/">
+
+  <meta name="description" content="Panadería boutique en San José, Costa Rica. Pan artesanal, postres y queques hechos hoy. Pedidos por WhatsApp.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#FCFDFC">
+  <meta property="og:title" content="Pan d' Casa | Panadería Boutique">
+  <meta property="og:description" content="Panadería boutique en San José, Costa Rica. Pan artesanal, postres y queques hechos hoy. Pedidos por WhatsApp.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/Logo Pandcasa.png">
+  <meta property="og:locale" content="es_CR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Pan d' Casa | Panadería Boutique">
+  <meta name="twitter:description" content="Panadería boutique en San José, Costa Rica. Pan artesanal, postres y queques hechos hoy. Pedidos por WhatsApp.">
+  <meta name="twitter:image" content="assets/Logo Pandcasa.png">
+
+  <link rel="icon" type="image/png" href="assets/Logo Pandcasa.png">
+  <link rel="apple-touch-icon" href="assets/Logo Pandcasa.png">
+  <link rel="stylesheet" href="dist/tailwind.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+  
+    /* page-transition */
+    @keyframes pageFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    main {
+      animation: pageFadeIn 0.4s ease both;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    body.page-exit main {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      main { animation: none; transition: none; }
+    }
+
+  </style>
+</head>
+<body class="bg-brand-cream text-brand-cocoa font-sans antialiased selection:bg-brand-gold/20 selection:text-brand-cocoa overflow-x-hidden">
+  <!-- Navbar -->
+  <header class="sticky top-0 z-50 bg-brand-cream/80 border-b border-brand-caramel/15">
+    <nav class="max-w-6xl mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/index.html" class="block">
+          <p class="font-serif text-2xl tracking-tight">Pan d’ Casa</p>
+          <p class="text-xs uppercase tracking-[0.25em] text-brand-caramel">Siempre fresco</p>
+        </a>
+      </div>
+      <div class="hidden lg:flex items-center gap-8 text-sm">
+        <a href="/index.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Inicio</a>
+        <a href="/pages/almuerzos.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Almuerzos</a>
+        <a href="/pages/panaderia.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Panadería</a>
+        <a href="/pages/postres.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Postres</a>
+        <a href="/pages/queques.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Queques</a>
+        <a href="/index.html#nosotros" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Nosotros</a>
+        <a href="/index.html#resenas" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Reseñas</a>
+        <a href="/index.html#contacto" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Contacto</a>
+      </div>
+      <div class="hidden lg:flex">
+        <a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="px-5 py-2 rounded-full bg-brand-cocoa text-brand-cream text-sm border border-transparent transition-all duration-200 hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">Ordenar ahora</a>
+      </div>
+      <button id="menuBtn" class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-brand-caramel/30 hover:border-brand-gold/70 transition" aria-label="Abrir menú">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </nav>
+    <div id="mobilePanel" class="fixed inset-0 z-50 hidden">
+      <div id="mobileOverlay" class="absolute inset-0 bg-brand-cocoa/30"></div>
+      <div class="absolute right-0 top-0 h-full w-72 bg-brand-cream/90 backdrop-blur-md border-l border-brand-caramel/20 p-6 flex flex-col">
+        <button id="menuClose" class="self-end w-9 h-9 rounded-full border border-brand-caramel/30" aria-label="Cerrar menú">
+          <svg class="w-5 h-5 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+        <div class="mt-6 flex flex-col gap-4 text-lg">
+          <a href="/index.html" class="py-2 border-b border-brand-caramel/10">Inicio</a>
+          <a href="/pages/almuerzos.html" class="py-2 border-b border-brand-caramel/10">Almuerzos</a>
+          <a href="/pages/panaderia.html" class="py-2 border-b border-brand-caramel/10">Panadería</a>
+          <a href="/pages/postres.html" class="py-2 border-b border-brand-caramel/10">Postres</a>
+          <a href="/pages/queques.html" class="py-2 border-b border-brand-caramel/10">Queques</a>
+          <a href="/index.html#nosotros" class="py-2 border-b border-brand-caramel/10">Nosotros</a>
+          <a href="/index.html#resenas" class="py-2 border-b border-brand-caramel/10">Reseñas</a>
+          <a href="/index.html#contacto" class="py-2 border-b border-brand-caramel/10">Contacto</a>
+        </div>
+        <a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="mt-6 px-5 py-3 rounded-full bg-brand-cocoa text-brand-cream text-center">Ordenar ahora</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Full width hero image -->
+  <section class="w-full">
+    <div class="relative h-80 md:h-[520px] w-full bg-brand-beige/40 border-b border-brand-caramel/15 overflow-hidden">
+      <img src="https://www.colbake.com/wp-content/uploads/2019/04/maquinaria-panaderia-colbake.jpg" alt="Pan d’ Casa" class="absolute inset-0 w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+    </div>
+  </section>
+
+  <main id="inicio" class="relative z-10">
+    <!-- Hero -->
+    <section class="max-w-6xl mx-auto px-6 lg:px-10 pt-16 lg:pt-24 pb-16">
+      <div class="text-center">
+        <p class="text-sm uppercase tracking-[0.35em] text-brand-caramel">Recién salido del horno</p>
+        <h1 class="mt-4 font-serif text-4xl md:text-5xl lg:text-6xl leading-tight">Siempre fresco, siempre Pan d’ Casa.</h1>
+        <p class="mt-6 text-lg text-brand-cocoa/80 leading-relaxed max-w-2xl mx-auto">Originado del ritual de compartir pan: piezas artesanales que se disfrutan hoy, con calma y carácter.</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href="/index.html#nosotros" class="px-6 py-3 rounded-full bg-brand-cocoa text-brand-cream text-sm tracking-wide transition hover:translate-y-[-2px] hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">Conócenos</a>
+          <a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="px-6 py-3 rounded-full border border-brand-caramel/50 text-sm tracking-wide transition hover:translate-y-[-2px] hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">Ordenar por WhatsApp</a>
+        </div>
+      </div>
+      <div class="mt-12 grid lg:grid-cols-12 gap-4">
+        <div class="lg:col-span-7">
+          <div class="relative h-72 md:h-[420px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+            <div class="absolute -top-16 -left-10 w-40 h-40 bg-white/35 rotate-12 blur-2xl"></div>
+            <div class="relative text-center">
+              <p class="font-serif text-2xl">Foto principal</p>
+              <p class="text-sm text-brand-caramel">Panadería artesanal</p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-5 grid gap-4">
+          <div class="relative h-36 md:h-[200px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+            <div class="relative text-center">
+              <p class="font-serif text-xl">Foto 02</p>
+              <p class="text-xs text-brand-caramel">Queques del día</p>
+            </div>
+          </div>
+          <div class="relative h-36 md:h-[200px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+            <div class="relative text-center">
+              <p class="font-serif text-xl">Foto 03</p>
+              <p class="text-xs text-brand-caramel">Postres boutique</p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-4">
+          <div class="relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+            <div class="relative text-center">
+              <p class="font-serif text-xl">Foto 04</p>
+              <p class="text-xs text-brand-caramel">Almuerzos</p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-4">
+          <div class="relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+            <div class="relative text-center">
+              <p class="font-serif text-xl">Foto 05</p>
+              <p class="text-xs text-brand-caramel">Laminados</p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-4">
+          <div class="relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+            <div class="relative text-center">
+              <p class="font-serif text-xl">Foto 06</p>
+              <p class="text-xs text-brand-caramel">Pan dulce</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 grid md:grid-cols-2 gap-6">
+        <div class="rounded-2xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft">
+          <p class="text-xs uppercase tracking-[0.25em] text-brand-caramel">Visítanos</p>
+          <p class="mt-3 text-lg font-medium">San Francisco, Goicoechea</p>
+          <p class="text-sm text-brand-cocoa/70">San José, CR</p>
+        </div>
+        <div class="rounded-2xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft">
+          <p class="text-xs uppercase tracking-[0.25em] text-brand-caramel">Horario</p>
+          <p class="mt-3 text-lg font-medium">Lunes a sábado</p>
+          <p class="text-sm text-brand-cocoa/70">7:00 – 6:30</p>
+        </div>
+      </div>
+    </section>
+    <!-- Nosotros -->
+    <section id="nosotros" class="bg-brand-beige">
+      <div class="max-w-6xl mx-auto px-6 lg:px-10 py-16">
+        <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+          <div>
+            <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Nosotros</p>
+            <h2 class="mt-3 font-serif text-3xl md:text-4xl">Horneamos con pausa, servimos con intención</h2>
+            <p class="mt-6 text-brand-cocoa/75 leading-relaxed">Pan d’ Casa nace de un ritual diario: masa viva, ingredientes reales y un diseño que se siente en cada miga. Lo premium es simple cuando está bien hecho.</p>
+            <div class="mt-8 grid md:grid-cols-3 gap-6">
+              <div class="flex items-start gap-4">
+                <svg class="w-7 h-7 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                  <path d="M12 4c3 2 5 4 6 8-4 1-8 1-12 0 1-4 3-6 6-8z" />
+                  <path d="M6 14c2 2 10 2 12 0" />
+                </svg>
+                <div>
+                  <p class="font-medium">Artesanal</p>
+                  <p class="text-sm text-brand-cocoa/70">Manos expertas, tiempos lentos.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <svg class="w-7 h-7 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                  <path d="M5 12h14" />
+                  <path d="M7 8h10" />
+                  <path d="M9 16h6" />
+                </svg>
+                <div>
+                  <p class="font-medium">Ingredientes reales</p>
+                  <p class="text-sm text-brand-cocoa/70">Nada artificial, todo noble.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <svg class="w-7 h-7 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                  <path d="M12 6v12" />
+                  <path d="M6 12h12" />
+                </svg>
+                <div>
+                  <p class="font-medium">Hecho hoy</p>
+                  <p class="text-sm text-brand-cocoa/70">Lo que llega, se va hoy.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-3xl bg-brand-cocoa2 text-brand-cream p-8 shadow-soft">
+            <div class="flex items-center gap-3">
+              <span class="w-12 h-px bg-brand-gold"></span>
+              <p class="text-sm uppercase tracking-[0.3em] text-brand-gold">Sello de casa</p>
+            </div>
+            <h3 class="mt-4 font-serif text-3xl">Hecho hoy, vendido hoy</h3>
+            <p class="mt-4 text-brand-cream/80">Porque lo premium es la frescura absoluta, sin compromisos ni almacenajes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reseñas -->
+    <section id="resenas" class="max-w-6xl mx-auto px-6 lg:px-10 py-16">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div>
+          <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Reseñas</p>
+          <h2 class="mt-3 font-serif text-3xl md:text-4xl">Clientes que vuelven por el aroma</h2>
+        </div>
+        <div class="text-sm text-brand-cocoa/70">
+          <p><span class="text-2xl font-serif">4.9/5</span> · +300 reseñas</p>
+        </div>
+      </div>
+      <div class="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Review Card -->
+        <article class="rounded-3xl border border-brand-caramel/20 bg-brand-cream/60 backdrop-blur-sm p-6 shadow-soft">
+          <div class="flex gap-1 text-brand-gold">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <p class="mt-4 text-brand-cocoa/80">“Cada croissant parece recién pintado. Elegante y delicioso.”</p>
+          <p class="mt-4 text-sm text-brand-caramel">— Laura M.</p>
+        </article>
+        <article class="rounded-3xl border border-brand-caramel/20 bg-brand-cream/60 backdrop-blur-sm p-6 shadow-soft">
+          <div class="flex gap-1 text-brand-gold">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <p class="mt-4 text-brand-cocoa/80">“El pan de masa madre es perfecto, con una corteza impecable.”</p>
+          <p class="mt-4 text-sm text-brand-caramel">— Andrés R.</p>
+        </article>
+        <article class="rounded-3xl border border-brand-caramel/20 bg-brand-cream/60 backdrop-blur-sm p-6 shadow-soft">
+          <div class="flex gap-1 text-brand-gold">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <p class="mt-4 text-brand-cocoa/80">“Se nota el cariño en cada detalle. Premium de verdad.”</p>
+          <p class="mt-4 text-sm text-brand-caramel">— Sofía P.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="bg-brand-beige">
+      <div class="max-w-6xl mx-auto px-6 lg:px-10 py-16">
+        <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-10">
+          <div>
+            <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Contacto</p>
+            <h2 class="mt-3 font-serif text-3xl md:text-4xl">Siempre cerca, siempre cálido</h2>
+            <div class="mt-6 space-y-3 text-brand-cocoa/80">
+              <p><strong>Horario:</strong> 7:00 – 6:30</p>
+              <p><strong>Dirección:</strong> San Francisco, Goicoechea, San José, CR</p>
+              <p><strong>Tel:</strong> +506 8337-6864</p>
+            </div>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="https://wa.me/50683376864" target="_blank" rel="noopener" class="px-4 py-2 rounded-full border border-brand-caramel/50 text-sm transition hover:border-brand-gold">WhatsApp</a>
+              <a href="https://www.instagram.com/pandcasa" target="_blank" rel="noopener" class="px-4 py-2 rounded-full border border-brand-caramel/50 text-sm transition hover:border-brand-gold">Instagram</a>
+              <a href="https://www.facebook.com/pandcasacr" target="_blank" rel="noopener" class="px-4 py-2 rounded-full border border-brand-caramel/50 text-sm transition hover:border-brand-gold">Facebook</a>
+              <a href="https://www.tiktok.com/@pandcasa" target="_blank" rel="noopener" class="px-4 py-2 rounded-full border border-brand-caramel/50 text-sm transition hover:border-brand-gold">TikTok</a>
+            </div>
+          </div>
+          <div class="grid gap-6">
+            <form class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft grid gap-4">
+              <div>
+                <label class="text-sm text-brand-caramel" for="contactNombre">Nombre</label>
+                <input id="contactNombre" type="text" class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+              </div>
+              <div>
+                <label class="text-sm text-brand-caramel" for="contactEmail">Email</label>
+                <input id="contactEmail" type="email" class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+              </div>
+              <div>
+                <label class="text-sm text-brand-caramel" for="contactMensaje">Mensaje</label>
+                <textarea id="contactMensaje" rows="4" class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"></textarea>
+              </div>
+              <button class="justify-self-start px-5 py-3 rounded-full bg-brand-cocoa text-brand-cream text-sm">Enviar</button>
+            </form>
+            <div class="relative rounded-3xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-r from-brand-gold/10 via-white/20 to-brand-gold2/10 animate-shimmer"></div>
+              <div class="relative h-40 rounded-2xl border border-brand-caramel/20 bg-brand-beige/50 flex items-center justify-center">
+                <p class="text-sm text-brand-caramel">Mapa premium</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Footer -->
+  <footer class="bg-brand-cream">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10 py-12">
+      <div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-10">
+        <div>
+          <h3 class="font-serif text-2xl">Pan d’ Casa</h3>
+          <p class="mt-3 text-brand-cocoa/70">Escríbenos por medio de WhatsApp para atender tus dudas.</p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="px-6 py-3 rounded-full bg-brand-cocoa text-brand-cream text-sm tracking-wide transition hover:translate-y-[-2px] hover:shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">Ir a WhatsApp</a>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-6 text-sm">
+          <div>
+            <p class="text-brand-caramel uppercase tracking-[0.2em] text-xs">Links</p>
+            <ul class="mt-3 space-y-2">
+              <li><a href="/index.html" class="hover:text-brand-gold">Inicio</a></li>
+              <li><a href="/pages/almuerzos.html" class="hover:text-brand-gold">Almuerzos</a></li>
+              <li><a href="/pages/panaderia.html" class="hover:text-brand-gold">Panadería</a></li>
+              <li><a href="/pages/postres.html" class="hover:text-brand-gold">Postres</a></li>
+              <li><a href="/pages/queques.html" class="hover:text-brand-gold">Queques</a></li>
+              <li><a href="/index.html#nosotros" class="hover:text-brand-gold">Nosotros</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="text-brand-caramel uppercase tracking-[0.2em] text-xs">Redes</p>
+            <ul class="mt-3 space-y-2">
+              <li><a href="#" class="hover:text-brand-gold">Instagram</a></li>
+              <li><a href="#" class="hover:text-brand-gold">TikTok</a></li>
+              <li><a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="hover:text-brand-gold">WhatsApp</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="mt-10 border-t border-brand-caramel/20 pt-6 text-sm text-brand-cocoa/70 flex flex-col md:flex-row md:items-center md:justify-between">
+        <p>© 2026 Pan d’ Casa. Siempre fresco.</p>
+        <p>Hecho con amor.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const menuClose = document.getElementById('menuClose');
+    const mobilePanel = document.getElementById('mobilePanel');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+
+    const toggleMenu = (show) => {
+      mobilePanel.classList.toggle('hidden', !show);
+      document.body.classList.toggle('overflow-hidden', show);
+    };
+
+    menuBtn?.addEventListener('click', () => toggleMenu(true));
+    menuClose?.addEventListener('click', () => toggleMenu(false));
+    mobilePanel?.addEventListener('click', (e) => {
+      if (e.target === mobilePanel) toggleMenu(false);
+    });
+    mobileOverlay?.addEventListener('click', () => toggleMenu(false));
+
+  </script>
+
+  <script>
+    (() => {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
+
+      const isModifiedClick = (event) => event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+      document.querySelectorAll('a[href]').forEach((link) => {
+        const href = link.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+        if (link.target === '_blank') return;
+        if (/^(mailto:|tel:|javascript:)/i.test(href)) return;
+        if (/^https?:\/\//i.test(href)) return;
+
+        link.addEventListener('click', (event) => {
+          if (isModifiedClick(event)) return;
+          event.preventDefault();
+          document.body.classList.add('page-exit');
+          setTimeout(() => {
+            window.location.href = href;
+          }, 220);
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pan d' Casa | Admin</title>
+
+  <meta name="description" content="Panel de administración de Pan d' Casa.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#FCFDFC">
+  <meta property="og:title" content="Pan d' Casa | Admin">
+  <meta property="og:description" content="Panel de administración de Pan d' Casa.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/Logo Pandcasa.png">
+  <meta property="og:locale" content="es_CR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Pan d' Casa | Admin">
+  <meta name="twitter:description" content="Panel de administración de Pan d' Casa.">
+  <meta name="twitter:image" content="assets/Logo Pandcasa.png">
+
+  <link rel="icon" type="image/png" href="assets/Logo Pandcasa.png">
+  <link rel="apple-touch-icon" href="assets/Logo Pandcasa.png">
+  <link rel="stylesheet" href="dist/tailwind.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+  
+    /* page-transition */
+    @keyframes pageFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    main {
+      animation: pageFadeIn 0.4s ease both;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    body.page-exit main {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      main { animation: none; transition: none; }
+    }
+
+  </style>
+</head>
+<body class="bg-brand-cream text-brand-cocoa font-sans antialiased selection:bg-brand-gold/20 selection:text-brand-cocoa overflow-x-hidden">
+  <!-- Navbar -->
+  <header class="sticky top-0 z-50 bg-brand-cream/80 border-b border-brand-caramel/15">
+    <nav class="max-w-6xl mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/index.html" class="block">
+          <p class="font-serif text-2xl tracking-tight">Pan d’ Casa</p>
+          <p class="text-xs uppercase tracking-[0.25em] text-brand-caramel">Admin</p>
+        </a>
+      </div>
+      <div class="hidden lg:flex items-center gap-8 text-sm">
+        <a href="/index.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Inicio</a>
+        <a href="/pages/almuerzos.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Almuerzos</a>
+        <a href="/pages/panaderia.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Panadería</a>
+        <a href="/pages/postres.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Postres</a>
+        <a href="/pages/queques.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Queques</a>
+      </div>
+      <div class="hidden lg:flex">
+        <a href="/index.html" class="px-5 py-2 rounded-full border border-brand-caramel/40 text-sm">Volver al sitio</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="relative z-10 max-w-6xl mx-auto px-6 lg:px-10 py-16">
+    <div id="configMessage" class="hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft">
+      <h2 class="font-serif text-2xl">Configura Supabase</h2>
+      <p class="mt-3 text-sm text-brand-cocoa/70">Completa SUPABASE_URL y SUPABASE_ANON_KEY en <code>admin.js</code> para habilitar el panel.</p>
+    </div>
+
+    <section id="loginSection" class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-8 shadow-soft max-w-lg">
+      <h1 class="font-serif text-3xl">Acceso administrador</h1>
+      <p class="mt-3 text-sm text-brand-cocoa/70">Ingresa con tu correo para gestionar productos.</p>
+      <form id="loginForm" method="post" action="admin.html" class="mt-6 grid gap-4">
+        <div>
+          <label class="text-sm text-brand-caramel" for="email">Email</label>
+          <input id="email" name="email" type="email" required class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+        </div>
+        <div>
+          <label class="text-sm text-brand-caramel" for="password">Contraseña</label>
+          <input id="password" name="password" type="password" required class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+        </div>
+        <button class="justify-self-start px-6 py-3 rounded-full bg-brand-cocoa text-brand-cream text-sm">Entrar</button>
+        <p id="loginStatus" class="text-sm text-brand-caramel"></p>
+      </form>
+    </section>
+
+    <section id="adminSection" class="hidden">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div>
+          <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Panel</p>
+          <h2 class="mt-3 font-serif text-3xl md:text-4xl">Gestión de productos</h2>
+        </div>
+        <button id="logoutBtn" class="px-5 py-2 rounded-full border border-brand-caramel/40 text-sm">Cerrar sesión</button>
+      </div>
+
+      <div class="mt-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
+        <form id="productForm" class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-8 shadow-soft grid gap-4">
+          <h3 class="font-serif text-2xl">Producto</h3>
+          <div>
+            <label class="text-sm text-brand-caramel" for="nombre">Nombre</label>
+            <input id="nombre" name="nombre" type="text" required class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+          </div>
+          <div>
+            <label class="text-sm text-brand-caramel" for="descripcion">Descripción</label>
+            <textarea id="descripcion" name="descripcion" rows="3" class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"></textarea>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="text-sm text-brand-caramel" for="precio">Precio (₡)</label>
+              <input id="precio" name="precio" type="number" required class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+            </div>
+            <div>
+              <label class="text-sm text-brand-caramel" for="categoria">Categoría</label>
+              <select id="categoria" name="categoria" class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">
+                <option value="almuerzos">Almuerzos</option>
+                <option value="panaderia">Panadería</option>
+                <option value="postres">Postres</option>
+                <option value="queques">Queques</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <input id="disponible" name="disponible" type="checkbox" class="h-4 w-4" checked />
+            <label for="disponible" class="text-sm text-brand-caramel">Disponible</label>
+          </div>
+          <div>
+            <label class="text-sm text-brand-caramel" for="imageInput">Imagen</label>
+            <input id="imageInput" name="imageInput" type="file" accept="image/*" class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 text-sm" />
+            <div id="imagePreview" class="mt-4 h-40 rounded-2xl border border-brand-caramel/20 bg-brand-beige/40 flex items-center justify-center text-[0.6rem] uppercase tracking-[0.2em] text-brand-caramel">
+              Vista previa
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center justify-between">
+              <label class="text-sm text-brand-caramel">Extras o acompañamientos</label>
+              <button id="addExtraBtn" type="button" class="px-3 py-1 rounded-full border border-brand-caramel/40 text-xs">Agregar</button>
+            </div>
+            <div id="extrasList" class="mt-3 grid gap-3"></div>
+          </div>
+          <button class="justify-self-start px-6 py-3 rounded-full bg-brand-cocoa text-brand-cream text-sm">Guardar producto</button>
+          <p id="adminStatus" class="text-sm text-brand-caramel"></p>
+        </form>
+
+        <div class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-8 shadow-soft">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <h3 class="font-serif text-2xl">Productos</h3>
+              <p class="text-sm text-brand-cocoa/70">Total: <span id="productsCount">0</span></p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-3">
+              <input id="adminSearch" type="search" placeholder="Buscar producto..." class="rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+              <select id="adminCategoryFilter" class="rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">
+                <option value="all">Todas las categorías</option>
+                <option value="almuerzos">Almuerzos</option>
+                <option value="panaderia">Panadería</option>
+                <option value="postres">Postres</option>
+                <option value="queques">Queques</option>
+              </select>
+              <select id="adminAvailabilityFilter" class="rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">
+                <option value="all">Disponibles y agotados</option>
+                <option value="available">Solo disponibles</option>
+                <option value="unavailable">Solo agotados</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-6" id="productsTable"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-50 hidden" role="status" aria-live="polite" aria-atomic="true">
+    <div id="toastContent" class="rounded-2xl border border-brand-caramel/30 bg-brand-cream/90 backdrop-blur-sm px-4 py-3 shadow-soft text-sm text-brand-cocoa"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/admin.js"></script>
+
+  <script>
+    (() => {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
+
+      const isModifiedClick = (event) => event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+      document.querySelectorAll('a[href]').forEach((link) => {
+        const href = link.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+        if (link.target === '_blank') return;
+        if (/^(mailto:|tel:|javascript:)/i.test(href)) return;
+        if (/^https?:\/\//i.test(href)) return;
+
+        link.addEventListener('click', (event) => {
+          if (isModifiedClick(event)) return;
+          event.preventDefault();
+          document.body.classList.add('page-exit');
+          setTimeout(() => {
+            window.location.href = href;
+          }, 220);
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
