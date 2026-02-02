@@ -66,7 +66,6 @@
       width: 100%;
       height: var(--height);
       overflow: hidden;
-      mask-image: linear-gradient(to right, transparent, #000 10% 90%, transparent);
     }
     .seasonal-slider .seasonal-list {
       display: flex;
@@ -83,13 +82,6 @@
       animation: seasonalRun 16s linear infinite;
       transition: filter 0.5s;
       animation-delay: calc((16s / var(--quantity)) * (var(--position) - 1) - 16s) !important;
-    }
-    .seasonal-slider:hover .seasonal-item {
-      animation-play-state: paused !important;
-      filter: grayscale(1);
-    }
-    .seasonal-slider .seasonal-item:hover {
-      filter: grayscale(0);
     }
     @keyframes seasonalRun {
       from { left: 100%; }
