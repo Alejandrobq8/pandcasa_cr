@@ -53,6 +53,49 @@
       main { animation: none; transition: none; }
     }
 
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* seasonal slider (template-style) */
+    .seasonal-slider {
+      width: 100%;
+      height: var(--height);
+      overflow: hidden;
+      mask-image: linear-gradient(to right, transparent, #000 10% 90%, transparent);
+    }
+    .seasonal-slider .seasonal-list {
+      display: flex;
+      width: 100%;
+      min-width: calc(var(--width) * var(--quantity));
+      position: relative;
+      height: 100%;
+    }
+    .seasonal-slider .seasonal-item {
+      width: var(--width);
+      height: var(--height);
+      position: absolute;
+      left: 100%;
+      animation: seasonalRun 16s linear infinite;
+      transition: filter 0.5s;
+      animation-delay: calc((16s / var(--quantity)) * (var(--position) - 1) - 16s) !important;
+    }
+    .seasonal-slider:hover .seasonal-item {
+      animation-play-state: paused !important;
+      filter: grayscale(1);
+    }
+    .seasonal-slider .seasonal-item:hover {
+      filter: grayscale(0);
+    }
+    @keyframes seasonalRun {
+      from { left: 100%; }
+      to { left: calc(var(--width) * -1); }
+    }
+
   </style>
 </head>
 <body class="bg-brand-cream text-brand-cocoa font-sans antialiased selection:bg-brand-gold/20 selection:text-brand-cocoa overflow-x-hidden">
@@ -71,8 +114,8 @@
         <a href="/pages/panaderia.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Panadería</a>
         <a href="/pages/postres.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Postres</a>
         <a href="/pages/queques.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Queques</a>
+        <a href="/pages/temporada.html" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Temporada</a>
         <a href="/index.html#nosotros" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Nosotros</a>
-        <a href="/index.html#resenas" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Reseñas</a>
         <a href="/index.html#contacto" class="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full">Contacto</a>
       </div>
       <div class="hidden lg:flex">
@@ -98,8 +141,8 @@
           <a href="/pages/panaderia.html" class="py-2 border-b border-brand-caramel/10">Panadería</a>
           <a href="/pages/postres.html" class="py-2 border-b border-brand-caramel/10">Postres</a>
           <a href="/pages/queques.html" class="py-2 border-b border-brand-caramel/10">Queques</a>
+          <a href="/pages/temporada.html" class="py-2 border-b border-brand-caramel/10">Temporada</a>
           <a href="/index.html#nosotros" class="py-2 border-b border-brand-caramel/10">Nosotros</a>
-          <a href="/index.html#resenas" class="py-2 border-b border-brand-caramel/10">Reseñas</a>
           <a href="/index.html#contacto" class="py-2 border-b border-brand-caramel/10">Contacto</a>
         </div>
         <a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="mt-6 px-5 py-3 rounded-full bg-brand-cocoa text-brand-cream text-center">Ordenar ahora</a>
@@ -110,7 +153,7 @@
   <!-- Full width hero image -->
   <section class="w-full">
     <div class="relative h-80 md:h-[520px] w-full bg-brand-beige/40 border-b border-brand-caramel/15 overflow-hidden">
-      <img src="https://www.colbake.com/wp-content/uploads/2019/04/maquinaria-panaderia-colbake.jpg" alt="Pan d’ Casa" class="absolute inset-0 w-full h-full object-cover" />
+      <img src="https://esquirescoffee.co.uk/wp-content/uploads/2021/05/nafinia-putra-Kwdp-0pok-I-unsplash-1.jpg" alt="Pan d’ Casa" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
     </div>
   </section>
@@ -133,8 +176,7 @@
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
             <div class="absolute -top-16 -left-10 w-40 h-40 bg-white/35 rotate-12 blur-2xl"></div>
             <div class="relative text-center">
-              <p class="font-serif text-2xl">Foto principal</p>
-              <p class="text-sm text-brand-caramel">Panadería artesanal</p>
+              <img src="https://dm.emea.cms.aldi.cx/is/image/aldiprodeu/Editorial-hero-Bakery-250325-UK?wid=2625" alt="">
             </div>
           </div>
         </div>
@@ -142,15 +184,13 @@
           <div class="relative h-36 md:h-[200px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
             <div class="relative text-center">
-              <p class="font-serif text-xl">Foto 02</p>
-              <p class="text-xs text-brand-caramel">Queques del día</p>
+              <img src="https://dm.emea.cms.aldi.cx/is/image/aldiprodeu/Editorial-hero-Bakery-250325-UK?wid=2625" alt="">
             </div>
           </div>
           <div class="relative h-36 md:h-[200px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
             <div class="relative text-center">
-              <p class="font-serif text-xl">Foto 03</p>
-              <p class="text-xs text-brand-caramel">Postres boutique</p>
+              <img src="https://dm.emea.cms.aldi.cx/is/image/aldiprodeu/Editorial-hero-Bakery-250325-UK?wid=2625" alt="">
             </div>
           </div>
         </div>
@@ -158,8 +198,7 @@
           <div class="relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
             <div class="relative text-center">
-              <p class="font-serif text-xl">Foto 04</p>
-              <p class="text-xs text-brand-caramel">Almuerzos</p>
+              <img src="https://dm.emea.cms.aldi.cx/is/image/aldiprodeu/Editorial-hero-Bakery-250325-UK?wid=2625" alt="">
             </div>
           </div>
         </div>
@@ -167,8 +206,7 @@
           <div class="relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
             <div class="relative text-center">
-              <p class="font-serif text-xl">Foto 05</p>
-              <p class="text-xs text-brand-caramel">Laminados</p>
+              <img src="https://dm.emea.cms.aldi.cx/is/image/aldiprodeu/Editorial-hero-Bakery-250325-UK?wid=2625" alt="">
             </div>
           </div>
         </div>
@@ -176,8 +214,7 @@
           <div class="relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
             <div class="relative text-center">
-              <p class="font-serif text-xl">Foto 06</p>
-              <p class="text-xs text-brand-caramel">Pan dulce</p>
+              <img src="https://dm.emea.cms.aldi.cx/is/image/aldiprodeu/Editorial-hero-Bakery-250325-UK?wid=2625" alt="">
             </div>
           </div>
         </div>
@@ -249,40 +286,50 @@
       </div>
     </section>
 
-    <!-- Reseñas -->
-    <section id="resenas" class="max-w-6xl mx-auto px-6 lg:px-10 py-16">
-      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+    <!-- Temporada -->
+    <section id="temporada" class="py-16">
+      <div class="max-w-6xl mx-auto px-6 lg:px-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
         <div>
-          <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Reseñas</p>
-          <h2 class="mt-3 font-serif text-3xl md:text-4xl">Clientes que vuelven por el aroma</h2>
-        </div>
-        <div class="text-sm text-brand-cocoa/70">
-          <p><span class="text-2xl font-serif">4.9/5</span> · +300 reseñas</p>
+          <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Temporada</p>
+          <h2 class="mt-3 font-serif text-3xl md:text-4xl">Ediciones de temporada</h2>
+          <p class="mt-4 text-brand-cocoa/75 max-w-xl">Selecciones limitadas para momentos especiales. Pasa el mouse o desliza para pausar.</p>
         </div>
       </div>
-      <div class="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Review Card -->
-        <article class="rounded-3xl border border-brand-caramel/20 bg-brand-cream/60 backdrop-blur-sm p-6 shadow-soft">
-          <div class="flex gap-1 text-brand-gold">
-            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      <div class="mt-10 w-full">
+        <div class="seasonal-slider" style="--width: 260px; --height: 220px; --quantity: 6;">
+          <div class="seasonal-list">
+            <div class="seasonal-item" style="--position: 1">
+              <a href="/pages/temporada.html" class="block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full">
+                <img src="https://esquirescoffee.co.uk/wp-content/uploads/2021/05/nafinia-putra-Kwdp-0pok-I-unsplash-1.jpg" alt="Rosca de temporada" class="h-full w-full object-cover" />
+              </a>
+            </div>
+            <div class="seasonal-item" style="--position: 2">
+              <a href="/pages/temporada.html" class="block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full">
+                <img src="https://dm.emea.cms.aldi.cx/is/image/aldiprodeu/Editorial-hero-Bakery-250325-UK?wid=2625" alt="Tarta de temporada" class="h-full w-full object-cover" />
+              </a>
+            </div>
+            <div class="seasonal-item" style="--position: 3">
+              <a href="/pages/temporada.html" class="block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full">
+                <img src="https://www.colbake.com/wp-content/uploads/2019/04/maquinaria-panaderia-colbake.jpg" alt="Pan de temporada" class="h-full w-full object-cover" />
+              </a>
+            </div>
+            <div class="seasonal-item" style="--position: 4">
+              <a href="/pages/temporada.html" class="block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full">
+                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=80" alt="Brioche de temporada" class="h-full w-full object-cover" />
+              </a>
+            </div>
+            <div class="seasonal-item" style="--position: 5">
+              <a href="/pages/temporada.html" class="block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full">
+                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=80" alt="Brioche de temporada" class="h-full w-full object-cover" />
+              </a>
+            </div>
+            <div class="seasonal-item" style="--position: 6">
+              <a href="/pages/temporada.html" class="block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full">
+                <img src="https://esquirescoffee.co.uk/wp-content/uploads/2021/05/nafinia-putra-Kwdp-0pok-I-unsplash-1.jpg" alt="Rosca de temporada" class="h-full w-full object-cover" />
+              </a>
+            </div>
           </div>
-          <p class="mt-4 text-brand-cocoa/80">“Cada croissant parece recién pintado. Elegante y delicioso.”</p>
-          <p class="mt-4 text-sm text-brand-caramel">— Laura M.</p>
-        </article>
-        <article class="rounded-3xl border border-brand-caramel/20 bg-brand-cream/60 backdrop-blur-sm p-6 shadow-soft">
-          <div class="flex gap-1 text-brand-gold">
-            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-          </div>
-          <p class="mt-4 text-brand-cocoa/80">“El pan de masa madre es perfecto, con una corteza impecable.”</p>
-          <p class="mt-4 text-sm text-brand-caramel">— Andrés R.</p>
-        </article>
-        <article class="rounded-3xl border border-brand-caramel/20 bg-brand-cream/60 backdrop-blur-sm p-6 shadow-soft">
-          <div class="flex gap-1 text-brand-gold">
-            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-          </div>
-          <p class="mt-4 text-brand-cocoa/80">“Se nota el cariño en cada detalle. Premium de verdad.”</p>
-          <p class="mt-4 text-sm text-brand-caramel">— Sofía P.</p>
-        </article>
+        </div>
       </div>
     </section>
 
@@ -356,6 +403,7 @@
               <li><a href="/pages/panaderia.html" class="hover:text-brand-gold">Panadería</a></li>
               <li><a href="/pages/postres.html" class="hover:text-brand-gold">Postres</a></li>
               <li><a href="/pages/queques.html" class="hover:text-brand-gold">Queques</a></li>
+              <li><a href="/pages/temporada.html" class="hover:text-brand-gold">Temporada</a></li>
               <li><a href="/index.html#nosotros" class="hover:text-brand-gold">Nosotros</a></li>
             </ul>
           </div>

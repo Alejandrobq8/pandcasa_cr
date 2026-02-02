@@ -15,7 +15,7 @@ create table if not exists public.products (
   name text not null,
   description text,
   price integer not null,
-  category text not null check (category in ('almuerzos','panaderia','postres','queques')),
+  category text not null check (category in ('almuerzos','panaderia','postres','queques','temporada')),
   extras jsonb not null default '[]'::jsonb,
   image_url text,
   available boolean not null default true,
@@ -35,6 +35,17 @@ for update using ((select auth.role()) = 'authenticated');
 
 create policy "Admin delete products" on public.products
 for delete using ((select auth.role()) = 'authenticated');
+```
+
+Si ya creaste la tabla, corre este update para habilitar la categoría "temporada":
+
+```sql
+alter table public.products
+  drop constraint if exists products_category_check;
+
+alter table public.products
+  add constraint products_category_check
+  check (category in ('almuerzos','panaderia','postres','queques','temporada'));
 ```
 
 ## 3) Storage para imágenes
