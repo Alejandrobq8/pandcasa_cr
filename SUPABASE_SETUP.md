@@ -17,7 +17,6 @@ create table if not exists public.products (
   price integer not null,
   category text not null check (category in ('almuerzos','panaderia','postres','queques','temporada')),
   extras jsonb not null default '[]'::jsonb,
-  image_url text,
   available boolean not null default true,
   created_at timestamptz not null default now()
 );
@@ -37,6 +36,13 @@ create policy "Admin delete products" on public.products
 for delete using ((select auth.role()) = 'authenticated');
 ```
 
+Si ya tienes la tabla y quieres eliminar imágenes:
+
+```sql
+alter table public.products
+  drop column if exists image_url;
+```
+
 Si ya creaste la tabla, corre este update para habilitar la categoría "temporada":
 
 ```sql
@@ -48,24 +54,8 @@ alter table public.products
   check (category in ('almuerzos','panaderia','postres','queques','temporada'));
 ```
 
-## 3) Storage para imágenes
-1. En `Storage`, crea un bucket llamado `product-images`.
-2. Configúralo como **public**.
-3. En `SQL Editor`, ejecuta:
-
-```sql
-create policy "Public read product images" on storage.objects
-for select using (bucket_id = 'product-images');
-
-create policy "Admin upload product images" on storage.objects
-for insert with check (bucket_id = 'product-images' and (select auth.role()) = 'authenticated');
-
-create policy "Admin update product images" on storage.objects
-for update using (bucket_id = 'product-images' and (select auth.role()) = 'authenticated');
-
-create policy "Admin delete product images" on storage.objects
-for delete using (bucket_id = 'product-images' and (select auth.role()) = 'authenticated');
-```
+## 3) (Opcional) Storage para imágenes
+Si en el futuro quieres volver a subir fotos, crea un bucket llamado `product-images` y configura las policies.
 
 ## 4) Crear usuario admin
 1. Ve a `Authentication → Users`.

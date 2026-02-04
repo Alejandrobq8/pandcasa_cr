@@ -27,8 +27,6 @@ const adminAvailabilityFilter = document.getElementById('adminAvailabilityFilter
 const productForm = document.getElementById('productForm');
 const extrasList = document.getElementById('extrasList');
 const addExtraBtn = document.getElementById('addExtraBtn');
-const imageInput = document.getElementById('imageInput');
-const imagePreview = document.getElementById('imagePreview');
 const loginStatus = document.getElementById('loginStatus');
 const adminStatus = document.getElementById('adminStatus');
 const configMessage = document.getElementById('configMessage');
@@ -36,7 +34,6 @@ const toast = document.getElementById('toast');
 const toastContent = document.getElementById('toastContent');
 
 let editingId = null;
-let currentImageUrl = '';
 let allProducts = [];
 let toastTimeout = null;
 
@@ -79,9 +76,7 @@ const addExtraRow = (extra = {}) => {
 const resetForm = () => {
   productForm.reset();
   editingId = null;
-  currentImageUrl = '';
   extrasList.innerHTML = '';
-  imagePreview.innerHTML = '<span class="text-[0.6rem] uppercase tracking-[0.2em] text-brand-caramel">Vista previa</span>';
 };
 
 const collectExtras = () => {
@@ -113,7 +108,6 @@ const renderProducts = (products) => {
       </button>
       <button data-edit="${product.id}" class="text-sm text-brand-caramel hover:text-brand-gold">Editar</button>
       <button data-delete="${product.id}" class="text-sm text-red-600">Eliminar</button>
-      <a href="${product.image_url || '#'}" target="_blank" rel="noopener" class="text-sm text-brand-caramel hover:text-brand-gold">Imagen</a>
     </div>
   `).join('');
 
@@ -168,8 +162,6 @@ const handleEdit = (id, products) => {
   if (!product) return;
 
   editingId = id;
-  currentImageUrl = product.image_url || '';
-
   productForm.nombre.value = product.name || '';
   productForm.descripcion.value = product.description || '';
   productForm.precio.value = product.price || '';
@@ -179,9 +171,6 @@ const handleEdit = (id, products) => {
   extrasList.innerHTML = '';
   (product.extras || []).forEach(addExtraRow);
 
-    imagePreview.innerHTML = currentImageUrl
-    ? `<img src="${currentImageUrl}" alt="${product.name}" class="w-full h-full object-cover object-center" />`
-    : '<span class="text-[0.6rem] uppercase tracking-[0.2em] text-brand-caramel">Vista previa</span>';
 };
 
 const handleDelete = async (id) => {
@@ -209,14 +198,6 @@ const handleToggleAvailability = async (id) => {
   fetchProducts();
 };
 
-const uploadImage = async (file) => {
-  const fileExt = file.name.split('.').pop();
-  const filePath = `products/${crypto.randomUUID()}.${fileExt}`;
-  const { error } = await supabaseClient.storage.from('product-images').upload(filePath, file, { upsert: false });
-  if (error) throw error;
-  const { data } = supabaseClient.storage.from('product-images').getPublicUrl(filePath);
-  return data.publicUrl;
-};
 
 const initAuth = async () => {
   if (!isConfigured) {
@@ -265,15 +246,6 @@ adminSearch.addEventListener('input', applyFilters);
 adminCategoryFilter.addEventListener('change', applyFilters);
 adminAvailabilityFilter.addEventListener('change', applyFilters);
 
-imageInput.addEventListener('change', () => {
-  const file = imageInput.files?.[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    imagePreview.innerHTML = `<img src="${reader.result}" alt="Vista previa" class="w-full h-full object-cover object-center" />`;
-  };
-  reader.readAsDataURL(file);
-});
 
 productForm.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -287,20 +259,13 @@ productForm.addEventListener('submit', async (event) => {
     const available = productForm.disponible.checked;
     const extras = collectExtras();
 
-    let imageUrl = currentImageUrl;
-    const file = imageInput.files?.[0];
-    if (file) {
-      imageUrl = await uploadImage(file);
-    }
-
     const payload = {
       name,
       description,
       price,
       category,
       available,
-      extras,
-      image_url: imageUrl
+      extras
     };
 
     const successMessage = editingId ? 'Producto actualizado.' : 'Producto creado.';

@@ -36,23 +36,21 @@ const fallbackImage =
   'https://www.colbake.com/wp-content/uploads/2019/04/maquinaria-panaderia-colbake.jpg';
 
 const renderCard = (product) => {
-  const imageSrc = product.image_url || fallbackImage;
-  const image = `<img src="${imageSrc}" alt="${product.name}" class="w-full h-full object-cover object-center" loading="lazy" decoding="async" />`;
-
   return `
-    <article class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft">
-      <div class="mb-6 w-full aspect-[5/3] rounded-2xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center">${image}</div>
-      <div class="flex items-start justify-between gap-4 pt-6">
-        <div>
-          <h3 class="font-serif text-xl">${product.name}</h3>
-          <p class="mt-4 text-sm text-brand-cocoa/70">${product.description || ''}</p>
+    <article class="relative min-h-[16rem] overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft px-7 py-8">
+      <div class="absolute inset-0 bg-gradient-to-br from-brand-cream via-brand-beige/30 to-brand-cream"></div>
+      <div class="relative z-10">
+        <div class="flex items-start justify-between gap-4">
+          <h3 class="font-serif text-2xl leading-tight">${product.name}</h3>
+          <span class="text-lg font-medium">${formatCRC(product.price)}</span>
         </div>
-        <span class="text-lg font-medium">${formatCRC(product.price)}</span>
+        <p class="mt-4 text-sm text-brand-cocoa/70">${product.description || 'Consulta por los sabores disponibles hoy.'}</p>
+        <div class="mt-5 h-px w-full bg-brand-caramel/15"></div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          ${renderAvailability(product.available)}
+          ${renderExtras(product.extras)}
+        </div>
       </div>
-      <div class="mt-4 flex flex-wrap gap-2">
-        ${renderAvailability(product.available)}
-      </div>
-      ${renderExtras(product.extras)}
     </article>
   `;
 };
@@ -115,8 +113,20 @@ const setCachedProducts = (category, data) => {
   }
 };
 
+const filterProducts = (products, query) => {
+  const q = query.trim().toLowerCase();
+  if (!q) return products;
+  return products.filter((product) => {
+    return (
+      (product.name || '').toLowerCase().includes(q) ||
+      (product.description || '').toLowerCase().includes(q)
+    );
+  });
+};
+
 const initMenu = async () => {
   const grid = document.getElementById('productGrid');
+  const searchInput = document.getElementById('productSearch');
   if (!grid) return;
 
   const category = grid.dataset.category;
@@ -127,7 +137,15 @@ const initMenu = async () => {
 
   const cached = getCachedProducts(category);
   if (cached) {
-    grid.innerHTML = cached.map(renderCard).join('');
+    const initial = filterProducts(cached, searchInput?.value || '');
+    grid.innerHTML = initial.map(renderCard).join('');
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        const filtered = filterProducts(cached, searchInput.value);
+        grid.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '';
+        if (!filtered.length) renderEmpty(grid);
+      });
+    }
     return;
   }
 
@@ -135,7 +153,7 @@ const initMenu = async () => {
 
   const { data, error } = await supabaseClient
     .from('products')
-    .select('id,name,description,price,category,extras,image_url,available')
+    .select('id,name,description,price,category,extras,available')
     .eq('category', category)
     .order('created_at', { ascending: false });
 
@@ -149,8 +167,17 @@ const initMenu = async () => {
     return;
   }
 
-  grid.innerHTML = data.map(renderCard).join('');
+  const initial = filterProducts(data, searchInput?.value || '');
+  grid.innerHTML = initial.map(renderCard).join('');
   setCachedProducts(category, data);
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      const filtered = filterProducts(data, searchInput.value);
+      grid.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '';
+      if (!filtered.length) renderEmpty(grid);
+    });
+  }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
