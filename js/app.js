@@ -32,12 +32,9 @@ const renderAvailability = (available) => {
     : '<span class="px-3 py-1 rounded-full bg-brand-caramel/15 text-xs text-brand-cocoa">Agotado</span>';
 };
 
-const fallbackImage =
-  'https://www.colbake.com/wp-content/uploads/2019/04/maquinaria-panaderia-colbake.jpg';
-
 const renderCard = (product) => {
   return `
-    <article class="relative min-h-[16rem] overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft px-7 py-8">
+    <article class="card-reveal relative min-h-[16rem] overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft px-7 py-8">
       <div class="absolute inset-0 bg-gradient-to-br from-brand-cream via-brand-beige/30 to-brand-cream"></div>
       <div class="relative z-10">
         <div class="flex items-start justify-between gap-4">
@@ -124,6 +121,24 @@ const filterProducts = (products, query) => {
   });
 };
 
+const applyCardStagger = (grid) => {
+  const cards = Array.from(grid.querySelectorAll('.card-reveal'));
+  if (!cards.length) return;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) {
+    cards.forEach((card) => card.classList.add('is-visible'));
+    return;
+  }
+
+  cards.forEach((card, index) => {
+    card.style.transitionDelay = `${Math.min(index * 60, 420)}ms`;
+  });
+
+  requestAnimationFrame(() => {
+    cards.forEach((card) => card.classList.add('is-visible'));
+  });
+};
+
 const initMenu = async () => {
   const grid = document.getElementById('productGrid');
   const searchInput = document.getElementById('productSearch');
@@ -139,10 +154,12 @@ const initMenu = async () => {
   if (cached) {
     const initial = filterProducts(cached, searchInput?.value || '');
     grid.innerHTML = initial.map(renderCard).join('');
+    applyCardStagger(grid);
     if (searchInput) {
       searchInput.addEventListener('input', () => {
         const filtered = filterProducts(cached, searchInput.value);
         grid.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '';
+        if (filtered.length) applyCardStagger(grid);
         if (!filtered.length) renderEmpty(grid);
       });
     }
@@ -169,12 +186,14 @@ const initMenu = async () => {
 
   const initial = filterProducts(data, searchInput?.value || '');
   grid.innerHTML = initial.map(renderCard).join('');
+  applyCardStagger(grid);
   setCachedProducts(category, data);
 
   if (searchInput) {
     searchInput.addEventListener('input', () => {
       const filtered = filterProducts(data, searchInput.value);
       grid.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '';
+      if (filtered.length) applyCardStagger(grid);
       if (!filtered.length) renderEmpty(grid);
     });
   }
