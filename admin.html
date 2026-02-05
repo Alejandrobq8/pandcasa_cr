@@ -34,33 +34,22 @@
 <body class="bg-brand-beige text-brand-cocoa font-sans antialiased selection:bg-brand-gold/20 selection:text-brand-cocoa overflow-x-hidden" style="background-color: #ECD8B4;">
   <!-- Admin Navbar -->
   <header class="sticky top-0 z-50 bg-brand-cream/90 border-b border-brand-caramel/15 backdrop-blur-sm">
-    <nav class="max-w-6xl mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="/index.html" class="block">
-          <p class="font-serif text-2xl tracking-tight">Pan d’ Casa</p>
-          <p class="text-xs uppercase tracking-[0.25em] text-brand-caramel">Administración</p>
-        </a>
-      </div>
-      <div class="hidden lg:flex items-center gap-8 text-sm">
-        <a href="/index.html" class="nav-link">Inicio</a>
-        <a href="/pages/almuerzos.html" class="nav-link">Almuerzos</a>
-        <a href="/pages/panaderia.html" class="nav-link">Panadería</a>
-        <a href="/pages/postres.html" class="nav-link">Postres</a>
-        <a href="/pages/queques.html" class="nav-link">Queques</a>
-      </div>
-      <div class="hidden lg:flex">
-        <a href="/index.html" class="px-5 py-2 rounded-full border border-brand-caramel/40 text-sm btn-lift">Volver al sitio</a>
-      </div>
+    <nav class="max-w-7xl mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
+      <a href="/index.html" class="block">
+        <p class="font-serif text-2xl tracking-tight">Pan d’ Casa</p>
+        <p class="text-[10px] uppercase tracking-[0.35em] text-brand-caramel">Dashboard</p>
+      </a>
+      <a href="/index.html" class="px-5 py-2 rounded-full border border-brand-caramel/40 text-sm btn-lift">Volver al sitio</a>
     </nav>
   </header>
 
-  <main class="relative z-10 max-w-6xl mx-auto px-6 lg:px-10 py-16">
+  <main class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-16">
     <div id="configMessage" class="hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft">
       <h2 class="font-serif text-2xl">Configura Supabase</h2>
       <p class="mt-3 text-sm text-brand-cocoa/70">Completa SUPABASE_URL y SUPABASE_ANON_KEY en <code>admin.js</code> para habilitar el panel.</p>
     </div>
 
-    <section id="loginSection" class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-8 shadow-soft max-w-lg">
+    <section id="loginSection" class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-8 shadow-soft max-w-md mx-auto">
       <h1 class="font-serif text-3xl">Acceso administrador</h1>
       <p class="mt-3 text-sm text-brand-cocoa/70">Ingresa con tu correo para gestionar productos.</p>
       <form id="loginForm" method="post" action="admin.html" class="mt-6 grid gap-4">
@@ -82,13 +71,14 @@
         <div>
           <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Panel</p>
           <h2 class="mt-3 font-serif text-3xl md:text-4xl">Gestión de productos</h2>
+          <p class="mt-3 text-sm text-brand-cocoa/70">Actualiza productos, precios y disponibilidad en tiempo real.</p>
         </div>
         <div class="flex items-center gap-3">
           <button id="logoutBtn" class="px-5 py-2 rounded-full border border-brand-caramel/40 text-sm btn-lift">Cerrar sesión</button>
         </div>
       </div>
 
-      <div class="mt-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
+      <div class="mt-10 grid lg:grid-cols-[1.2fr_1fr] gap-8">
         <form id="productForm" class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-8 shadow-soft grid gap-4">
           <h3 class="font-serif text-2xl">Producto</h3>
           <div>
