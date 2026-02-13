@@ -34,7 +34,7 @@ const renderAvailability = (available) => {
 
 const renderCard = (product) => {
   return `
-    <article class="card-reveal relative min-h-[16rem] overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft px-7 py-8">
+    <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft px-7 py-8">
       <div class="absolute inset-0 bg-gradient-to-br from-brand-cream via-brand-beige/30 to-brand-cream"></div>
       <div class="relative z-10">
         <div class="flex items-start justify-between gap-4">
