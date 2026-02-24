@@ -67,14 +67,31 @@
     </section>
 
     <section id="adminSection" class="hidden">
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div>
-          <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Panel</p>
-          <h2 class="mt-3 font-serif text-3xl md:text-4xl">Gestión de productos</h2>
-          <p class="mt-3 text-sm text-brand-cocoa/70">Actualiza productos, precios y disponibilidad en tiempo real.</p>
+      <div class="rounded-3xl border border-brand-caramel/20 bg-brand-cream/95 backdrop-blur-sm p-6 shadow-soft">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div>
+            <p class="text-xs uppercase tracking-[0.35em] text-brand-caramel">Panel</p>
+            <h2 class="mt-2 font-serif text-3xl md:text-4xl">Gestión de productos</h2>
+            <p class="mt-2 text-sm text-brand-cocoa/70">Actualiza productos, precios y disponibilidad en tiempo real.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="syncStatus" class="px-3 py-1 rounded-full border border-brand-caramel/30 text-xs text-brand-caramel">Sincronizando</span>
+            <button id="logoutBtn" class="px-5 py-2 rounded-full border border-brand-caramel/40 text-sm btn-lift">Cerrar sesión</button>
+          </div>
         </div>
-        <div class="flex items-center gap-3">
-          <button id="logoutBtn" class="px-5 py-2 rounded-full border border-brand-caramel/40 text-sm btn-lift">Cerrar sesión</button>
+        <div class="mt-6 grid md:grid-cols-3 gap-4">
+          <div class="rounded-2xl border border-brand-caramel/20 bg-brand-cream p-4">
+            <p class="text-[10px] uppercase tracking-[0.2em] text-brand-caramel">Total</p>
+            <p class="mt-2 text-2xl font-semibold" id="productsCount">0</p>
+          </div>
+          <div class="rounded-2xl border border-brand-caramel/20 bg-brand-cream p-4">
+            <p class="text-[10px] uppercase tracking-[0.2em] text-brand-caramel">Disponibles</p>
+            <p class="mt-2 text-2xl font-semibold" id="availableCount">0</p>
+          </div>
+          <div class="rounded-2xl border border-brand-caramel/20 bg-brand-cream p-4">
+            <p class="text-[10px] uppercase tracking-[0.2em] text-brand-caramel">Agotados</p>
+            <p class="mt-2 text-2xl font-semibold" id="unavailableCount">0</p>
+          </div>
         </div>
       </div>
 
@@ -125,8 +142,7 @@
           <div class="flex flex-col gap-4">
             <div class="flex items-center justify-between">
               <h3 class="font-serif text-2xl">Productos</h3>
-              <p class="text-sm text-brand-cocoa/70">Total: <span id="productsCount">0</span></p>
-            </div>
+                          </div>
             <div class="grid md:grid-cols-3 gap-3">
               <input id="adminSearch" type="search" placeholder="Buscar producto..." class="rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
               <select id="adminCategoryFilter" class="rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">

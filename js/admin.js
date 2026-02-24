@@ -21,6 +21,9 @@ const loginForm = document.getElementById('loginForm');
 const logoutBtn = document.getElementById('logoutBtn');
 const productsTable = document.getElementById('productsTable');
 const productsCount = document.getElementById('productsCount');
+const availableCount = document.getElementById('availableCount');
+const unavailableCount = document.getElementById('unavailableCount');
+const syncStatus = document.getElementById('syncStatus');
 const adminSearch = document.getElementById('adminSearch');
 const adminCategoryFilter = document.getElementById('adminCategoryFilter');
 const adminAvailabilityFilter = document.getElementById('adminAvailabilityFilter');
@@ -135,7 +138,6 @@ const collectExtras = () => {
 };
 
 const renderProducts = (products) => {
-  productsCount.textContent = String(products.length);
   if (!products || products.length === 0) {
     productsTable.innerHTML = '<p class="text-sm text-brand-cocoa/70">Aún no hay productos registrados.</p>';
     return;
@@ -193,12 +195,18 @@ const applyFilters = () => {
 };
 
 const fetchProducts = async () => {
+  if (syncStatus) syncStatus.textContent = 'Sincronizando';
   const { data, error } = await supabaseClient.from('products').select('*').order('created_at', { ascending: false });
   if (error) {
     showStatus(adminStatus, error.message, 'error');
+    if (syncStatus) syncStatus.textContent = 'Error';
     return;
   }
   allProducts = data || [];
+  if (productsCount) productsCount.textContent = String(allProducts.length);
+  if (availableCount) availableCount.textContent = String(allProducts.filter((p) => p.available).length);
+  if (unavailableCount) unavailableCount.textContent = String(allProducts.filter((p) => !p.available).length);
+  if (syncStatus) syncStatus.textContent = 'Actualizado';
   applyFilters();
 };
 
