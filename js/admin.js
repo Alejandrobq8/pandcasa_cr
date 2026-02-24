@@ -25,6 +25,7 @@ const adminSearch = document.getElementById('adminSearch');
 const adminCategoryFilter = document.getElementById('adminCategoryFilter');
 const adminAvailabilityFilter = document.getElementById('adminAvailabilityFilter');
 const productForm = document.getElementById('productForm');
+const newProductBtn = document.getElementById('newProductBtn');
 const extrasList = document.getElementById('extrasList');
 const addExtraBtn = document.getElementById('addExtraBtn');
 const loginStatus = document.getElementById('loginStatus');
@@ -241,6 +242,10 @@ logoutBtn.addEventListener('click', async () => {
 });
 
 addExtraBtn.addEventListener('click', () => addExtraRow());
+newProductBtn?.addEventListener('click', () => {
+  resetForm();
+  productForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
 
 adminSearch.addEventListener('input', applyFilters);
 adminCategoryFilter.addEventListener('change', applyFilters);
