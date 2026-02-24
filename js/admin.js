@@ -32,11 +32,9 @@ const loginStatus = document.getElementById('loginStatus');
 const adminStatus = document.getElementById('adminStatus');
 const configMessage = document.getElementById('configMessage');
 const toast = document.getElementById('toast');
-const toastContent = document.getElementById('toastContent');
 
 let editingId = null;
 let allProducts = [];
-let toastTimeout = null;
 
 const showStatus = (target, text, type = 'info') => {
   if (!target) return;
@@ -45,14 +43,60 @@ const showStatus = (target, text, type = 'info') => {
 };
 
 const showToast = (text, type = 'info') => {
-  if (!toast || !toastContent) return;
-  toastContent.textContent = text;
-  toastContent.classList.toggle('text-red-600', type === 'error');
-  toastContent.classList.toggle('text-brand-cocoa', type !== 'error');
-  toast.classList.remove('hidden');
-  if (toastTimeout) clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(() => {
-    toast.classList.add('hidden');
+  if (!toast) return;
+  const isError = type === 'error';
+  const toastEl = document.createElement('div');
+  toastEl.className = [
+    'toast-item',
+    'flex',
+    'items-start',
+    'gap-3',
+    'rounded-2xl',
+    'border',
+    'border-brand-caramel/20',
+    'bg-brand-cream/95',
+    'backdrop-blur-sm',
+    'shadow-soft',
+    'px-4',
+    'py-3',
+    'transition',
+    'duration-300',
+    'opacity-0',
+    'translate-y-2'
+  ].join(' ');
+
+  const accent = isError ? 'bg-brand-caramel/40' : 'bg-brand-gold/60';
+  const badge = isError ? 'bg-brand-caramel/15' : 'bg-brand-gold/15';
+  const title = isError ? 'Error' : 'Listo';
+  const icon = isError ? '!' : '✓';
+
+  toastEl.innerHTML = `
+    <span style="width:3px;" class="rounded-full ${accent} self-stretch"></span>
+    <div class="flex-1">
+      <p class="text-xs uppercase tracking-[0.25em] text-brand-caramel">${title}</p>
+      <p class="mt-1 text-sm text-brand-cocoa/80">${text}</p>
+    </div>
+    <div class="flex flex-col items-end gap-2">
+      <span class="h-9 w-9 rounded-full ${badge} text-brand-cocoa flex items-center justify-center text-sm font-medium">${icon}</span>
+      <button type="button" class="text-xs text-brand-caramel/70 hover:text-brand-cocoa">Cerrar</button>
+    </div>
+  `;
+
+  const closeBtn = toastEl.querySelector('button');
+  closeBtn?.addEventListener('click', () => {
+    toastEl.classList.add('opacity-0', 'translate-y-2');
+    toastEl.addEventListener('transitionend', () => toastEl.remove(), { once: true });
+  });
+
+  toast.appendChild(toastEl);
+  requestAnimationFrame(() => {
+    toastEl.classList.remove('opacity-0', 'translate-y-2');
+  });
+
+  setTimeout(() => {
+    if (!toastEl.isConnected) return;
+    toastEl.classList.add('opacity-0', 'translate-y-2');
+    toastEl.addEventListener('transitionend', () => toastEl.remove(), { once: true });
   }, 3200);
 };
 
