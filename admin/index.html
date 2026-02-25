@@ -4,33 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pan d’ Casa | Admin</title>
-
   <meta name="description" content="Panel de administración de Pan d’ Casa.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#ECD8B4">
-  <meta property="og:title" content="Pan d’ Casa | Admin">
-  <meta property="og:description" content="Panel de administración de Pan d’ Casa.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/Logo Pandcasa.png">
-  <meta property="og:locale" content="es_CR">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Pan d’ Casa | Admin">
-  <meta name="twitter:description" content="Panel de administración de Pan d’ Casa.">
-  <meta name="twitter:image" content="assets/Logo Pandcasa.png">
-
   <base href="/" />
+
   <link rel="icon" type="image/png" href="assets/Logo Pandcasa.png">
   <link rel="apple-touch-icon" href="assets/Logo Pandcasa.png">
-  <link rel="stylesheet" href="dist/tailwind.css">
-  <link rel="stylesheet" href="css/site.css?v=1">
+  <link rel="stylesheet" href="/dist/tailwind.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    html, body { background-color: #ECD8B4 !important; }
-  </style>
 </head>
-<body class="text-brand-cocoa font-sans antialiased min-h-screen">
+<body class="bg-brand-beige text-brand-cocoa font-sans antialiased min-h-screen">
   <!-- Header -->
   <header class="border-b border-brand-caramel/20 bg-brand-cream/80 backdrop-blur">
     <div class="max-w-6xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between">
@@ -53,7 +39,7 @@
     <section id="loginSection" class="border border-brand-caramel/30 bg-brand-cream/85 p-6 rounded-3xl max-w-sm mx-auto">
       <h1 class="font-serif text-2xl">Acceso administrador</h1>
       <p class="mt-2 text-sm text-brand-cocoa/70">Ingresa con tu correo para gestionar productos.</p>
-      <form id="loginForm" method="post" action="admin.html" class="mt-4 grid gap-3">
+      <form id="loginForm" method="post" action="/admin" class="mt-4 grid gap-3">
         <div>
           <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="email">Email</label>
           <input id="email" name="email" type="email" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
@@ -86,7 +72,7 @@
         Agotados <span id="unavailableCount" class="text-brand-cocoa font-semibold">0</span>
       </div>
 
-      <div class="grid lg:grid-cols-2 gap-6">
+      <div class="grid lg:grid-cols-2 gap-6 items-start">
         <!-- Form -->
         <form id="productForm" class="border border-brand-caramel/20 bg-brand-cream/85 p-6 rounded-3xl grid gap-4">
           <div class="flex items-center justify-between">
@@ -133,7 +119,7 @@
         </form>
 
         <!-- Inventory -->
-        <div class="border border-brand-caramel/20 bg-brand-cream/85 p-6 rounded-3xl">
+        <div class="border border-brand-caramel/20 bg-brand-cream/85 p-6 rounded-3xl self-start">
           <div class="grid gap-3">
             <div>
               <p class="text-xs uppercase tracking-[0.3em] text-brand-caramel">Inventario</p>
@@ -168,8 +154,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script src="js/admin.js"></script>
-  <script src="js/site.js"></script>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="/js/admin.js"></script>
 
   <script>
     if (window.netlifyIdentity) {

@@ -78,4 +78,4 @@ Con esos valores reales del proyecto.
 ## 6) Publicar
 Sube todo a Netlify y listo. El admin estará en:
 
-`/admin.html`
+`/admin`
