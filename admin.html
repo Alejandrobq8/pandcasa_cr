@@ -49,25 +49,25 @@
       <p class="mt-2 text-sm text-brand-cocoa/70">Completa SUPABASE_URL y SUPABASE_ANON_KEY en <code>admin.js</code> para habilitar el panel.</p>
     </div>
 
-    <section id="loginSection" class="border border-brand-caramel/30 bg-brand-cream/80 p-5 rounded-2xl max-w-sm mx-auto">
+    <section id="loginSection" class="border border-brand-caramel/30 bg-brand-cream/85 p-6 rounded-3xl max-w-sm mx-auto">
       <h1 class="font-serif text-2xl">Acceso administrador</h1>
       <p class="mt-2 text-sm text-brand-cocoa/70">Ingresa con tu correo para gestionar productos.</p>
       <form id="loginForm" method="post" action="admin.html" class="mt-4 grid gap-3">
         <div>
           <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="email">Email</label>
-          <input id="email" name="email" type="email" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-brand-cream px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+          <input id="email" name="email" type="email" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
         </div>
         <div>
           <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="password">Contraseña</label>
-          <input id="password" name="password" type="password" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-brand-cream px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+          <input id="password" name="password" type="password" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
         </div>
-        <button class="justify-self-start px-3 py-1.5 rounded-full bg-brand-cocoa text-brand-cream text-xs">Entrar</button>
+        <button class="justify-self-start px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-xs">Entrar</button>
         <p id="loginStatus" class="text-sm text-brand-caramel"></p>
       </form>
     </section>
 
     <section id="adminSection" class="hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
         <div>
           <p class="text-xs uppercase tracking-[0.3em] text-brand-caramel">Panel</p>
           <h2 class="font-serif text-2xl">Gestión de productos</h2>
@@ -78,43 +78,34 @@
         </div>
       </div>
 
-      <div class="flex flex-wrap gap-2 mb-6 text-xs text-brand-caramel">
-        <div class="px-3 py-2 rounded-full border border-brand-caramel/30 bg-brand-cream/80">
-          <span class="uppercase tracking-[0.2em]">Total</span>
-          <span class="ml-2 text-brand-cocoa font-semibold" id="productsCount">0</span>
-        </div>
-        <div class="px-3 py-2 rounded-full border border-brand-caramel/30 bg-brand-cream/80">
-          <span class="uppercase tracking-[0.2em]">Disponibles</span>
-          <span class="ml-2 text-brand-cocoa font-semibold" id="availableCount">0</span>
-        </div>
-        <div class="px-3 py-2 rounded-full border border-brand-caramel/30 bg-brand-cream/80">
-          <span class="uppercase tracking-[0.2em]">Agotados</span>
-          <span class="ml-2 text-brand-cocoa font-semibold" id="unavailableCount">0</span>
-        </div>
+      <div class="text-xs text-brand-caramel mb-6">
+        Total <span id="productsCount" class="text-brand-cocoa font-semibold">0</span> ·
+        Disponibles <span id="availableCount" class="text-brand-cocoa font-semibold">0</span> ·
+        Agotados <span id="unavailableCount" class="text-brand-cocoa font-semibold">0</span>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-6">
-        <form id="productForm" class="border border-brand-caramel/20 bg-brand-cream/80 p-4 rounded-2xl grid gap-3">
+        <form id="productForm" class="border border-brand-caramel/20 bg-brand-cream/85 p-6 rounded-3xl grid gap-4">
           <div class="flex items-center justify-between">
             <h3 class="font-serif text-lg">Producto</h3>
-            <button id="newProductBtn" type="button" class="px-2.5 py-1 rounded-full border border-brand-caramel/40 text-xs">Nuevo</button>
+            <button id="newProductBtn" type="button" class="px-3 py-1 rounded-full border border-brand-caramel/40 text-xs">Nuevo</button>
           </div>
           <div>
             <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="nombre">Nombre</label>
-            <input id="nombre" name="nombre" type="text" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-brand-cream px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+            <input id="nombre" name="nombre" type="text" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
           </div>
           <div>
             <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="descripcion">Descripción</label>
-            <textarea id="descripcion" name="descripcion" rows="3" class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-brand-cream px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"></textarea>
+            <textarea id="descripcion" name="descripcion" rows="3" class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40"></textarea>
           </div>
           <div class="grid md:grid-cols-2 gap-3">
             <div>
               <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="precio">Precio (₡)</label>
-              <input id="precio" name="precio" type="number" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-brand-cream px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+              <input id="precio" name="precio" type="number" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
             </div>
             <div>
               <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="categoria">Categoría</label>
-              <select id="categoria" name="categoria" class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-brand-cream px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">
+              <select id="categoria" name="categoria" class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40">
                 <option value="almuerzos">Almuerzos</option>
                 <option value="panaderia">Panadería</option>
                 <option value="postres">Postres</option>
@@ -130,23 +121,23 @@
           <div>
             <div class="flex items-center justify-between">
               <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel">Extras</label>
-              <button id="addExtraBtn" type="button" class="px-2.5 py-1 rounded-full border border-brand-caramel/40 text-xs">Agregar</button>
+              <button id="addExtraBtn" type="button" class="px-3 py-1 rounded-full border border-brand-caramel/40 text-xs">Agregar</button>
             </div>
             <div id="extrasList" class="mt-2 grid gap-2"></div>
           </div>
-          <button class="justify-self-start px-3 py-1.5 rounded-full bg-brand-cocoa text-brand-cream text-xs">Guardar</button>
+          <button class="justify-self-start px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-xs">Guardar</button>
           <p id="adminStatus" class="text-sm text-brand-caramel"></p>
         </form>
 
-        <div class="border border-brand-caramel/20 bg-brand-cream/80 p-4 rounded-2xl">
+        <div class="border border-brand-caramel/20 bg-brand-cream/85 p-6 rounded-3xl">
           <div class="grid gap-3">
             <div>
               <p class="text-xs uppercase tracking-[0.3em] text-brand-caramel">Inventario</p>
               <h3 class="font-serif text-lg">Productos</h3>
             </div>
-            <input id="adminSearch" type="search" placeholder="Buscar producto..." class="rounded-xl border border-brand-caramel/30 bg-brand-cream px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+            <input id="adminSearch" type="search" placeholder="Buscar producto..." class="rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
             <div class="grid md:grid-cols-2 gap-3">
-              <select id="adminCategoryFilter" class="rounded-xl border border-brand-caramel/30 bg-brand-cream px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">
+              <select id="adminCategoryFilter" class="rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40">
                 <option value="all">Todas las categorías</option>
                 <option value="almuerzos">Almuerzos</option>
                 <option value="panaderia">Panadería</option>
@@ -154,14 +145,14 @@
                 <option value="queques">Queques</option>
                 <option value="temporada">Temporada</option>
               </select>
-              <select id="adminAvailabilityFilter" class="rounded-xl border border-brand-caramel/30 bg-brand-cream px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">
+              <select id="adminAvailabilityFilter" class="rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40">
                 <option value="all">Disponibles y agotados</option>
                 <option value="available">Solo disponibles</option>
                 <option value="unavailable">Solo agotados</option>
               </select>
             </div>
           </div>
-          <div class="mt-4 border border-brand-caramel/15 rounded-xl p-3 bg-brand-cream/90">
+          <div class="mt-4 border border-brand-caramel/15 rounded-2xl p-3 bg-brand-cream/90">
             <div id="productsTable"></div>
           </div>
         </div>

@@ -110,12 +110,12 @@ const toggleUI = (isLoggedIn) => {
 
 const addExtraRow = (extra = {}) => {
   const row = document.createElement('div');
-  row.className = 'grid md:grid-cols-[1fr_140px_40px] gap-3 items-center';
+  row.className = 'grid md:grid-cols-[1fr_120px_32px] gap-2 items-center';
   row.dataset.extraRow = 'true';
   row.innerHTML = `
-    <input type="text" placeholder="Extra / acompañamiento" value="${extra.name || ''}" class="rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
-    <input type="number" placeholder="Precio" value="${extra.price || ''}" class="rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
-    <button type="button" class="w-9 h-9 rounded-full border border-brand-caramel/30 text-brand-caramel hover:border-brand-gold">×</button>
+    <input type="text" placeholder="Extra / acompañamiento" value="${extra.name || ''}" class="rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
+    <input type="number" placeholder="Precio" value="${extra.price || ''}" class="rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
+    <button type="button" class="w-8 h-8 rounded-full border border-brand-caramel/30 text-brand-caramel hover:border-brand-gold">×</button>
   `;
   row.querySelector('button').addEventListener('click', () => row.remove());
   extrasList.appendChild(row);
@@ -144,17 +144,17 @@ const renderProducts = (products) => {
   }
 
   const rows = products.map((product) => `
-    <div class="grid md:grid-cols-[1.5fr_0.8fr_0.6fr_0.6fr_0.6fr_0.6fr] gap-3 items-center border-b border-brand-caramel/10 py-4">
+    <div class="grid md:grid-cols-[1.6fr_0.7fr_0.7fr_0.5fr_0.5fr] gap-3 items-center border-b border-brand-caramel/10 py-3">
       <div>
         <p class="font-medium">${product.name}</p>
         <p class="text-xs text-brand-cocoa/70">${product.category} · ${product.available ? 'Disponible' : 'Agotado'}</p>
       </div>
       <p class="text-sm text-brand-cocoa/80">${formatCRC(product.price)}</p>
-      <button data-toggle="${product.id}" class="text-sm ${product.available ? 'text-brand-caramel' : 'text-brand-gold'}">
+      <button data-toggle="${product.id}" class="text-xs ${product.available ? 'text-brand-caramel' : 'text-brand-gold'}">
         ${product.available ? 'Marcar agotado' : 'Marcar disponible'}
       </button>
-      <button data-edit="${product.id}" class="text-sm text-brand-caramel hover:text-brand-gold">Editar</button>
-      <button data-delete="${product.id}" class="text-sm text-red-600">Eliminar</button>
+      <button data-edit="${product.id}" class="text-xs text-brand-caramel hover:text-brand-gold">Editar</button>
+      <button data-delete="${product.id}" class="text-xs text-red-600">Eliminar</button>
     </div>
   `).join('');
 
