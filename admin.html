@@ -3,52 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pan d' Casa | Admin</title>
+  <title>Pan d’ Casa | Admin</title>
 
-  <meta name="description" content="Panel de administración de Pan d' Casa.">
+  <meta name="description" content="Panel de administración de Pan d’ Casa.">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#FCFDFC">
-  <meta property="og:title" content="Pan d' Casa | Admin">
-  <meta property="og:description" content="Panel de administración de Pan d' Casa.">
+  <meta name="theme-color" content="#ECD8B4">
+  <meta property="og:title" content="Pan d’ Casa | Admin">
+  <meta property="og:description" content="Panel de administración de Pan d’ Casa.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/Logo Pandcasa.png">
   <meta property="og:locale" content="es_CR">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Pan d' Casa | Admin">
-  <meta name="twitter:description" content="Panel de administración de Pan d' Casa.">
+  <meta name="twitter:title" content="Pan d’ Casa | Admin">
+  <meta name="twitter:description" content="Panel de administración de Pan d’ Casa.">
   <meta name="twitter:image" content="assets/Logo Pandcasa.png">
 
   <base href="/" />
   <link rel="icon" type="image/png" href="assets/Logo Pandcasa.png">
   <link rel="apple-touch-icon" href="assets/Logo Pandcasa.png">
   <link rel="stylesheet" href="dist/tailwind.css">
-  <link rel="stylesheet" href="/css/site.css?v=1">
+  <link rel="stylesheet" href="css/site.css?v=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     html, body { background-color: #ECD8B4 !important; }
   </style>
-
-
 </head>
-<body class="bg-brand-beige text-brand-cocoa font-sans antialiased min-h-screen">
+<body class="text-brand-cocoa font-sans antialiased min-h-screen">
+  <!-- Header -->
   <header class="border-b border-brand-caramel/20 bg-brand-cream/80 backdrop-blur">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+    <div class="max-w-6xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between">
       <div>
-        <p class="font-serif text-xl">Pan d’ Casa</p>
+        <p class="font-serif text-2xl">Pan d’ Casa</p>
         <p class="text-[10px] uppercase tracking-[0.3em] text-brand-caramel">Admin</p>
       </div>
       <a href="/index.html" class="px-3 py-1.5 rounded-full border border-brand-caramel/40 text-xs">Volver al sitio</a>
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-    <div id="configMessage" class="hidden border border-brand-caramel/30 bg-brand-cream/80 p-4 rounded-2xl">
+  <main class="max-w-6xl mx-auto px-5 sm:px-6 py-8">
+    <!-- Config -->
+    <div id="configMessage" class="hidden border border-brand-caramel/30 bg-brand-cream/85 p-4 rounded-2xl">
       <h2 class="font-serif text-xl">Configura Supabase</h2>
       <p class="mt-2 text-sm text-brand-cocoa/70">Completa SUPABASE_URL y SUPABASE_ANON_KEY en <code>admin.js</code> para habilitar el panel.</p>
     </div>
 
+    <!-- Login -->
     <section id="loginSection" class="border border-brand-caramel/30 bg-brand-cream/85 p-6 rounded-3xl max-w-sm mx-auto">
       <h1 class="font-serif text-2xl">Acceso administrador</h1>
       <p class="mt-2 text-sm text-brand-cocoa/70">Ingresa con tu correo para gestionar productos.</p>
@@ -66,8 +67,9 @@
       </form>
     </section>
 
+    <!-- Admin -->
     <section id="adminSection" class="hidden">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
           <p class="text-xs uppercase tracking-[0.3em] text-brand-caramel">Panel</p>
           <h2 class="font-serif text-2xl">Gestión de productos</h2>
@@ -85,6 +87,7 @@
       </div>
 
       <div class="grid lg:grid-cols-2 gap-6">
+        <!-- Form -->
         <form id="productForm" class="border border-brand-caramel/20 bg-brand-cream/85 p-6 rounded-3xl grid gap-4">
           <div class="flex items-center justify-between">
             <h3 class="font-serif text-lg">Producto</h3>
@@ -129,6 +132,7 @@
           <p id="adminStatus" class="text-sm text-brand-caramel"></p>
         </form>
 
+        <!-- Inventory -->
         <div class="border border-brand-caramel/20 bg-brand-cream/85 p-6 rounded-3xl">
           <div class="grid gap-3">
             <div>
@@ -179,6 +183,5 @@
       });
     }
   </script>
-
 </body>
 </html>
