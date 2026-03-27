@@ -35,9 +35,11 @@ const loginStatus = document.getElementById('loginStatus');
 const adminStatus = document.getElementById('adminStatus');
 const configMessage = document.getElementById('configMessage');
 const toast = document.getElementById('toast');
+const ACCESS_DENIED_MESSAGE = 'Tu cuenta no tiene permisos de administrador.';
 
 let editingId = null;
 let allProducts = [];
+let hasAdminAccess = false;
 
 const showStatus = (target, text, type = 'info') => {
   if (!target) return;
@@ -106,6 +108,25 @@ const showToast = (text, type = 'info') => {
 const toggleUI = (isLoggedIn) => {
   loginSection.classList.toggle('hidden', isLoggedIn);
   adminSection.classList.toggle('hidden', !isLoggedIn);
+};
+
+const clearAdminData = () => {
+  allProducts = [];
+  editingId = null;
+  if (productsCount) productsCount.textContent = '0';
+  if (availableCount) availableCount.textContent = '0';
+  if (unavailableCount) unavailableCount.textContent = '0';
+  if (syncStatus) syncStatus.textContent = 'Sin acceso';
+  if (productsTable) {
+    productsTable.innerHTML = '<p class="text-sm text-brand-cocoa/70">Inicia sesión con un usuario administrador para ver los productos.</p>';
+  }
+  resetForm();
+};
+
+const requireAdminAccess = () => {
+  if (hasAdminAccess) return true;
+  showStatus(loginStatus, ACCESS_DENIED_MESSAGE, 'error');
+  return false;
 };
 
 const addExtraRow = (extra = {}) => {
@@ -195,6 +216,7 @@ const applyFilters = () => {
 };
 
 const fetchProducts = async () => {
+  if (!supabaseClient || !hasAdminAccess) return;
   if (syncStatus) syncStatus.textContent = 'Sincronizando';
   const { data, error } = await supabaseClient.from('products').select('*').order('created_at', { ascending: false });
   if (error) {
@@ -211,6 +233,7 @@ const fetchProducts = async () => {
 };
 
 const handleEdit = (id, products) => {
+  if (!requireAdminAccess()) return;
   const product = products.find((item) => item.id === id);
   if (!product) return;
 
@@ -227,6 +250,7 @@ const handleEdit = (id, products) => {
 };
 
 const handleDelete = async (id) => {
+  if (!requireAdminAccess()) return;
   if (!confirm('¿Eliminar este producto?')) return;
   const { error } = await supabaseClient.from('products').delete().eq('id', id);
   if (error) {
@@ -238,6 +262,7 @@ const handleDelete = async (id) => {
 };
 
 const handleToggleAvailability = async (id) => {
+  if (!requireAdminAccess()) return;
   const product = allProducts.find((item) => item.id === id);
   if (!product) return;
   const { error } = await supabaseClient
@@ -252,6 +277,45 @@ const handleToggleAvailability = async (id) => {
 };
 
 
+const checkAdminAccess = async () => {
+  const { data, error } = await supabaseClient.rpc('is_admin');
+  if (error) {
+    throw new Error('No se pudo validar el rol admin en Supabase. Ejecuta el SQL de admin_access.sql.');
+  }
+  return Boolean(data);
+};
+
+const syncAdminSession = async (session) => {
+  if (!session) {
+    hasAdminAccess = false;
+    clearAdminData();
+    toggleUI(false);
+    return;
+  }
+
+  try {
+    const isAdmin = await checkAdminAccess();
+    if (!isAdmin) {
+      hasAdminAccess = false;
+      clearAdminData();
+      toggleUI(false);
+      showStatus(loginStatus, ACCESS_DENIED_MESSAGE, 'error');
+      await supabaseClient.auth.signOut();
+      return;
+    }
+
+    hasAdminAccess = true;
+    showStatus(loginStatus, '');
+    toggleUI(true);
+    await fetchProducts();
+  } catch (error) {
+    hasAdminAccess = false;
+    clearAdminData();
+    toggleUI(false);
+    showStatus(loginStatus, error.message, 'error');
+  }
+};
+
 const initAuth = async () => {
   if (!isConfigured) {
     configMessage.classList.remove('hidden');
@@ -260,11 +324,10 @@ const initAuth = async () => {
   }
 
   const { data: { session } } = await supabaseClient.auth.getSession();
-  toggleUI(Boolean(session));
+  await syncAdminSession(session);
 
-  supabaseClient.auth.onAuthStateChange((_event, session) => {
-    toggleUI(Boolean(session));
-    if (session) fetchProducts();
+  supabaseClient.auth.onAuthStateChange(async (_event, nextSession) => {
+    await syncAdminSession(nextSession);
   });
 };
 
@@ -282,7 +345,7 @@ loginForm.addEventListener('submit', async (event) => {
   if (error) {
     showStatus(loginStatus, error.message, 'error');
   } else {
-    showStatus(loginStatus, 'Sesión iniciada.');
+    showStatus(loginStatus, 'Validando permisos...');
     loginForm.reset();
   }
 });
@@ -306,7 +369,7 @@ adminAvailabilityFilter.addEventListener('change', applyFilters);
 
 productForm.addEventListener('submit', async (event) => {
   event.preventDefault();
-  if (!isConfigured) return;
+  if (!isConfigured || !requireAdminAccess()) return;
 
   try {
     const name = productForm.nombre.value.trim();

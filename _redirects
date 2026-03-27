@@ -1,5 +1,0 @@
-/admin /admin/index.html 200! Role=admin
-/admin/* /admin/index.html 200! Role=admin
-/admin-login /admin-login.html 200
-/admin-login/* /admin-login.html 200
-/admin.html /admin 301

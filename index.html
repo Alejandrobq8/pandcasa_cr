@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pan d' Casa</title>
-  <link rel="canonical" href="https://pandcasa.netlify.app/">
+  <link rel="canonical" href="https://pandcasa.com/">
 
   <meta name="description" content="Panadería boutique en San José, Costa Rica. Pan artesanal, postres y queques hechos hoy. Pedidos por WhatsApp.">
   <meta name="robots" content="index, follow">
@@ -225,11 +225,7 @@
             </div>
           </div>
           <div class="grid gap-6">
-            <form name="contacto" method="POST" action="/gracias.html" data-netlify="true" netlify-honeypot="bot-field" class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft grid gap-4">
-              <input type="hidden" name="form-name" value="contacto" />
-              <p class="hidden">
-                <label>Si eres humano, deja esto en blanco: <input name="bot-field" /></label>
-              </p>
+            <form id="contactForm" class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft grid gap-4">
               <div>
                 <label class="text-sm text-brand-caramel" for="contactNombre">Nombre</label>
                 <input id="contactNombre" name="nombre" type="text" required class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
@@ -242,7 +238,8 @@
                 <label class="text-sm text-brand-caramel" for="contactMensaje">Mensaje</label>
                 <textarea id="contactMensaje" name="mensaje" rows="4" required class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"></textarea>
               </div>
-              <button type="submit" class="justify-self-start px-5 py-3 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift">Enviar</button>
+              <button type="submit" class="justify-self-start px-5 py-3 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift">Enviar por WhatsApp</button>
+              <p id="contactStatus" class="text-sm text-brand-caramel/80">El mensaje se abrirá en WhatsApp con tu información ya lista.</p>
             </form>
             <div class="relative rounded-3xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft overflow-hidden">
               <div class="absolute inset-0 bg-gradient-to-r from-brand-gold/10 via-white/20 to-brand-gold2/10 animate-shimmer"></div>
@@ -257,12 +254,6 @@
   </main>
   <!-- Footer -->
   <div data-include="/partials/site-footer.html"></div>
-
-  
-
-  
-
-  
 
   <script src="js/site.js"></script>
 </body>

@@ -38,7 +38,7 @@
     <!-- Login -->
     <section id="loginSection" class="border border-brand-caramel/30 bg-brand-cream/85 p-6 rounded-3xl max-w-sm mx-auto">
       <h1 class="font-serif text-2xl">Acceso administrador</h1>
-      <p class="mt-2 text-sm text-brand-cocoa/70">Ingresa con tu correo para gestionar productos.</p>
+      <p class="mt-2 text-sm text-brand-cocoa/70">Ingresa con tu usuario administrador de Supabase para gestionar productos.</p>
       <form id="loginForm" method="post" action="/admin" class="mt-4 grid gap-3">
         <div>
           <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="email">Email</label>
@@ -153,20 +153,6 @@
   <div id="toast" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3" style="width: min(90vw, 340px);"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script src="/js/admin.js"></script>
-
-  <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', (user) => {
-        if (!user) {
-          window.netlifyIdentity.open('login');
-        }
-      });
-      window.netlifyIdentity.on('login', () => {
-        window.netlifyIdentity.close();
-      });
-    }
-  </script>
 </body>
 </html>

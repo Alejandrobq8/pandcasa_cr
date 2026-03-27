@@ -90,10 +90,46 @@
     );
   };
 
+  const initContactForm = () => {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+
+    const status = document.getElementById('contactStatus');
+    const whatsappNumber = '50683376864';
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const nombre = String(formData.get('nombre') || '').trim();
+      const email = String(formData.get('email') || '').trim();
+      const mensaje = String(formData.get('mensaje') || '').trim();
+
+      if (!nombre || !email || !mensaje) {
+        if (status) status.textContent = 'Completa todos los campos antes de continuar.';
+        return;
+      }
+
+      const text = [
+        'Hola, Pan d’ Casa.',
+        '',
+        `Nombre: ${nombre}`,
+        `Email: ${email}`,
+        'Mensaje:',
+        mensaje
+      ].join('\n');
+
+      const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank', 'noopener');
+      window.location.href = '/gracias.html';
+    });
+  };
+
   document.addEventListener('DOMContentLoaded', async () => {
     await loadPartials();
     initMobileMenu();
     initPageTransitions();
     initScrollReveal();
+    initContactForm();
   });
 })();
