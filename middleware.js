@@ -1,3 +1,5 @@
+import { next } from '@vercel/functions';
+
 export const config = {
   runtime: 'nodejs',
   matcher: ['/admin/:path*']
@@ -15,8 +17,9 @@ export default function middleware(request) {
   const gateUser = process.env.ADMIN_GATE_USER;
   const gatePass = process.env.ADMIN_GATE_PASS;
 
+  // If the gate is not configured, let Vercel continue directly to the asset.
   if (!gateUser || !gatePass) {
-    return;
+    return next();
   }
 
   const authorization = request.headers.get('authorization');
@@ -27,7 +30,7 @@ export default function middleware(request) {
   let decoded = '';
   try {
     decoded = Buffer.from(authorization.slice(6), 'base64').toString('utf8');
-  } catch (error) {
+  } catch {
     return unauthorized();
   }
 
@@ -42,4 +45,6 @@ export default function middleware(request) {
   if (username !== gateUser || password !== gatePass) {
     return unauthorized();
   }
+
+  return next();
 }
