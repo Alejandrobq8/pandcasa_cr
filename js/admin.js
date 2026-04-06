@@ -499,6 +499,42 @@ const addTemporadaExtraBtn = document.getElementById('addTemporadaExtraBtn');
 const temporadaSearch = document.getElementById('temporadaSearch');
 const temporadaAvailabilityFilter = document.getElementById('temporadaAvailabilityFilter');
 const temporadaFormStatus = document.getElementById('temporadaFormStatus');
+const temporadaImageFile = document.getElementById('temporadaImageFile');
+const temporadaImagePreview = document.getElementById('temporadaImagePreview');
+const temporadaImagePreviewImg = document.getElementById('temporadaImagePreviewImg');
+const temporadaImageFileName = document.getElementById('temporadaImageFileName');
+
+let temporadaCurrentImageUrl = null;
+
+const showTemporadaImagePreview = (src) => {
+  if (!temporadaImagePreview || !temporadaImagePreviewImg) return;
+  temporadaImagePreviewImg.src = src;
+  temporadaImagePreview.classList.remove('hidden');
+};
+
+const hideTemporadaImagePreview = () => {
+  if (!temporadaImagePreview) return;
+  temporadaImagePreview.classList.add('hidden');
+  if (temporadaImagePreviewImg) temporadaImagePreviewImg.src = '';
+};
+
+temporadaImageFile?.addEventListener('change', (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  if (temporadaImageFileName) temporadaImageFileName.textContent = file.name;
+  showTemporadaImagePreview(URL.createObjectURL(file));
+});
+
+const uploadTemporadaImage = async (file) => {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const { error } = await supabaseClient.storage
+    .from('temporada-images')
+    .upload(path, file, { upsert: false });
+  if (error) throw error;
+  const { data } = supabaseClient.storage.from('temporada-images').getPublicUrl(path);
+  return data.publicUrl;
+};
 
 const addTemporadaExtraRow = (extra = {}) => {
   const row = document.createElement('div');
@@ -516,7 +552,11 @@ const addTemporadaExtraRow = (extra = {}) => {
 const resetTemporadaForm = () => {
   temporadaForm?.reset();
   editingTemporadaId = null;
+  temporadaCurrentImageUrl = null;
   if (temporadaExtrasList) temporadaExtrasList.innerHTML = '';
+  hideTemporadaImagePreview();
+  if (temporadaImageFileName) temporadaImageFileName.textContent = 'Seleccionar imagen...';
+  if (temporadaImageFile) temporadaImageFile.value = '';
 };
 
 const collectTemporadaExtras = () => {
@@ -607,12 +647,20 @@ const handleTemporadaEdit = (id) => {
   if (!product) return;
 
   editingTemporadaId = id;
+  temporadaCurrentImageUrl = product.image_url || null;
   if (temporadaForm) {
     temporadaForm.nombre.value = product.name || '';
     temporadaForm.descripcion.value = product.description || '';
     temporadaForm.precio.value = product.price || '';
     temporadaForm.disponible.checked = Boolean(product.available);
   }
+  if (product.image_url) {
+    showTemporadaImagePreview(product.image_url);
+  } else {
+    hideTemporadaImagePreview();
+  }
+  if (temporadaImageFileName) temporadaImageFileName.textContent = 'Seleccionar imagen...';
+  if (temporadaImageFile) temporadaImageFile.value = '';
   if (temporadaExtrasList) temporadaExtrasList.innerHTML = '';
   (product.extras || []).forEach(addTemporadaExtraRow);
   temporadaForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -665,7 +713,14 @@ temporadaForm?.addEventListener('submit', async (event) => {
     const available = temporadaForm.disponible.checked;
     const extras = collectTemporadaExtras();
 
-    const payload = { name, description, price, category: 'temporada', available, extras };
+    let image_url = temporadaCurrentImageUrl;
+    const fileToUpload = temporadaImageFile?.files?.[0];
+    if (fileToUpload) {
+      showStatus(temporadaFormStatus, 'Subiendo imagen...');
+      image_url = await uploadTemporadaImage(fileToUpload);
+    }
+
+    const payload = { name, description, price, category: 'temporada', available, extras, image_url };
 
     const successMessage = editingTemporadaId ? 'Producto actualizado.' : 'Producto creado.';
     const { error } = editingTemporadaId

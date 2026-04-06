@@ -51,6 +51,36 @@ for delete to authenticated
 using (public.is_admin());
 
 -- ============================================================
+-- Columna: image_url en products (solo para temporada)
+-- ============================================================
+alter table public.products add column if not exists image_url text;
+
+-- ============================================================
+-- Storage: bucket para imágenes de temporada
+-- ============================================================
+insert into storage.buckets (id, name, public)
+values ('temporada-images', 'temporada-images', true)
+on conflict (id) do nothing;
+
+drop policy if exists "Public read temporada images" on storage.objects;
+create policy "Public read temporada images"
+on storage.objects for select
+to anon, authenticated
+using (bucket_id = 'temporada-images');
+
+drop policy if exists "Admin upload temporada images" on storage.objects;
+create policy "Admin upload temporada images"
+on storage.objects for insert
+to authenticated
+with check (bucket_id = 'temporada-images' and public.is_admin());
+
+drop policy if exists "Admin delete temporada images" on storage.objects;
+create policy "Admin delete temporada images"
+on storage.objects for delete
+to authenticated
+using (bucket_id = 'temporada-images' and public.is_admin());
+
+-- ============================================================
 -- Tabla: site_settings
 -- Almacena configuraciones globales del sitio (ej: visibilidad de temporada).
 -- ============================================================

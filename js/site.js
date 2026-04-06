@@ -93,19 +93,38 @@
     );
   };
 
-  const applyTemporadaNavVisibility = async () => {
+  const initTemporadaSection = async () => {
+    const headers = { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } };
     try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/site_settings?key=eq.temporada_visible&select=value`,
-        { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
-      );
-      const data = await res.json();
-      const visible = Array.isArray(data) && data.length > 0 ? data[0].value !== false : true;
+      const [visRes, prodRes] = await Promise.all([
+        fetch(`${SUPABASE_URL}/rest/v1/site_settings?key=eq.temporada_visible&select=value`, headers),
+        fetch(`${SUPABASE_URL}/rest/v1/products?category=eq.temporada&image_url=not.is.null&available=eq.true&select=id,name,image_url&order=created_at.desc`, headers)
+      ]);
+      const [visData, products] = await Promise.all([visRes.json(), prodRes.json()]);
+      const visible = Array.isArray(visData) && visData.length > 0 ? visData[0].value !== false : true;
+
       if (!visible) {
         document.querySelectorAll('[data-temporada-link]').forEach((el) => el.classList.add('hidden'));
+        const section = document.getElementById('temporada');
+        if (section) section.classList.add('hidden');
+        return;
+      }
+
+      // Reemplaza el carrusel estático con los productos de temporada que tengan imagen
+      const slider = document.querySelector('.seasonal-slider');
+      const list = document.querySelector('.seasonal-list');
+      if (slider && list && Array.isArray(products) && products.length > 0) {
+        slider.style.setProperty('--quantity', String(products.length));
+        list.innerHTML = products.map((p, i) => `
+          <div class="seasonal-item" style="--position: ${i + 1}">
+            <a href="/pages/temporada.html" class="card-reveal block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full" data-reveal>
+              <img src="${p.image_url}" alt="${p.name}" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+            </a>
+          </div>
+        `).join('');
       }
     } catch {
-      // falla silenciosamente — mantiene los links visibles
+      // falla silenciosamente — mantiene el carrusel estático
     }
   };
 
@@ -146,7 +165,7 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     await loadPartials();
-    applyTemporadaNavVisibility();
+    initTemporadaSection();
     initMobileMenu();
     initPageTransitions();
     initScrollReveal();

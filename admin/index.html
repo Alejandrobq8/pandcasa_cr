@@ -197,6 +197,20 @@
               <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="temporadaPrecio">Precio (₡)</label>
               <input id="temporadaPrecio" name="precio" type="number" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
             </div>
+            <div>
+              <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel">Imagen</label>
+              <div id="temporadaImagePreview" class="hidden mt-2 h-36 rounded-xl overflow-hidden border border-brand-caramel/20">
+                <img id="temporadaImagePreviewImg" src="" alt="" class="h-full w-full object-cover" />
+              </div>
+              <label for="temporadaImageFile" class="mt-2 flex items-center gap-2 px-3 py-2 rounded-xl border border-brand-caramel/30 bg-white/80 text-sm cursor-pointer hover:border-brand-gold/60 transition">
+                <svg class="w-4 h-4 shrink-0 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <span id="temporadaImageFileName" class="truncate text-brand-cocoa/60">Seleccionar imagen...</span>
+              </label>
+              <input id="temporadaImageFile" type="file" accept="image/*" class="hidden" />
+              <p class="mt-1 text-xs text-brand-cocoa/50">Aparece en la tarjeta del producto y en el carrusel del inicio.</p>
+            </div>
             <div class="flex items-center gap-2">
               <input id="temporadaDisponible" name="disponible" type="checkbox" class="h-4 w-4" checked />
               <label for="temporadaDisponible" class="text-sm text-brand-caramel">Disponible</label>

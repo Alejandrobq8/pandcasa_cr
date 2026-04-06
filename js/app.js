@@ -33,6 +33,27 @@ const renderAvailability = (available) => {
 };
 
 const renderCard = (product) => {
+  if (product.image_url) {
+    return `
+      <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft">
+        <div class="h-52 w-full overflow-hidden">
+          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+        </div>
+        <div class="relative z-10 px-7 py-6">
+          <div class="flex items-start justify-between gap-4">
+            <h3 class="font-serif text-2xl leading-tight">${product.name}</h3>
+            <span class="text-lg font-medium">${formatCRC(product.price)}</span>
+          </div>
+          <p class="mt-4 text-sm text-brand-cocoa/70">${product.description || 'Consulta por los sabores disponibles hoy.'}</p>
+          <div class="mt-5 h-px w-full bg-brand-caramel/15"></div>
+          <div class="mt-4 flex flex-wrap gap-2">
+            ${renderAvailability(product.available)}
+            ${renderExtras(product.extras)}
+          </div>
+        </div>
+      </article>
+    `;
+  }
   return `
     <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft px-7 py-8">
       <div class="absolute inset-0 bg-gradient-to-br from-brand-cream via-brand-beige/30 to-brand-cream"></div>
@@ -196,7 +217,7 @@ const initMenu = async () => {
 
   const { data, error } = await supabaseClient
     .from('products')
-    .select('id,name,description,price,category,extras,available')
+    .select('id,name,description,price,category,extras,available,image_url')
     .eq('category', category)
     .order('created_at', { ascending: false });
 
