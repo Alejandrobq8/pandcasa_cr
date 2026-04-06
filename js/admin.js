@@ -41,6 +41,11 @@ let editingId = null;
 let allProducts = [];
 let hasAdminAccess = false;
 
+// Temporada state
+let editingTemporadaId = null;
+let temporadaProducts = [];
+let temporadaVisible = true;
+
 const showStatus = (target, text, type = 'info') => {
   if (!target) return;
   target.textContent = text;
@@ -401,6 +406,280 @@ productForm.addEventListener('submit', async (event) => {
     fetchProducts();
   } catch (error) {
     showStatus(adminStatus, error.message, 'error');
+  }
+});
+
+// ============================================================
+// Tabs
+// ============================================================
+const tabInventarioBtn = document.getElementById('tabInventarioBtn');
+const tabTemporadaBtn = document.getElementById('tabTemporadaBtn');
+const panelInventario = document.getElementById('panelInventario');
+const panelTemporada = document.getElementById('panelTemporada');
+
+const switchTab = (tab) => {
+  const isTemporada = tab === 'temporada';
+  panelInventario?.classList.toggle('hidden', isTemporada);
+  panelTemporada?.classList.toggle('hidden', !isTemporada);
+
+  if (tabInventarioBtn) {
+    tabInventarioBtn.className = isTemporada
+      ? 'px-5 py-2 text-sm rounded-t-xl text-brand-caramel hover:text-brand-cocoa transition'
+      : 'px-5 py-2 text-sm rounded-t-xl border border-b-0 border-brand-caramel/30 bg-brand-cream font-medium -mb-px';
+  }
+  if (tabTemporadaBtn) {
+    tabTemporadaBtn.className = isTemporada
+      ? 'px-5 py-2 text-sm rounded-t-xl border border-b-0 border-brand-caramel/30 bg-brand-cream font-medium -mb-px'
+      : 'px-5 py-2 text-sm rounded-t-xl text-brand-caramel hover:text-brand-cocoa transition';
+  }
+
+  if (isTemporada) fetchTemporadaData();
+};
+
+tabInventarioBtn?.addEventListener('click', () => switchTab('inventario'));
+tabTemporadaBtn?.addEventListener('click', () => switchTab('temporada'));
+
+// ============================================================
+// Temporada: Visibilidad
+// ============================================================
+const temporadaToggleBtn = document.getElementById('temporadaToggleBtn');
+const temporadaVisibilityBadge = document.getElementById('temporadaVisibilityBadge');
+
+const updateTemporadaVisibilityUI = () => {
+  if (temporadaVisibilityBadge) {
+    temporadaVisibilityBadge.textContent = temporadaVisible ? 'Visible' : 'Oculto';
+    temporadaVisibilityBadge.className = temporadaVisible
+      ? 'px-3 py-1 rounded-full text-xs bg-brand-gold/15 text-brand-cocoa'
+      : 'px-3 py-1 rounded-full text-xs bg-brand-caramel/15 text-brand-cocoa';
+  }
+  if (temporadaToggleBtn) {
+    temporadaToggleBtn.textContent = temporadaVisible ? 'Ocultar para usuarios' : 'Mostrar para usuarios';
+  }
+};
+
+const fetchTemporadaVisibility = async () => {
+  if (!supabaseClient || !hasAdminAccess) return;
+  const { data, error } = await supabaseClient
+    .from('site_settings')
+    .select('value')
+    .eq('key', 'temporada_visible')
+    .single();
+  if (!error && data) {
+    temporadaVisible = data.value === true;
+    updateTemporadaVisibilityUI();
+  }
+};
+
+const handleTemporadaVisibilityToggle = async () => {
+  if (!requireAdminAccess()) return;
+  const newValue = !temporadaVisible;
+  const { error } = await supabaseClient
+    .from('site_settings')
+    .update({ value: newValue })
+    .eq('key', 'temporada_visible');
+  if (error) {
+    showToast(error.message, 'error');
+    return;
+  }
+  temporadaVisible = newValue;
+  updateTemporadaVisibilityUI();
+  showToast(newValue ? 'Temporada visible para usuarios.' : 'Temporada oculta para usuarios.');
+};
+
+temporadaToggleBtn?.addEventListener('click', handleTemporadaVisibilityToggle);
+
+// ============================================================
+// Temporada: CRUD
+// ============================================================
+const temporadaExtrasList = document.getElementById('temporadaExtrasList');
+const temporadaProductsTable = document.getElementById('temporadaProductsTable');
+const temporadaForm = document.getElementById('temporadaForm');
+const newTemporadaBtn = document.getElementById('newTemporadaBtn');
+const addTemporadaExtraBtn = document.getElementById('addTemporadaExtraBtn');
+const temporadaSearch = document.getElementById('temporadaSearch');
+const temporadaAvailabilityFilter = document.getElementById('temporadaAvailabilityFilter');
+const temporadaFormStatus = document.getElementById('temporadaFormStatus');
+
+const addTemporadaExtraRow = (extra = {}) => {
+  const row = document.createElement('div');
+  row.className = 'grid md:grid-cols-[1fr_120px_32px] gap-2 items-center';
+  row.dataset.extraRow = 'true';
+  row.innerHTML = `
+    <input type="text" placeholder="Extra / acompañamiento" value="${extra.name || ''}" class="rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
+    <input type="number" placeholder="Precio" value="${extra.price || ''}" class="rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
+    <button type="button" class="w-8 h-8 rounded-full border border-brand-caramel/30 text-brand-caramel hover:border-brand-gold">×</button>
+  `;
+  row.querySelector('button').addEventListener('click', () => row.remove());
+  temporadaExtrasList?.appendChild(row);
+};
+
+const resetTemporadaForm = () => {
+  temporadaForm?.reset();
+  editingTemporadaId = null;
+  if (temporadaExtrasList) temporadaExtrasList.innerHTML = '';
+};
+
+const collectTemporadaExtras = () => {
+  return Array.from(temporadaExtrasList?.querySelectorAll('[data-extra-row]') || []).map((row) => {
+    const inputs = row.querySelectorAll('input');
+    return {
+      name: inputs[0].value.trim(),
+      price: inputs[1].value ? Number(inputs[1].value) : null
+    };
+  }).filter((extra) => extra.name);
+};
+
+const renderTemporadaProducts = (products) => {
+  if (!temporadaProductsTable) return;
+  if (!products || products.length === 0) {
+    temporadaProductsTable.innerHTML = '<p class="text-sm text-brand-cocoa/70">No hay productos de temporada.</p>';
+    return;
+  }
+
+  const rows = products.map((product) => `
+    <div class="grid md:grid-cols-[1.6fr_0.7fr_0.7fr_0.5fr_0.5fr] gap-3 items-center border-b border-brand-caramel/10 py-3">
+      <div>
+        <p class="font-medium">${product.name}</p>
+        <p class="text-xs text-brand-cocoa/70">${product.available ? 'Disponible' : 'Agotado'}</p>
+      </div>
+      <p class="text-sm text-brand-cocoa/80">${formatCRC(product.price)}</p>
+      <button data-t-toggle="${product.id}" class="text-xs ${product.available ? 'text-brand-caramel' : 'text-brand-gold'}">
+        ${product.available ? 'Marcar agotado' : 'Marcar disponible'}
+      </button>
+      <button data-t-edit="${product.id}" class="text-xs text-brand-caramel hover:text-brand-gold">Editar</button>
+      <button data-t-delete="${product.id}" class="text-xs text-red-600">Eliminar</button>
+    </div>
+  `).join('');
+
+  temporadaProductsTable.innerHTML = rows;
+
+  temporadaProductsTable.querySelectorAll('[data-t-edit]').forEach((btn) => {
+    btn.addEventListener('click', () => handleTemporadaEdit(btn.dataset.tEdit));
+  });
+  temporadaProductsTable.querySelectorAll('[data-t-delete]').forEach((btn) => {
+    btn.addEventListener('click', () => handleTemporadaDelete(btn.dataset.tDelete));
+  });
+  temporadaProductsTable.querySelectorAll('[data-t-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => handleTemporadaToggleAvailability(btn.dataset.tToggle));
+  });
+};
+
+const applyTemporadaFilters = () => {
+  const query = (temporadaSearch?.value || '').trim().toLowerCase();
+  const availability = temporadaAvailabilityFilter?.value || 'all';
+
+  const filtered = temporadaProducts.filter((p) => {
+    const matchesQuery =
+      p.name.toLowerCase().includes(query) ||
+      (p.description || '').toLowerCase().includes(query);
+    const matchesAvailability =
+      availability === 'all' ||
+      (availability === 'available' && p.available) ||
+      (availability === 'unavailable' && !p.available);
+    return matchesQuery && matchesAvailability;
+  });
+
+  renderTemporadaProducts(filtered);
+};
+
+const fetchTemporadaProducts = async () => {
+  if (!supabaseClient || !hasAdminAccess) return;
+  const { data, error } = await supabaseClient
+    .from('products')
+    .select('*')
+    .eq('category', 'temporada')
+    .order('created_at', { ascending: false });
+  if (error) {
+    showToast(error.message, 'error');
+    return;
+  }
+  temporadaProducts = data || [];
+  applyTemporadaFilters();
+};
+
+const fetchTemporadaData = async () => {
+  await Promise.all([fetchTemporadaVisibility(), fetchTemporadaProducts()]);
+};
+
+const handleTemporadaEdit = (id) => {
+  if (!requireAdminAccess()) return;
+  const product = temporadaProducts.find((p) => p.id === id);
+  if (!product) return;
+
+  editingTemporadaId = id;
+  if (temporadaForm) {
+    temporadaForm.nombre.value = product.name || '';
+    temporadaForm.descripcion.value = product.description || '';
+    temporadaForm.precio.value = product.price || '';
+    temporadaForm.disponible.checked = Boolean(product.available);
+  }
+  if (temporadaExtrasList) temporadaExtrasList.innerHTML = '';
+  (product.extras || []).forEach(addTemporadaExtraRow);
+  temporadaForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+const handleTemporadaDelete = async (id) => {
+  if (!requireAdminAccess()) return;
+  if (!confirm('¿Eliminar este producto de temporada?')) return;
+  const { error } = await supabaseClient.from('products').delete().eq('id', id);
+  if (error) {
+    showToast(error.message, 'error');
+    return;
+  }
+  showToast('Producto eliminado.');
+  fetchTemporadaProducts();
+};
+
+const handleTemporadaToggleAvailability = async (id) => {
+  if (!requireAdminAccess()) return;
+  const product = temporadaProducts.find((p) => p.id === id);
+  if (!product) return;
+  const { error } = await supabaseClient
+    .from('products')
+    .update({ available: !product.available })
+    .eq('id', id);
+  if (error) {
+    showToast(error.message, 'error');
+    return;
+  }
+  fetchTemporadaProducts();
+};
+
+addTemporadaExtraBtn?.addEventListener('click', () => addTemporadaExtraRow());
+newTemporadaBtn?.addEventListener('click', () => {
+  resetTemporadaForm();
+  temporadaForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+temporadaSearch?.addEventListener('input', applyTemporadaFilters);
+temporadaAvailabilityFilter?.addEventListener('change', applyTemporadaFilters);
+
+temporadaForm?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (!isConfigured || !requireAdminAccess()) return;
+
+  try {
+    const name = temporadaForm.nombre.value.trim();
+    const description = temporadaForm.descripcion.value.trim();
+    const price = Number(temporadaForm.precio.value);
+    const available = temporadaForm.disponible.checked;
+    const extras = collectTemporadaExtras();
+
+    const payload = { name, description, price, category: 'temporada', available, extras };
+
+    const successMessage = editingTemporadaId ? 'Producto actualizado.' : 'Producto creado.';
+    const { error } = editingTemporadaId
+      ? await supabaseClient.from('products').update(payload).eq('id', editingTemporadaId)
+      : await supabaseClient.from('products').insert(payload);
+
+    if (error) throw error;
+
+    showStatus(temporadaFormStatus, successMessage);
+    showToast(successMessage);
+    resetTemporadaForm();
+    fetchTemporadaProducts();
+  } catch (error) {
+    showStatus(temporadaFormStatus, error.message, 'error');
   }
 });
 

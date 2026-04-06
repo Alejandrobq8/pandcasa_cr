@@ -1,4 +1,7 @@
 (() => {
+  const SUPABASE_URL = 'https://hcvzztldkjwhopkbydyo.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjdnp6dGxka2p3aG9wa2J5ZHlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyODc0NTYsImV4cCI6MjA4NDg2MzQ1Nn0.CvCrkjtf_an4u6dH-W_dsmVag5nvHq5yApiLKMz6bCk';
+
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const initMobileMenu = () => {
@@ -90,6 +93,22 @@
     );
   };
 
+  const applyTemporadaNavVisibility = async () => {
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/site_settings?key=eq.temporada_visible&select=value`,
+        { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
+      );
+      const data = await res.json();
+      const visible = Array.isArray(data) && data.length > 0 ? data[0].value !== false : true;
+      if (!visible) {
+        document.querySelectorAll('[data-temporada-link]').forEach((el) => el.classList.add('hidden'));
+      }
+    } catch {
+      // falla silenciosamente — mantiene los links visibles
+    }
+  };
+
   const initContactForm = () => {
     const form = document.getElementById('contactForm');
     if (!form) return;
@@ -127,6 +146,7 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     await loadPartials();
+    applyTemporadaNavVisibility();
     initMobileMenu();
     initPageTransitions();
     initScrollReveal();

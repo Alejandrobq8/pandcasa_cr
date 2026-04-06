@@ -50,6 +50,34 @@ create policy "Admin delete products" on public.products
 for delete to authenticated
 using (public.is_admin());
 
+-- ============================================================
+-- Tabla: site_settings
+-- Almacena configuraciones globales del sitio (ej: visibilidad de temporada).
+-- ============================================================
+create table if not exists public.site_settings (
+  key text primary key,
+  value jsonb not null
+);
+
+alter table public.site_settings enable row level security;
+
+-- Valor por defecto: temporada visible
+insert into public.site_settings (key, value)
+values ('temporada_visible', 'true'::jsonb)
+on conflict (key) do nothing;
+
+drop policy if exists "Public read site settings" on public.site_settings;
+create policy "Public read site settings" on public.site_settings
+for select to anon, authenticated
+using (true);
+
+drop policy if exists "Admin update site settings" on public.site_settings;
+create policy "Admin update site settings" on public.site_settings
+for update to authenticated
+using (public.is_admin())
+with check (public.is_admin());
+
+-- ============================================================
 -- Despues de crear el usuario en Authentication > Users,
 -- registra a cada administrador con una sentencia como esta:
 --

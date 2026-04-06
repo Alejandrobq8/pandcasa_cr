@@ -139,6 +139,15 @@ const applyCardStagger = (grid) => {
   });
 };
 
+const renderTemporadaOculta = (grid) => {
+  grid.innerHTML = `
+    <div class="col-span-full rounded-3xl border border-brand-caramel/20 bg-brand-cream p-8 text-center">
+      <p class="font-serif text-2xl">Menú de temporada no disponible</p>
+      <p class="mt-3 text-sm text-brand-cocoa/70">Estamos preparando nuevas ediciones limitadas. ¡Vuelve pronto!</p>
+    </div>
+  `;
+};
+
 const initMenu = async () => {
   const grid = document.getElementById('productGrid');
   const searchInput = document.getElementById('productSearch');
@@ -148,6 +157,23 @@ const initMenu = async () => {
   if (!isConfigured) {
     renderError(grid, 'Configura Supabase en app.js para ver los productos.');
     return;
+  }
+
+  if (category === 'temporada') {
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/site_settings?key=eq.temporada_visible&select=value`,
+        { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
+      );
+      const data = await res.json();
+      const visible = Array.isArray(data) && data.length > 0 ? data[0].value !== false : true;
+      if (!visible) {
+        renderTemporadaOculta(grid);
+        return;
+      }
+    } catch {
+      // si falla la verificación, muestra los productos normalmente
+    }
   }
 
   const cached = getCachedProducts(category);
