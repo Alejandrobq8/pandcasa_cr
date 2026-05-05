@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pan d’ Casa | Admin</title>
-  <meta name="description" content="Panel de administración de Pan d’ Casa.">
+  <title>Pan d' Casa | Admin</title>
+  <meta name="description" content="Panel de administración de Pan d' Casa.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#ECD8B4">
   <base href="/" />
@@ -21,7 +21,7 @@
   <header class="border-b border-brand-caramel/20 bg-brand-cream/80 backdrop-blur">
     <div class="max-w-6xl mx-auto px-5 sm:px-6 py-4 flex items-center justify-between">
       <div>
-        <p class="font-serif text-2xl">Pan d’ Casa</p>
+        <p class="font-serif text-2xl">Pan d' Casa</p>
         <p class="text-[10px] uppercase tracking-[0.3em] text-brand-caramel">Admin</p>
       </div>
       <a href="/" class="px-3 py-1.5 rounded-full border border-brand-caramel/40 text-xs">Volver al sitio</a>
@@ -76,6 +76,7 @@
       <div class="flex gap-1 mb-6 border-b border-brand-caramel/20">
         <button id="tabInventarioBtn" class="px-5 py-2 text-sm rounded-t-xl border border-b-0 border-brand-caramel/30 bg-brand-cream font-medium -mb-px">Inventario</button>
         <button id="tabTemporadaBtn" class="px-5 py-2 text-sm rounded-t-xl text-brand-caramel hover:text-brand-cocoa transition">Temporada</button>
+        <button id="tabCarruselBtn" class="px-5 py-2 text-sm rounded-t-xl text-brand-caramel hover:text-brand-cocoa transition">Carrusel bocadillos</button>
       </div>
 
       <!-- Panel: Inventario -->
@@ -248,6 +249,65 @@
           </div>
         </div>
       </div>
+
+      <!-- Panel: Carrusel bocadillos -->
+      <div id="panelCarrusel" class="hidden">
+        <div class="grid lg:grid-cols-2 gap-6 items-start">
+          <!-- Form -->
+          <form id="carruselForm" class="border border-brand-caramel/20 bg-brand-cream/85 p-6 rounded-3xl grid gap-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-serif text-lg">Foto de carrusel</h3>
+                <p class="text-xs text-brand-caramel mt-0.5">Categoria fija: bocadillos_carousel</p>
+              </div>
+              <button id="newCarruselBtn" type="button" class="px-3 py-1 rounded-full border border-brand-caramel/40 text-xs">Nuevo</button>
+            </div>
+            <div>
+              <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="carruselNombre">Nombre</label>
+              <input id="carruselNombre" name="nombre" type="text" required placeholder="Ej: Caja mixta grande" class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
+            </div>
+            <div>
+              <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="carruselPrecio">Precio (colones)</label>
+              <input id="carruselPrecio" name="precio" type="number" min="0" value="0" required class="mt-1 w-full rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
+            </div>
+            <div>
+              <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel">Imagen</label>
+              <div id="carruselImagePreview" class="hidden mt-2 h-36 rounded-xl overflow-hidden border border-brand-caramel/20">
+                <img id="carruselImagePreviewImg" src="" alt="" class="h-full w-full object-cover" />
+              </div>
+              <label for="carruselImageFile" class="mt-2 flex items-center gap-2 px-3 py-2 rounded-xl border border-brand-caramel/30 bg-white/80 text-sm cursor-pointer hover:border-brand-gold/60 transition">
+                <svg class="w-4 h-4 shrink-0 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <span id="carruselImageFileName" class="truncate text-brand-cocoa/60">Seleccionar imagen...</span>
+              </label>
+              <input id="carruselImageFile" type="file" accept="image/*" class="hidden" />
+              <p class="mt-1 text-xs text-brand-cocoa/50">Esta imagen aparece en el carrusel de la pagina de inicio.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input id="carruselDisponible" name="disponible" type="checkbox" class="h-4 w-4" checked />
+              <label for="carruselDisponible" class="text-sm text-brand-caramel">Visible en el carrusel</label>
+            </div>
+            <button id="carruselSubmitBtn" type="submit" class="justify-self-start px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-xs disabled:opacity-50 disabled:cursor-not-allowed">Guardar</button>
+            <p id="carruselFormStatus" class="text-sm text-brand-caramel"></p>
+          </form>
+
+          <!-- Listado -->
+          <div class="border border-brand-caramel/20 bg-brand-cream/85 p-6 rounded-3xl self-start">
+            <div class="grid gap-3">
+              <div>
+                <p class="text-xs uppercase tracking-[0.3em] text-brand-caramel">Inventario</p>
+                <h3 class="font-serif text-lg">Fotos en el carrusel</h3>
+              </div>
+              <input id="carruselSearch" type="search" placeholder="Buscar..." class="rounded-xl border border-brand-caramel/30 bg-white/80 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40" />
+            </div>
+            <div class="mt-4 border border-brand-caramel/15 rounded-2xl p-3 bg-brand-cream/90">
+              <div id="carruselProductsTable"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
   </main>
 

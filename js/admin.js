@@ -1,4 +1,4 @@
-const SUPABASE_URL = 'https://hcvzztldkjwhopkbydyo.supabase.co';
+﻿const SUPABASE_URL = 'https://hcvzztldkjwhopkbydyo.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjdnp6dGxka2p3aG9wa2J5ZHlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyODc0NTYsImV4cCI6MjA4NDg2MzQ1Nn0.CvCrkjtf_an4u6dH-W_dsmVag5nvHq5yApiLKMz6bCk';
 
 const isConfigured =
@@ -414,30 +414,30 @@ productForm.addEventListener('submit', async (event) => {
 // ============================================================
 const tabInventarioBtn = document.getElementById('tabInventarioBtn');
 const tabTemporadaBtn = document.getElementById('tabTemporadaBtn');
+const tabCarruselBtn = document.getElementById('tabCarruselBtn');
 const panelInventario = document.getElementById('panelInventario');
 const panelTemporada = document.getElementById('panelTemporada');
+const panelCarrusel = document.getElementById('panelCarrusel');
+
+const TAB_ACTIVE = 'px-5 py-2 text-sm rounded-t-xl border border-b-0 border-brand-caramel/30 bg-brand-cream font-medium -mb-px';
+const TAB_INACTIVE = 'px-5 py-2 text-sm rounded-t-xl text-brand-caramel hover:text-brand-cocoa transition';
 
 const switchTab = (tab) => {
-  const isTemporada = tab === 'temporada';
-  panelInventario?.classList.toggle('hidden', isTemporada);
-  panelTemporada?.classList.toggle('hidden', !isTemporada);
+  panelInventario?.classList.toggle('hidden', tab !== 'inventario');
+  panelTemporada?.classList.toggle('hidden', tab !== 'temporada');
+  panelCarrusel?.classList.toggle('hidden', tab !== 'carrusel');
 
-  if (tabInventarioBtn) {
-    tabInventarioBtn.className = isTemporada
-      ? 'px-5 py-2 text-sm rounded-t-xl text-brand-caramel hover:text-brand-cocoa transition'
-      : 'px-5 py-2 text-sm rounded-t-xl border border-b-0 border-brand-caramel/30 bg-brand-cream font-medium -mb-px';
-  }
-  if (tabTemporadaBtn) {
-    tabTemporadaBtn.className = isTemporada
-      ? 'px-5 py-2 text-sm rounded-t-xl border border-b-0 border-brand-caramel/30 bg-brand-cream font-medium -mb-px'
-      : 'px-5 py-2 text-sm rounded-t-xl text-brand-caramel hover:text-brand-cocoa transition';
-  }
+  if (tabInventarioBtn) tabInventarioBtn.className = tab === 'inventario' ? TAB_ACTIVE : TAB_INACTIVE;
+  if (tabTemporadaBtn) tabTemporadaBtn.className = tab === 'temporada' ? TAB_ACTIVE : TAB_INACTIVE;
+  if (tabCarruselBtn) tabCarruselBtn.className = tab === 'carrusel' ? TAB_ACTIVE : TAB_INACTIVE;
 
-  if (isTemporada) fetchTemporadaData();
+  if (tab === 'temporada') fetchTemporadaData();
+  if (tab === 'carrusel') fetchCarruselProducts();
 };
 
 tabInventarioBtn?.addEventListener('click', () => switchTab('inventario'));
 tabTemporadaBtn?.addEventListener('click', () => switchTab('temporada'));
+tabCarruselBtn?.addEventListener('click', () => switchTab('carrusel'));
 
 // ============================================================
 // Temporada: Visibilidad
@@ -740,6 +740,206 @@ temporadaForm?.addEventListener('submit', async (event) => {
     showStatus(temporadaFormStatus, successMessage);
   } catch (error) {
     showStatus(temporadaFormStatus, error.message, 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Guardar';
+  }
+});
+
+// ============================================================
+// Carrusel bocadillos: CRUD
+// ============================================================
+let editingCarruselId = null;
+let carruselProducts = [];
+let carruselCurrentImageUrl = null;
+
+const carruselForm = document.getElementById('carruselForm');
+const newCarruselBtn = document.getElementById('newCarruselBtn');
+const carruselSearch = document.getElementById('carruselSearch');
+const carruselFormStatus = document.getElementById('carruselFormStatus');
+const carruselImageFile = document.getElementById('carruselImageFile');
+const carruselImagePreview = document.getElementById('carruselImagePreview');
+const carruselImagePreviewImg = document.getElementById('carruselImagePreviewImg');
+const carruselImageFileName = document.getElementById('carruselImageFileName');
+const carruselProductsTable = document.getElementById('carruselProductsTable');
+
+const showCarruselImagePreview = (src) => {
+  if (!carruselImagePreview || !carruselImagePreviewImg) return;
+  carruselImagePreviewImg.src = src;
+  carruselImagePreview.classList.remove('hidden');
+};
+
+const hideCarruselImagePreview = () => {
+  if (!carruselImagePreview) return;
+  carruselImagePreview.classList.add('hidden');
+  if (carruselImagePreviewImg) carruselImagePreviewImg.src = '';
+};
+
+carruselImageFile?.addEventListener('change', (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  if (carruselImageFileName) carruselImageFileName.textContent = file.name;
+  showCarruselImagePreview(URL.createObjectURL(file));
+});
+
+const uploadCarruselImage = async (file) => {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const { error } = await supabaseClient.storage
+    .from('bocadillos-carousel')
+    .upload(path, file, { upsert: false });
+  if (error) throw error;
+  const { data } = supabaseClient.storage.from('bocadillos-carousel').getPublicUrl(path);
+  return data.publicUrl;
+};
+
+const resetCarruselForm = () => {
+  carruselForm?.reset();
+  editingCarruselId = null;
+  carruselCurrentImageUrl = null;
+  hideCarruselImagePreview();
+  if (carruselImageFileName) carruselImageFileName.textContent = 'Seleccionar imagen...';
+  if (carruselImageFile) carruselImageFile.value = '';
+};
+
+const renderCarruselProducts = (products) => {
+  if (!carruselProductsTable) return;
+  if (!products || products.length === 0) {
+    carruselProductsTable.innerHTML = '<p class="text-sm text-brand-cocoa/70">No hay fotos en el carrusel.</p>';
+    return;
+  }
+
+  carruselProductsTable.innerHTML = products.map((p) => `
+    <div class="grid md:grid-cols-[1fr_0.5fr_0.5fr_0.5fr] gap-3 items-center border-b border-brand-caramel/10 py-3">
+      <div class="flex items-center gap-3">
+        ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" class="h-10 w-10 rounded-lg object-cover border border-brand-caramel/15 shrink-0" />` : '<div class="h-10 w-10 rounded-lg bg-brand-beige/60 border border-brand-caramel/15 shrink-0"></div>'}
+        <div>
+          <p class="font-medium text-sm">${p.name}</p>
+          <p class="text-xs text-brand-cocoa/60">${p.available ? 'Visible' : 'Oculto'}</p>
+        </div>
+      </div>
+      <button data-c-toggle="${p.id}" class="text-xs ${p.available ? 'text-brand-caramel' : 'text-brand-gold'}">
+        ${p.available ? 'Ocultar' : 'Mostrar'}
+      </button>
+      <button data-c-edit="${p.id}" class="text-xs text-brand-caramel hover:text-brand-gold">Editar</button>
+      <button data-c-delete="${p.id}" class="text-xs text-red-600">Eliminar</button>
+    </div>
+  `).join('');
+
+  carruselProductsTable.querySelectorAll('[data-c-edit]').forEach((btn) => {
+    btn.addEventListener('click', () => handleCarruselEdit(btn.dataset.cEdit));
+  });
+  carruselProductsTable.querySelectorAll('[data-c-delete]').forEach((btn) => {
+    btn.addEventListener('click', () => handleCarruselDelete(btn.dataset.cDelete));
+  });
+  carruselProductsTable.querySelectorAll('[data-c-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => handleCarruselToggle(btn.dataset.cToggle));
+  });
+};
+
+const applyCarruselFilters = () => {
+  const query = (carruselSearch?.value || '').trim().toLowerCase();
+  const filtered = carruselProducts.filter((p) =>
+    p.name.toLowerCase().includes(query)
+  );
+  renderCarruselProducts(filtered);
+};
+
+const fetchCarruselProducts = async () => {
+  if (!supabaseClient || !hasAdminAccess) return;
+  const { data, error } = await supabaseClient
+    .from('products')
+    .select('*')
+    .eq('category', 'bocadillos_carousel')
+    .order('created_at', { ascending: false });
+  if (error) { showToast(error.message, 'error'); return; }
+  carruselProducts = data || [];
+  applyCarruselFilters();
+};
+
+const handleCarruselEdit = (id) => {
+  if (!requireAdminAccess()) return;
+  const product = carruselProducts.find((p) => p.id === id);
+  if (!product) return;
+
+  editingCarruselId = id;
+  carruselCurrentImageUrl = product.image_url || null;
+  if (carruselForm) {
+    carruselForm.nombre.value = product.name || '';
+    carruselForm.precio.value = product.price || 0;
+    carruselForm.disponible.checked = Boolean(product.available);
+  }
+  if (product.image_url) showCarruselImagePreview(product.image_url);
+  else hideCarruselImagePreview();
+  if (carruselImageFileName) carruselImageFileName.textContent = 'Seleccionar imagen...';
+  if (carruselImageFile) carruselImageFile.value = '';
+  carruselForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+const handleCarruselDelete = async (id) => {
+  if (!requireAdminAccess()) return;
+  if (!confirm('Eliminar esta foto del carrusel?')) return;
+  const { error } = await supabaseClient.from('products').delete().eq('id', id);
+  if (error) { showToast(error.message, 'error'); return; }
+  showToast('Foto eliminada.');
+  fetchCarruselProducts();
+};
+
+const handleCarruselToggle = async (id) => {
+  if (!requireAdminAccess()) return;
+  const product = carruselProducts.find((p) => p.id === id);
+  if (!product) return;
+  const { error } = await supabaseClient
+    .from('products')
+    .update({ available: !product.available })
+    .eq('id', id);
+  if (error) { showToast(error.message, 'error'); return; }
+  fetchCarruselProducts();
+};
+
+newCarruselBtn?.addEventListener('click', () => {
+  resetCarruselForm();
+  carruselForm?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+carruselSearch?.addEventListener('input', applyCarruselFilters);
+
+carruselForm?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (!isConfigured || !requireAdminAccess()) return;
+
+  const submitBtn = document.getElementById('carruselSubmitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Guardando...';
+
+  try {
+    const name = carruselForm.nombre.value.trim();
+    const price = Number(carruselForm.precio.value) || 0;
+    const available = carruselForm.disponible.checked;
+
+    let image_url = carruselCurrentImageUrl;
+    const fileToUpload = carruselImageFile?.files?.[0];
+    if (fileToUpload) {
+      showStatus(carruselFormStatus, 'Subiendo imagen...');
+      submitBtn.textContent = 'Subiendo imagen...';
+      image_url = await uploadCarruselImage(fileToUpload);
+    }
+
+    const payload = { name, price, category: 'bocadillos_carousel', available, extras: [], image_url };
+    const successMessage = editingCarruselId ? 'Foto actualizada.' : 'Foto agregada al carrusel.';
+
+    const { error } = editingCarruselId
+      ? await supabaseClient.from('products').update(payload).eq('id', editingCarruselId)
+      : await supabaseClient.from('products').insert(payload);
+
+    if (error) throw error;
+
+    showToast(successMessage);
+    resetCarruselForm();
+    await fetchCarruselProducts();
+    showStatus(carruselFormStatus, successMessage);
+  } catch (error) {
+    showStatus(carruselFormStatus, error.message, 'error');
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = 'Guardar';

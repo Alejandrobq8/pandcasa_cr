@@ -98,7 +98,7 @@
     try {
       const [visRes, prodRes] = await Promise.all([
         fetch(`${SUPABASE_URL}/rest/v1/site_settings?key=eq.temporada_visible&select=value`, headers),
-        fetch(`${SUPABASE_URL}/rest/v1/products?category=eq.temporada&image_url=not.is.null&available=eq.true&select=id,name,image_url&order=created_at.desc`, headers)
+        fetch(`${SUPABASE_URL}/rest/v1/products?category=eq.bocadillos_carousel&image_url=not.is.null&available=eq.true&select=id,name,image_url&order=created_at.desc`, headers)
       ]);
       const [visData, products] = await Promise.all([visRes.json(), prodRes.json()]);
       const visible = Array.isArray(visData) && visData.length > 0 ? visData[0].value !== false : true;
