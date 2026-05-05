@@ -164,4 +164,13 @@ body.page-exit main {
 
 .wa-action {
   text-align: left;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .wa-action {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
 }
