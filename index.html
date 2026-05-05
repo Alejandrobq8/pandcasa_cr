@@ -224,23 +224,48 @@
             <a href="https://www.tiktok.com/@pandcasa" target="_blank" rel="noopener" class="px-4 py-2 rounded-full border border-brand-caramel/50 text-sm btn-lift hover:border-brand-gold">TikTok</a>
             </div>
           </div>
-          <div class="grid gap-6">
-            <form id="contactForm" class="rounded-3xl border border-brand-caramel/20 bg-brand-cream p-6 shadow-soft grid gap-4">
-              <div>
-                <label class="text-sm text-brand-caramel" for="contactNombre">Nombre</label>
-                <input id="contactNombre" name="nombre" type="text" required class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+          <div class="grid gap-4">
+            <!-- Hacer un pedido -->
+            <button
+              data-wa-msg="Hola, Pan d' Casa 👋 Quisiera hacer un pedido. ¿Me pueden ayudar con los productos disponibles?"
+              class="wa-action group rounded-3xl border border-brand-caramel/20 bg-brand-cream p-5 shadow-soft text-left transition hover:border-brand-gold hover:shadow-md btn-lift">
+              <div class="flex items-start gap-4">
+                <span class="text-2xl">🛒</span>
+                <div>
+                  <p class="font-serif text-lg text-brand-cocoa">Hacer un pedido</p>
+                  <p class="mt-1 text-sm text-brand-cocoa/70">Contáctanos por WhatsApp y te ayudamos a armar tu pedido.</p>
+                </div>
+                <span class="ml-auto text-brand-caramel/40 group-hover:text-brand-gold transition text-lg">→</span>
               </div>
-              <div>
-                <label class="text-sm text-brand-caramel" for="contactEmail">Email</label>
-                <input id="contactEmail" name="email" type="email" required class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50" />
+            </button>
+
+            <!-- Solicitar catálogo -->
+            <button
+              data-wa-msg="Hola, Pan d' Casa 👋 Quisiera recibir el catálogo de bocadillos en PDF. ¿Me lo pueden enviar?"
+              class="wa-action group rounded-3xl border border-brand-caramel/20 bg-brand-cream p-5 shadow-soft text-left transition hover:border-brand-gold hover:shadow-md btn-lift">
+              <div class="flex items-start gap-4">
+                <span class="text-2xl">📄</span>
+                <div>
+                  <p class="font-serif text-lg text-brand-cocoa">Catálogo de bocadillos</p>
+                  <p class="mt-1 text-sm text-brand-cocoa/70">Recibe nuestro catálogo completo en PDF directo a tu WhatsApp.</p>
+                </div>
+                <span class="ml-auto text-brand-caramel/40 group-hover:text-brand-gold transition text-lg">→</span>
               </div>
-              <div>
-                <label class="text-sm text-brand-caramel" for="contactMensaje">Mensaje</label>
-                <textarea id="contactMensaje" name="mensaje" rows="4" required class="mt-2 w-full rounded-2xl border border-brand-caramel/30 bg-brand-cream px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"></textarea>
+            </button>
+
+            <!-- Otra consulta -->
+            <button
+              data-wa-msg="Hola, Pan d' Casa 👋 Tengo una consulta y me gustaría que me ayudaran."
+              class="wa-action group rounded-3xl border border-brand-caramel/20 bg-brand-cream p-5 shadow-soft text-left transition hover:border-brand-gold hover:shadow-md btn-lift">
+              <div class="flex items-start gap-4">
+                <span class="text-2xl">💬</span>
+                <div>
+                  <p class="font-serif text-lg text-brand-cocoa">Otra consulta</p>
+                  <p class="mt-1 text-sm text-brand-cocoa/70">¿Tienes alguna pregunta? Con gusto te respondemos.</p>
+                </div>
+                <span class="ml-auto text-brand-caramel/40 group-hover:text-brand-gold transition text-lg">→</span>
               </div>
-              <button type="submit" class="justify-self-start px-5 py-3 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift">Enviar por WhatsApp</button>
-              <p id="contactStatus" class="text-sm text-brand-caramel/80">El mensaje se abrirá en WhatsApp con tu información ya lista.</p>
-            </form>
+            </button>
           </div>
         </div>
       </div>
