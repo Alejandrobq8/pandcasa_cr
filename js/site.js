@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   const SUPABASE_URL = 'https://hcvzztldkjwhopkbydyo.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjdnp6dGxka2p3aG9wa2J5ZHlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyODc0NTYsImV4cCI6MjA4NDg2MzQ1Nn0.CvCrkjtf_an4u6dH-W_dsmVag5nvHq5yApiLKMz6bCk';
 
@@ -129,12 +129,12 @@
   };
 
   const initContactActions = () => {
-    const whatsappNumber = ‘50683376864’;
-    document.querySelectorAll(‘.wa-action’).forEach((btn) => {
-      btn.addEventListener(‘click’, () => {
-        const msg = btn.dataset.waMsg || ‘’;
+    const whatsappNumber = '50683376864';
+    document.querySelectorAll('.wa-action').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const msg = btn.dataset.waMsg || '';
         const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
-        window.open(url, ‘_blank’, ‘noopener’);
+        window.open(url, '_blank', 'noopener');
       });
     });
   };
