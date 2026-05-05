@@ -397,10 +397,10 @@ productForm.addEventListener('submit', async (event) => {
 
     if (error) throw error;
 
-    showStatus(adminStatus, successMessage);
     showToast(successMessage);
     resetForm();
-    fetchProducts();
+    await fetchProducts();
+    showStatus(adminStatus, successMessage);
   } catch (error) {
     showStatus(adminStatus, error.message, 'error');
   } finally {
@@ -734,10 +734,10 @@ temporadaForm?.addEventListener('submit', async (event) => {
 
     if (error) throw error;
 
-    showStatus(temporadaFormStatus, successMessage);
     showToast(successMessage);
     resetTemporadaForm();
-    fetchTemporadaProducts();
+    await fetchTemporadaProducts();
+    showStatus(temporadaFormStatus, successMessage);
   } catch (error) {
     showStatus(temporadaFormStatus, error.message, 'error');
   } finally {
