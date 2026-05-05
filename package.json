@@ -2,6 +2,10 @@
   "name": "pandcasa-cr",
   "private": true,
   "type": "module",
+  "scripts": {
+    "css:build": "npx tailwindcss -o dist/tailwind.css --minify",
+    "css:watch": "npx tailwindcss -o dist/tailwind.css --watch"
+  },
   "dependencies": {
     "@vercel/functions": "^3.4.3"
   }

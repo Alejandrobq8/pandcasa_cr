@@ -161,3 +161,7 @@ body.page-exit main {
   from { transform: translateX(calc(var(--width) * var(--quantity))); }
   to { transform: translateX(calc(var(--width) * -1)); }
 }
+
+.wa-action {
+  text-align: left;
+}
