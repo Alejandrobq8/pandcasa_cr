@@ -376,6 +376,10 @@ productForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!isConfigured || !requireAdminAccess()) return;
 
+  const submitBtn = document.getElementById('productSubmitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Guardando...';
+
   try {
     const name = productForm.nombre.value.trim();
     const description = productForm.descripcion.value.trim();
@@ -384,14 +388,7 @@ productForm.addEventListener('submit', async (event) => {
     const available = productForm.disponible.checked;
     const extras = collectExtras();
 
-    const payload = {
-      name,
-      description,
-      price,
-      category,
-      available,
-      extras
-    };
+    const payload = { name, description, price, category, available, extras };
 
     const successMessage = editingId ? 'Producto actualizado.' : 'Producto creado.';
     const { error } = editingId
@@ -406,6 +403,9 @@ productForm.addEventListener('submit', async (event) => {
     fetchProducts();
   } catch (error) {
     showStatus(adminStatus, error.message, 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Guardar';
   }
 });
 
@@ -706,6 +706,10 @@ temporadaForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!isConfigured || !requireAdminAccess()) return;
 
+  const submitBtn = document.getElementById('temporadaSubmitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Guardando...';
+
   try {
     const name = temporadaForm.nombre.value.trim();
     const description = temporadaForm.descripcion.value.trim();
@@ -717,6 +721,7 @@ temporadaForm?.addEventListener('submit', async (event) => {
     const fileToUpload = temporadaImageFile?.files?.[0];
     if (fileToUpload) {
       showStatus(temporadaFormStatus, 'Subiendo imagen...');
+      submitBtn.textContent = 'Subiendo imagen...';
       image_url = await uploadTemporadaImage(fileToUpload);
     }
 
@@ -735,6 +740,9 @@ temporadaForm?.addEventListener('submit', async (event) => {
     fetchTemporadaProducts();
   } catch (error) {
     showStatus(temporadaFormStatus, error.message, 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Guardar';
   }
 });
 
