@@ -9,15 +9,6 @@
       "permanent": true
     }
   ],
-  "rewrites": [
-    { "source": "/desayunos", "destination": "/pages/desayunos.html" },
-    { "source": "/almuerzos", "destination": "/pages/almuerzos.html" },
-    { "source": "/panaderia", "destination": "/pages/panaderia.html" },
-    { "source": "/postres",   "destination": "/pages/postres.html" },
-    { "source": "/queques",   "destination": "/pages/queques.html" },
-    { "source": "/cajitas",   "destination": "/pages/cajitas.html" },
-    { "source": "/temporada", "destination": "/pages/temporada.html" }
-  ],
   "headers": [
     {
       "source": "/(.*)",
