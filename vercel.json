@@ -7,7 +7,51 @@
       "source": "/admin.html",
       "destination": "/admin",
       "permanent": true
+    },
+    {
+      "source": "/pages/desayunos.html",
+      "destination": "/desayunos",
+      "permanent": true
+    },
+    {
+      "source": "/pages/almuerzos.html",
+      "destination": "/almuerzos",
+      "permanent": true
+    },
+    {
+      "source": "/pages/panaderia.html",
+      "destination": "/panaderia",
+      "permanent": true
+    },
+    {
+      "source": "/pages/postres.html",
+      "destination": "/postres",
+      "permanent": true
+    },
+    {
+      "source": "/pages/queques.html",
+      "destination": "/queques",
+      "permanent": true
+    },
+    {
+      "source": "/pages/cajitas.html",
+      "destination": "/cajitas",
+      "permanent": true
+    },
+    {
+      "source": "/pages/temporada.html",
+      "destination": "/temporada",
+      "permanent": true
     }
+  ],
+  "rewrites": [
+    { "source": "/desayunos", "destination": "/pages/desayunos.html" },
+    { "source": "/almuerzos", "destination": "/pages/almuerzos.html" },
+    { "source": "/panaderia", "destination": "/pages/panaderia.html" },
+    { "source": "/postres",   "destination": "/pages/postres.html" },
+    { "source": "/queques",   "destination": "/pages/queques.html" },
+    { "source": "/cajitas",   "destination": "/pages/cajitas.html" },
+    { "source": "/temporada", "destination": "/pages/temporada.html" }
   ],
   "headers": [
     {
