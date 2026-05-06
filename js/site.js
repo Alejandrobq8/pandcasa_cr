@@ -105,7 +105,7 @@
       // Controla solo los links de navegacion — el carrusel siempre esta activo
       const visible = Array.isArray(visData) && visData.length > 0 ? visData[0].value !== false : true;
       if (!visible) {
-        document.querySelectorAll('[data-temporada-link]').forEach((el) => el.classList.add('hidden'));
+        document.querySelectorAll('[data-temporada-link]').forEach((el) => { el.style.display = 'none'; });
       }
 
       // Carga las fotos del carrusel de bocadillos independientemente de la visibilidad
