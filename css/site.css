@@ -190,11 +190,20 @@ body.page-exit main {
   transform: rotate(180deg);
 }
 
+.nav-dropdown-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 16px;
+}
+
 .nav-dropdown-menu {
   position: absolute;
   top: calc(100% + 12px);
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(-4px);
   min-width: 180px;
   background: #FCFDFC;
   border: 1px solid rgba(126, 91, 55, 0.15);
@@ -204,7 +213,6 @@ body.page-exit main {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.18s ease, transform 0.18s ease;
-  transform: translateX(-50%) translateY(-4px);
 }
 
 .nav-dropdown-wrapper:hover .nav-dropdown-menu {
