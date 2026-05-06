@@ -762,6 +762,7 @@ const carruselImagePreview = document.getElementById('carruselImagePreview');
 const carruselImagePreviewImg = document.getElementById('carruselImagePreviewImg');
 const carruselImageFileName = document.getElementById('carruselImageFileName');
 const carruselProductsTable = document.getElementById('carruselProductsTable');
+const carruselDescripcion = document.getElementById('carruselDescripcion');
 
 const showCarruselImagePreview = (src) => {
   if (!carruselImagePreview || !carruselImagePreviewImg) return;
@@ -868,6 +869,7 @@ const handleCarruselEdit = (id) => {
     carruselForm.nombre.value = product.name || '';
     carruselForm.precio.value = product.price || 0;
     carruselForm.disponible.checked = Boolean(product.available);
+    if (carruselDescripcion) carruselDescripcion.value = product.description || '';
   }
   if (product.image_url) showCarruselImagePreview(product.image_url);
   else hideCarruselImagePreview();
@@ -914,6 +916,7 @@ carruselForm?.addEventListener('submit', async (event) => {
 
   try {
     const name = carruselForm.nombre.value.trim();
+    const description = (carruselDescripcion?.value || '').trim();
     const price = Number(carruselForm.precio.value) || 0;
     const available = carruselForm.disponible.checked;
 
@@ -925,7 +928,7 @@ carruselForm?.addEventListener('submit', async (event) => {
       image_url = await uploadCarruselImage(fileToUpload);
     }
 
-    const payload = { name, price, category: 'bocadillos_carousel', available, extras: [], image_url };
+    const payload = { name, description, price, category: 'bocadillos_carousel', available, extras: [], image_url };
     const successMessage = editingCarruselId ? 'Foto actualizada.' : 'Foto agregada al carrusel.';
 
     const { error } = editingCarruselId

@@ -215,7 +215,7 @@ const initMenu = async () => {
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const selectFields = category === 'temporada'
+  const selectFields = category === 'temporada' || category === 'bocadillos_carousel'
     ? 'id,name,description,price,category,extras,available,image_url'
     : 'id,name,description,price,category,extras,available';
 

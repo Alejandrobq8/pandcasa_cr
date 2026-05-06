@@ -4,7 +4,9 @@
       "Bash(Get-ChildItem \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\" -Force)",
       "Bash(node --input-type=module --eval ' *)",
       "PowerShell(\\(Get-Item \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\dist\\\\tailwind.css\"\\).Length; Get-Content \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\dist\\\\tailwind.css\" | Select-Object -First 3)",
-      "Bash(node --check \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\js\\\\site.js\")"
+      "Bash(node --check \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\js\\\\site.js\")",
+      "Bash(node --check \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\js\\\\app.js\")",
+      "Bash(node --check \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\js\\\\admin.js\")"
     ]
   }
 }

@@ -101,30 +101,28 @@
         fetch(`${SUPABASE_URL}/rest/v1/products?category=eq.bocadillos_carousel&image_url=not.is.null&available=eq.true&select=id,name,image_url&order=created_at.desc`, headers)
       ]);
       const [visData, products] = await Promise.all([visRes.json(), prodRes.json()]);
-      const visible = Array.isArray(visData) && visData.length > 0 ? visData[0].value !== false : true;
 
+      // Controla solo los links de navegacion — el carrusel siempre esta activo
+      const visible = Array.isArray(visData) && visData.length > 0 ? visData[0].value !== false : true;
       if (!visible) {
         document.querySelectorAll('[data-temporada-link]').forEach((el) => el.classList.add('hidden'));
-        const section = document.getElementById('temporada');
-        if (section) section.classList.add('hidden');
-        return;
       }
 
-      // Reemplaza el carrusel estático con los productos de temporada que tengan imagen
+      // Carga las fotos del carrusel de bocadillos independientemente de la visibilidad
       const slider = document.querySelector('.seasonal-slider');
       const list = document.querySelector('.seasonal-list');
       if (slider && list && Array.isArray(products) && products.length > 0) {
         slider.style.setProperty('--quantity', String(products.length));
         list.innerHTML = products.map((p, i) => `
           <div class="seasonal-item" style="--position: ${i + 1}">
-            <a href="/pages/temporada.html" class="card-reveal block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full" data-reveal>
+            <div class="card-reveal block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full" data-reveal>
               <img src="${p.image_url}" alt="${p.name}" class="h-full w-full object-cover" loading="lazy" decoding="async" />
-            </a>
+            </div>
           </div>
         `).join('');
       }
     } catch {
-      // falla silenciosamente — mantiene el carrusel estático
+      // falla silenciosamente — mantiene el carrusel estatico
     }
   };
 
