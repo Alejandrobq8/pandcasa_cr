@@ -49,7 +49,7 @@ const renderCard = (product) => {
         <div class="w-full">
           <img src="${product.image_url}" alt="${product.name}" class="w-full block" loading="eager" decoding="async" />
         </div>
-        <div class="relative z-10 px-5 py-5 bg-brand-cream">
+        <div class="relative z-10 px-5 py-4 bg-brand-cream">
           <h3 class="font-serif text-xl leading-snug">${product.name}</h3>
           <span class="mt-1 block text-base font-medium text-brand-caramel">${formatCRC(product.price)}</span>
           ${renderDescription(product.description)}
