@@ -46,8 +46,8 @@ const renderCard = (product) => {
   if (product.category === 'bocadillos_carousel') {
     return `
       <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-beige shadow-soft">
-        <div class="w-full p-3">
-          <img src="${product.image_url}" alt="${product.name}" class="w-full rounded-2xl block" loading="eager" decoding="async" />
+        <div class="w-full">
+          <img src="${product.image_url}" alt="${product.name}" class="w-full block" loading="eager" decoding="async" />
         </div>
         <div class="relative z-10 px-5 py-5 bg-brand-cream">
           <h3 class="font-serif text-xl leading-snug">${product.name}</h3>
