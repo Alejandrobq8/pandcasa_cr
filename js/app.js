@@ -47,7 +47,7 @@ const renderCard = (product) => {
     return `
       <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-beige shadow-soft">
         <div class="w-full p-3 bg-brand-beige">
-          <img src="${product.image_url}" alt="${product.name}" class="w-full rounded-2xl transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+          <img src="${product.image_url}" alt="${product.name}" class="w-full rounded-2xl block" loading="eager" decoding="async" />
         </div>
         <div class="relative z-10 px-5 py-5 bg-brand-cream">
           <h3 class="font-serif text-xl leading-snug">${product.name}</h3>
@@ -55,7 +55,7 @@ const renderCard = (product) => {
           ${renderDescription(product.description)}
           <div class="mt-4 h-px w-full bg-brand-caramel/15"></div>
           <div class="mt-3 flex flex-wrap gap-2">
-            ${renderAvailability(product.available)}
+            ${product.category !== 'bocadillos_carousel' ? renderAvailability(product.available) : ''}
             ${renderExtras(product.extras)}
           </div>
         </div>
