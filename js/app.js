@@ -32,17 +32,27 @@ const renderAvailability = (available) => {
     : '<span class="px-3 py-1 rounded-full bg-brand-caramel/15 text-xs text-brand-cocoa">Agotado</span>';
 };
 
+const renderDescription = (description) => {
+  if (!description) return '<p class="mt-3 text-sm text-brand-cocoa/70">Consulta por los sabores disponibles hoy.</p>';
+  const lines = description.split('\n').map((l) => l.trim()).filter(Boolean);
+  if (lines.length <= 1) {
+    return `<p class="mt-3 text-sm text-brand-cocoa/70 leading-relaxed">${description}</p>`;
+  }
+  const items = lines.map((l) => `<li>${l}</li>`).join('');
+  return `<ul class="product-desc-list mt-3 text-sm text-brand-cocoa/70">${items}</ul>`;
+};
+
 const renderCard = (product) => {
   if (product.image_url) {
     return `
-      <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft">
-        <div class="relative h-56 w-full overflow-hidden bg-brand-beige">
-          <img src="${product.image_url}" alt="${product.name}" class="absolute inset-0 w-full h-full object-cover object-center scale-105 transition-transform duration-500 hover:scale-110" loading="lazy" decoding="async" />
+      <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-beige shadow-soft">
+        <div class="h-56 w-full overflow-hidden">
+          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover object-center transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
         </div>
-        <div class="relative z-10 px-5 py-5">
+        <div class="relative z-10 px-5 py-5 bg-brand-cream">
           <h3 class="font-serif text-xl leading-snug">${product.name}</h3>
           <span class="mt-1 block text-base font-medium text-brand-caramel">${formatCRC(product.price)}</span>
-          <p class="mt-3 text-sm text-brand-cocoa/70 leading-relaxed">${product.description || 'Consulta por los sabores disponibles hoy.'}</p>
+          ${renderDescription(product.description)}
           <div class="mt-4 h-px w-full bg-brand-caramel/15"></div>
           <div class="mt-3 flex flex-wrap gap-2">
             ${renderAvailability(product.available)}
@@ -58,7 +68,7 @@ const renderCard = (product) => {
       <div class="relative z-10">
         <h3 class="font-serif text-xl leading-snug">${product.name}</h3>
         <span class="mt-1 block text-base font-medium text-brand-caramel">${formatCRC(product.price)}</span>
-        <p class="mt-3 text-sm text-brand-cocoa/70 leading-relaxed">${product.description || 'Consulta por los sabores disponibles hoy.'}</p>
+        ${renderDescription(product.description)}
         <div class="mt-4 h-px w-full bg-brand-caramel/15"></div>
         <div class="mt-3 flex flex-wrap gap-2">
           ${renderAvailability(product.available)}

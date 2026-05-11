@@ -162,6 +162,20 @@ body.page-exit main {
   to { transform: translateX(calc(var(--width) * -1)); }
 }
 
+.product-desc-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-desc-list li::before {
+  content: '·';
+  margin-right: 6px;
+  color: rgba(126, 91, 55, 0.5);
+}
+
 /* nav dropdown */
 .nav-dropdown-wrapper {
   position: relative;
