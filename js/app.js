@@ -46,8 +46,10 @@ const renderCard = (product) => {
   if (product.image_url) {
     return `
       <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-beige shadow-soft">
-        <div class="h-56 w-full overflow-hidden">
-          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover object-center transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+        <div class="w-full p-3 bg-brand-beige">
+          <div class="h-52 w-full overflow-hidden rounded-2xl">
+            <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover object-center transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+          </div>
         </div>
         <div class="relative z-10 px-5 py-5 bg-brand-cream">
           <h3 class="font-serif text-xl leading-snug">${product.name}</h3>
