@@ -115,8 +115,8 @@
         slider.style.setProperty('--quantity', String(products.length));
         list.innerHTML = products.map((p, i) => `
           <div class="seasonal-item" style="--position: ${i + 1}">
-            <div class="card-reveal block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full" data-reveal>
-              <img src="${p.image_url}" alt="${p.name}" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+            <div class="block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full">
+              <img src="${p.image_url}" alt="${p.name}" class="h-full w-full object-cover" loading="eager" decoding="async" />
             </div>
           </div>
         `).join('');
