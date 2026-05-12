@@ -136,28 +136,6 @@ const initMobileMenu = () => {
   mobileOverlay?.addEventListener('click', () => toggleMenu(false));
 };
 
-const cacheKey = (category) => `pandcasa_products_${category}`;
-const cacheTTL = 5 * 60 * 1000;
-
-const getCachedProducts = (category) => {
-  try {
-    const raw = sessionStorage.getItem(cacheKey(category));
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (Date.now() - parsed.timestamp > cacheTTL) return null;
-    return parsed.data;
-  } catch (error) {
-    return null;
-  }
-};
-
-const setCachedProducts = (category, data) => {
-  try {
-    sessionStorage.setItem(cacheKey(category), JSON.stringify({ timestamp: Date.now(), data }));
-  } catch (error) {
-    // ignore cache errors
-  }
-};
 
 const filterProducts = (products, query) => {
   const q = query.trim().toLowerCase();
@@ -225,22 +203,6 @@ const initMenu = async () => {
     }
   }
 
-  const cached = getCachedProducts(category);
-  if (cached) {
-    const initial = filterProducts(cached, searchInput?.value || '');
-    grid.innerHTML = initial.map(renderCard).join('');
-    applyCardStagger(grid);
-    if (searchInput) {
-      searchInput.addEventListener('input', () => {
-        const filtered = filterProducts(cached, searchInput.value);
-        grid.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '';
-        if (filtered.length) applyCardStagger(grid);
-        if (!filtered.length) renderEmpty(grid);
-      });
-    }
-    return;
-  }
-
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const selectFields = category === 'temporada' || category === 'bocadillos_carousel'
@@ -266,7 +228,6 @@ const initMenu = async () => {
   const initial = filterProducts(data, searchInput?.value || '');
   grid.innerHTML = initial.map(renderCard).join('');
   applyCardStagger(grid);
-  setCachedProducts(category, data);
 
   if (searchInput) {
     searchInput.addEventListener('input', () => {
