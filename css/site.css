@@ -135,7 +135,8 @@ body.page-exit main {
 
 /* seasonal slider (index) */
 .seasonal-slider {
-  width: 100%;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
   height: var(--height);
   overflow: hidden;
 }
