@@ -6,6 +6,23 @@ const isConfigured =
   !SUPABASE_URL.includes('YOUR_SUPABASE_URL') &&
   !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY');
 
+const compressImage = (file, maxWidth = 1200, quality = 0.82) =>
+  new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, maxWidth / img.width);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob((blob) => resolve(blob ?? file), 'image/jpeg', quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
+  });
+
 const formatCRC = (value) => {
   if (value === null || value === undefined || Number.isNaN(Number(value))) return '';
   return `₡${Number(value).toLocaleString('es-CR')}`;
@@ -526,11 +543,11 @@ temporadaImageFile?.addEventListener('change', (e) => {
 });
 
 const uploadTemporadaImage = async (file) => {
-  const ext = file.name.split('.').pop().toLowerCase();
-  const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const compressed = await compressImage(file);
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
   const { error } = await supabaseClient.storage
     .from('temporada-images')
-    .upload(path, file, { upsert: false });
+    .upload(path, compressed, { upsert: false, contentType: 'image/jpeg' });
   if (error) throw error;
   const { data } = supabaseClient.storage.from('temporada-images').getPublicUrl(path);
   return data.publicUrl;
@@ -784,11 +801,11 @@ carruselImageFile?.addEventListener('change', (e) => {
 });
 
 const uploadCarruselImage = async (file) => {
-  const ext = file.name.split('.').pop().toLowerCase();
-  const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const compressed = await compressImage(file);
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
   const { error } = await supabaseClient.storage
     .from('bocadillos-carousel')
-    .upload(path, file, { upsert: false });
+    .upload(path, compressed, { upsert: false, contentType: 'image/jpeg' });
   if (error) throw error;
   const { data } = supabaseClient.storage.from('bocadillos-carousel').getPublicUrl(path);
   return data.publicUrl;
