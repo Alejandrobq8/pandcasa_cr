@@ -6,7 +6,13 @@
       "PowerShell(\\(Get-Item \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\dist\\\\tailwind.css\"\\).Length; Get-Content \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\dist\\\\tailwind.css\" | Select-Object -First 3)",
       "Bash(node --check \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\js\\\\site.js\")",
       "Bash(node --check \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\js\\\\app.js\")",
-      "Bash(node --check \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\js\\\\admin.js\")"
+      "Bash(node --check \"c:\\\\Users\\\\Usuario\\\\Documents\\\\VS_CODE\\\\Projects\\\\pandcasa_cr\\\\js\\\\admin.js\")",
+      "Bash(nslookup pandcasa.com)",
+      "Bash(nslookup www.pandcasa.com)",
+      "Bash(curl -s --max-time 5 -I https://pandcasa.com)",
+      "Bash(nslookup pandcasa.com 8.8.8.8)",
+      "Bash(nslookup pandcasa.com 1.1.1.1)",
+      "Bash(nslookup -type=NS pandcasa.com 8.8.8.8)"
     ]
   }
 }

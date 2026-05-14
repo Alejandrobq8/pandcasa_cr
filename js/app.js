@@ -213,6 +213,7 @@ const initMenu = async () => {
     .from('products')
     .select(selectFields)
     .eq('category', category)
+    .order('sort_order', { ascending: true, nullsFirst: false })
     .order('created_at', { ascending: false });
 
   if (error) {

@@ -52,10 +52,12 @@ const loginStatus = document.getElementById('loginStatus');
 const adminStatus = document.getElementById('adminStatus');
 const configMessage = document.getElementById('configMessage');
 const toast = document.getElementById('toast');
+const saveOrderBtn = document.getElementById('saveOrderBtn');
 const ACCESS_DENIED_MESSAGE = 'Tu cuenta no tiene permisos de administrador.';
 
 let editingId = null;
 let allProducts = [];
+let displayedProducts = [];
 let hasAdminAccess = false;
 
 // Temporada state
@@ -180,14 +182,18 @@ const collectExtras = () => {
   }).filter((extra) => extra.name);
 };
 
-const renderProducts = (products) => {
+const renderProducts = (products, keepOrderBtn = false) => {
+  displayedProducts = [...products];
+  if (!keepOrderBtn) saveOrderBtn?.classList.add('hidden');
+
   if (!products || products.length === 0) {
     productsTable.innerHTML = '<p class="text-sm text-brand-cocoa/70">Aún no hay productos registrados.</p>';
     return;
   }
 
-  const rows = products.map((product) => `
-    <div class="grid md:grid-cols-[1.6fr_0.7fr_0.7fr_0.5fr_0.5fr] gap-3 items-center border-b border-brand-caramel/10 py-3">
+  const rows = products.map((product, idx) => `
+    <div class="grid md:grid-cols-[16px_1.6fr_0.7fr_0.7fr_0.5fr_0.5fr] gap-3 items-center border-b border-brand-caramel/10 py-3 transition-opacity" draggable="true" data-drag-idx="${idx}">
+      <span class="text-brand-caramel/40 cursor-grab select-none text-base leading-none" title="Arrastrar para reordenar">&#8942;&#8942;</span>
       <div>
         <p class="font-medium">${product.name}</p>
         <p class="text-xs text-brand-cocoa/70">${product.category} · ${product.available ? 'Disponible' : 'Agotado'}</p>
@@ -203,8 +209,31 @@ const renderProducts = (products) => {
 
   productsTable.innerHTML = rows;
 
+  let dragSrcIdx = null;
+  productsTable.querySelectorAll('[data-drag-idx]').forEach((row) => {
+    row.addEventListener('dragstart', (e) => {
+      dragSrcIdx = Number(row.dataset.dragIdx);
+      e.dataTransfer.effectAllowed = 'move';
+      setTimeout(() => row.classList.add('opacity-40'), 0);
+    });
+    row.addEventListener('dragend', () => row.classList.remove('opacity-40'));
+    row.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    });
+    row.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const destIdx = Number(row.dataset.dragIdx);
+      if (dragSrcIdx === null || dragSrcIdx === destIdx) return;
+      const moved = displayedProducts.splice(dragSrcIdx, 1)[0];
+      displayedProducts.splice(destIdx, 0, moved);
+      renderProducts(displayedProducts, true);
+      saveOrderBtn?.classList.remove('hidden');
+    });
+  });
+
   productsTable.querySelectorAll('[data-edit]').forEach((btn) => {
-    btn.addEventListener('click', () => handleEdit(btn.dataset.edit, products));
+    btn.addEventListener('click', () => handleEdit(btn.dataset.edit, allProducts));
   });
 
   productsTable.querySelectorAll('[data-delete]').forEach((btn) => {
@@ -237,10 +266,33 @@ const applyFilters = () => {
   renderProducts(filtered);
 };
 
+const saveProductOrder = async () => {
+  if (!requireAdminAccess()) return;
+  saveOrderBtn.disabled = true;
+  saveOrderBtn.textContent = 'Guardando...';
+  try {
+    await Promise.all(
+      displayedProducts.map((p, i) =>
+        supabaseClient.from('products').update({ sort_order: i + 1 }).eq('id', p.id)
+      )
+    );
+    showToast('Orden guardado.');
+    saveOrderBtn?.classList.add('hidden');
+    await fetchProducts();
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    if (saveOrderBtn) {
+      saveOrderBtn.disabled = false;
+      saveOrderBtn.textContent = 'Guardar orden';
+    }
+  }
+};
+
 const fetchProducts = async () => {
   if (!supabaseClient || !hasAdminAccess) return;
   if (syncStatus) syncStatus.textContent = 'Sincronizando';
-  const { data, error } = await supabaseClient.from('products').select('*').order('created_at', { ascending: false });
+  const { data, error } = await supabaseClient.from('products').select('*').order('sort_order', { ascending: true, nullsFirst: false }).order('created_at', { ascending: false });
   if (error) {
     showStatus(adminStatus, error.message, 'error');
     if (syncStatus) syncStatus.textContent = 'Error';
@@ -377,6 +429,8 @@ logoutBtn.addEventListener('click', async () => {
   await supabaseClient.auth.signOut();
   showStatus(adminStatus, 'Sesión cerrada.');
 });
+
+saveOrderBtn?.addEventListener('click', saveProductOrder);
 
 addExtraBtn.addEventListener('click', () => addExtraRow());
 newProductBtn?.addEventListener('click', () => {
