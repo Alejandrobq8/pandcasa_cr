@@ -167,13 +167,19 @@ const renderFilterButtons = (container, products, activeFilter) => {
     ...(anyFrutas ? [{ label: 'Con frutas', value: 'frutas' }] : []),
   ];
 
-  container.innerHTML = items.map(({ label, value }) => {
+  const sep = `<span class="text-brand-caramel/40 select-none">·</span>`;
+  const btns = items.map(({ label, value }) => {
     const active = activeFilter === value;
     const cls = active
-      ? 'px-3 py-1 rounded-full text-xs bg-brand-cocoa text-brand-cream btn-lift'
-      : 'px-3 py-1 rounded-full text-xs border border-brand-caramel/20 bg-brand-cream text-brand-cocoa btn-lift';
+      ? 'px-4 py-1 rounded-2xl text-xs font-medium bg-brand-gold text-brand-cocoa btn-lift'
+      : 'px-4 py-1 rounded-2xl text-xs bg-brand-beige text-brand-cocoa btn-lift';
     return `<button data-filter="${value}" class="${cls}">${label}</button>`;
-  }).join('');
+  });
+
+  container.innerHTML =
+    `<span class="shrink-0 text-xs uppercase tracking-wide text-brand-caramel">Filtrar</span>` +
+    sep +
+    btns.join(sep);
 };
 
 const filterProducts = (products, query) => {
