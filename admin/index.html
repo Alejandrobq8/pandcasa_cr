@@ -85,8 +85,11 @@
           <!-- Form -->
           <form id="productForm" class="border border-brand-caramel/20 bg-brand-cream/85 p-6 rounded-3xl grid gap-4">
             <div class="flex items-center justify-between">
-              <h3 class="font-serif text-lg">Producto</h3>
-              <button id="newProductBtn" type="button" class="px-3 py-1 rounded-full border border-brand-caramel/40 text-xs">Nuevo</button>
+              <h3 class="font-serif text-lg"><span id="formHeading">Producto</span></h3>
+              <div class="flex items-center gap-2">
+                <button id="cancelEditBtn" type="button" class="hidden px-3 py-1 rounded-full border border-brand-caramel/40 text-xs text-brand-caramel">Cancelar</button>
+                <button id="newProductBtn" type="button" class="px-3 py-1 rounded-full border border-brand-caramel/40 text-xs">Nuevo</button>
+              </div>
             </div>
             <div>
               <label class="text-xs uppercase tracking-[0.2em] text-brand-caramel" for="nombre">Nombre</label>
@@ -124,7 +127,10 @@
               </div>
               <div id="extrasList" class="mt-2 grid gap-2"></div>
             </div>
-            <button id="productSubmitBtn" type="submit" class="justify-self-start px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-xs disabled:opacity-50 disabled:cursor-not-allowed">Guardar</button>
+            <div class="flex flex-wrap gap-2">
+              <button id="productSubmitBtn" type="submit" class="px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-xs disabled:opacity-50 disabled:cursor-not-allowed">Guardar</button>
+              <button id="saveAndAddAnotherBtn" type="button" class="px-4 py-2 rounded-full border border-brand-caramel/40 text-brand-caramel text-xs disabled:opacity-50 disabled:cursor-not-allowed">Guardar y agregar otro</button>
+            </div>
             <p id="adminStatus" class="text-sm text-brand-caramel"></p>
           </form>
 

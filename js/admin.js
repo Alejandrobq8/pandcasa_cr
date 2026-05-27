@@ -53,12 +53,16 @@ const adminStatus = document.getElementById('adminStatus');
 const configMessage = document.getElementById('configMessage');
 const toast = document.getElementById('toast');
 const saveOrderBtn = document.getElementById('saveOrderBtn');
+const formHeading = document.getElementById('formHeading');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+const saveAndAddAnotherBtn = document.getElementById('saveAndAddAnotherBtn');
 const ACCESS_DENIED_MESSAGE = 'Tu cuenta no tiene permisos de administrador.';
 
 let editingId = null;
 let allProducts = [];
 let displayedProducts = [];
 let hasAdminAccess = false;
+let saveMode = 'default'; // 'default' | 'addAnother'
 
 // Temporada state
 let editingTemporadaId = null;
@@ -166,10 +170,22 @@ const addExtraRow = (extra = {}) => {
   extrasList.appendChild(row);
 };
 
-const resetForm = () => {
-  productForm.reset();
+const resetForm = (keepContext = false) => {
+  if (keepContext) {
+    // Only clear name and description — keep category, price, availability, extras
+    productForm.nombre.value = '';
+    productForm.descripcion.value = '';
+  } else {
+    productForm.reset();
+    extrasList.innerHTML = '';
+  }
   editingId = null;
-  extrasList.innerHTML = '';
+  saveMode = 'default';
+  // Restore edit-mode UI
+  if (formHeading) formHeading.textContent = 'Producto';
+  const submitBtn = document.getElementById('productSubmitBtn');
+  if (submitBtn) submitBtn.textContent = 'Guardar';
+  cancelEditBtn?.classList.add('hidden');
 };
 
 const collectExtras = () => {
@@ -182,6 +198,12 @@ const collectExtras = () => {
   }).filter((extra) => extra.name);
 };
 
+const updateStatsCounters = () => {
+  if (productsCount) productsCount.textContent = String(allProducts.length);
+  if (availableCount) availableCount.textContent = String(allProducts.filter((p) => p.available).length);
+  if (unavailableCount) unavailableCount.textContent = String(allProducts.filter((p) => !p.available).length);
+};
+
 const renderProducts = (products, keepOrderBtn = false) => {
   displayedProducts = [...products];
   if (!keepOrderBtn) saveOrderBtn?.classList.add('hidden');
@@ -192,7 +214,7 @@ const renderProducts = (products, keepOrderBtn = false) => {
   }
 
   const rows = products.map((product, idx) => `
-    <div class="grid md:grid-cols-[16px_1.6fr_0.7fr_0.7fr_0.5fr_0.5fr] gap-3 items-center border-b border-brand-caramel/10 py-3 transition-opacity" draggable="true" data-drag-idx="${idx}">
+    <div class="grid md:grid-cols-[16px_1.5fr_0.6fr_0.7fr_0.5fr_0.5fr_0.5fr] gap-3 items-center border-b border-brand-caramel/10 py-3 transition-opacity" draggable="true" data-drag-idx="${idx}">
       <span class="text-brand-caramel/40 cursor-grab select-none text-base leading-none" title="Arrastrar para reordenar">&#8942;&#8942;</span>
       <div>
         <p class="font-medium">${product.name}</p>
@@ -203,6 +225,7 @@ const renderProducts = (products, keepOrderBtn = false) => {
         ${product.available ? 'Marcar agotado' : 'Marcar disponible'}
       </button>
       <button data-edit="${product.id}" class="text-xs text-brand-caramel hover:text-brand-gold">Editar</button>
+      <button data-duplicate="${product.id}" class="text-xs text-brand-caramel/60 hover:text-brand-gold">Duplicar</button>
       <button data-delete="${product.id}" class="text-xs text-red-600">Eliminar</button>
     </div>
   `).join('');
@@ -234,6 +257,10 @@ const renderProducts = (products, keepOrderBtn = false) => {
 
   productsTable.querySelectorAll('[data-edit]').forEach((btn) => {
     btn.addEventListener('click', () => handleEdit(btn.dataset.edit, allProducts));
+  });
+
+  productsTable.querySelectorAll('[data-duplicate]').forEach((btn) => {
+    btn.addEventListener('click', () => handleDuplicate(btn.dataset.duplicate));
   });
 
   productsTable.querySelectorAll('[data-delete]').forEach((btn) => {
@@ -321,6 +348,40 @@ const handleEdit = (id, products) => {
   extrasList.innerHTML = '';
   (product.extras || []).forEach(addExtraRow);
 
+  // Edit-mode UI
+  if (formHeading) formHeading.textContent = `Editando: ${product.name}`;
+  const submitBtn = document.getElementById('productSubmitBtn');
+  if (submitBtn) submitBtn.textContent = 'Actualizar';
+  cancelEditBtn?.classList.remove('hidden');
+
+  // Scroll to form
+  productForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+const handleDuplicate = (id) => {
+  if (!requireAdminAccess()) return;
+  const product = allProducts.find((item) => item.id === id);
+  if (!product) return;
+
+  // Fill the form like edit but don't set editingId (creates new)
+  editingId = null;
+  productForm.nombre.value = `Copia de ${product.name}`;
+  productForm.descripcion.value = product.description || '';
+  productForm.precio.value = product.price || '';
+  productForm.categoria.value = product.category || 'panaderia';
+  productForm.disponible.checked = Boolean(product.available);
+
+  extrasList.innerHTML = '';
+  (product.extras || []).forEach(addExtraRow);
+
+  // Reset to "new" mode UI
+  if (formHeading) formHeading.textContent = 'Producto';
+  const submitBtn = document.getElementById('productSubmitBtn');
+  if (submitBtn) submitBtn.textContent = 'Guardar';
+  cancelEditBtn?.classList.add('hidden');
+
+  productForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  productForm.nombre.focus();
 };
 
 const handleDelete = async (id) => {
@@ -339,15 +400,24 @@ const handleToggleAvailability = async (id) => {
   if (!requireAdminAccess()) return;
   const product = allProducts.find((item) => item.id === id);
   if (!product) return;
+
+  // Optimistic update
+  const prevValue = product.available;
+  product.available = !product.available;
+  updateStatsCounters();
+  applyFilters();
+
   const { error } = await supabaseClient
     .from('products')
-    .update({ available: !product.available })
+    .update({ available: product.available })
     .eq('id', id);
   if (error) {
-    showStatus(adminStatus, error.message, 'error');
-    return;
+    // Revert on failure
+    product.available = prevValue;
+    updateStatsCounters();
+    applyFilters();
+    showToast(error.message, 'error');
   }
-  fetchProducts();
 };
 
 
@@ -432,6 +502,16 @@ logoutBtn.addEventListener('click', async () => {
 
 saveOrderBtn?.addEventListener('click', saveProductOrder);
 
+saveAndAddAnotherBtn?.addEventListener('click', () => {
+  saveMode = 'addAnother';
+  productForm.requestSubmit();
+});
+
+cancelEditBtn?.addEventListener('click', () => {
+  resetForm();
+  showStatus(adminStatus, '');
+});
+
 addExtraBtn.addEventListener('click', () => addExtraRow());
 newProductBtn?.addEventListener('click', () => {
   resetForm();
@@ -448,7 +528,9 @@ productForm.addEventListener('submit', async (event) => {
   if (!isConfigured || !requireAdminAccess()) return;
 
   const submitBtn = document.getElementById('productSubmitBtn');
+  const currentSaveMode = saveMode;
   submitBtn.disabled = true;
+  if (saveAndAddAnotherBtn) saveAndAddAnotherBtn.disabled = true;
   submitBtn.textContent = 'Guardando...';
 
   try {
@@ -461,22 +543,62 @@ productForm.addEventListener('submit', async (event) => {
 
     const payload = { name, description, price, category, available, extras };
 
-    const successMessage = editingId ? 'Producto actualizado.' : 'Producto creado.';
-    const { error } = editingId
-      ? await supabaseClient.from('products').update(payload).eq('id', editingId)
-      : await supabaseClient.from('products').insert(payload);
+    if (editingId) {
+      // UPDATE — optimistic local mutation
+      const idx = allProducts.findIndex((p) => p.id === editingId);
+      const prev = idx !== -1 ? { ...allProducts[idx] } : null;
+      if (idx !== -1) Object.assign(allProducts[idx], payload);
+      updateStatsCounters();
+      applyFilters();
 
-    if (error) throw error;
+      const { error } = await supabaseClient.from('products').update(payload).eq('id', editingId);
+      if (error) {
+        // Revert
+        if (idx !== -1 && prev) allProducts[idx] = prev;
+        updateStatsCounters();
+        applyFilters();
+        throw error;
+      }
+      showToast('Producto actualizado.');
+      showStatus(adminStatus, 'Producto actualizado.');
+    } else {
+      // INSERT — optimistic with temp id, replace on success
+      const tempId = `__temp_${Date.now()}`;
+      const tempProduct = { id: tempId, sort_order: null, created_at: new Date().toISOString(), ...payload };
+      allProducts.unshift(tempProduct);
+      updateStatsCounters();
+      applyFilters();
 
-    showToast(successMessage);
-    resetForm();
-    await fetchProducts();
-    showStatus(adminStatus, successMessage);
-  } catch (error) {
-    showStatus(adminStatus, error.message, 'error');
+      const { data, error } = await supabaseClient.from('products').insert(payload).select().single();
+      if (error) {
+        // Remove temp entry
+        allProducts = allProducts.filter((p) => p.id !== tempId);
+        updateStatsCounters();
+        applyFilters();
+        throw error;
+      }
+      // Replace temp with real row
+      const tempIdx = allProducts.findIndex((p) => p.id === tempId);
+      if (tempIdx !== -1) allProducts[tempIdx] = data;
+      updateStatsCounters();
+      applyFilters();
+      showToast('Producto creado.');
+      showStatus(adminStatus, 'Producto creado.');
+    }
+
+    if (currentSaveMode === 'addAnother') {
+      resetForm(true); // keep category/price/availability/extras
+      productForm.nombre.focus();
+    } else {
+      resetForm();
+    }
+  } catch (err) {
+    showStatus(adminStatus, err.message, 'error');
   } finally {
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Guardar';
+    if (saveAndAddAnotherBtn) saveAndAddAnotherBtn.disabled = false;
+    // Restore button label based on current editing state
+    submitBtn.textContent = editingId ? 'Actualizar' : 'Guardar';
   }
 });
 
