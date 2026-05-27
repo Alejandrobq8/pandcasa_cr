@@ -14,6 +14,11 @@ const formatCRC = (value) => {
   })}`;
 };
 
+const formatPrice = (price) => {
+  if (price === null || price === undefined || Number.isNaN(Number(price))) return '';
+  return `₡ ${Number(price).toLocaleString('es-CR')}`;
+};
+
 const renderExtras = (extras) => {
   if (!Array.isArray(extras) || extras.length === 0) return '';
   const items = extras
@@ -99,6 +104,92 @@ const renderCard = (product) => {
       </div>
     </article>
   `;
+};
+
+const renderProductCard = (product) => {
+  const unavailable = product.available === false;
+  const waMsg = encodeURIComponent(`Hola, quisiera pedir: *${product.name}*. ¿Está disponible?`);
+  const waHref = `https://wa.me/50683376864?text=${waMsg}`;
+
+  const imageSection = product.image_url
+    ? `<img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105${unavailable ? ' grayscale opacity-60' : ''}" loading="lazy" decoding="async" />`
+    : `<div class="h-full w-full bg-gradient-to-br from-brand-caramel/30 to-brand-cocoa/20"></div>`;
+
+  const badge = unavailable
+    ? `<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-brand-cocoa/80 text-brand-cream text-xs">Agotado</span>`
+    : '';
+
+  const btn = unavailable
+    ? ''
+    : `<a href="${waHref}" target="_blank" rel="noopener" class="shrink-0 px-4 py-2 rounded-full bg-brand-gold text-brand-cocoa text-sm tracking-wide btn-lift">Pedir</a>`;
+
+  return `
+    <article class="card-reveal group relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft${unavailable ? ' opacity-70 pointer-events-none' : ''}">
+      <div class="relative h-52 w-full overflow-hidden">
+        ${imageSection}
+        ${badge}
+      </div>
+      <div class="px-6 py-5">
+        <h3 class="font-serif text-lg leading-snug">${product.name}</h3>
+        <p class="mt-2 text-sm text-brand-cocoa/65 line-clamp-2">${product.description || ''}</p>
+        <div class="mt-4 flex items-end justify-between gap-4">
+          <div>
+            <p class="text-[10px] uppercase tracking-widest text-brand-cocoa/50">Precio</p>
+            <p class="font-serif text-xl">${formatPrice(product.price)}</p>
+          </div>
+          ${btn}
+        </div>
+      </div>
+    </article>
+  `;
+};
+
+const loadProductGrid = async (supabaseClient) => {
+  const grid = document.getElementById('productGrid');
+  const loading = document.getElementById('productLoading');
+  const empty = document.getElementById('productEmpty');
+  const searchInput = document.getElementById('productSearch');
+
+  const category = grid.dataset.category;
+
+  const { data, error } = await supabaseClient
+    .from('products')
+    .select('id,name,description,price,category,available,image_url')
+    .eq('category', category)
+    .order('sort_order', { ascending: true, nullsFirst: false })
+    .order('name', { ascending: true });
+
+  if (loading) loading.classList.add('hidden');
+
+  if (error) {
+    renderError(grid, error.message);
+    return;
+  }
+
+  const allProducts = data || [];
+
+  const render = (products) => {
+    if (!products.length) {
+      grid.innerHTML = '';
+      if (empty) empty.classList.remove('hidden');
+      return;
+    }
+    if (empty) empty.classList.add('hidden');
+    grid.innerHTML = products.map(renderProductCard).join('');
+    applyCardStagger(grid);
+  };
+
+  render(allProducts);
+
+  if (searchInput) {
+    let debounceTimer;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        render(filterProducts(allProducts, searchInput.value));
+      }, 200);
+    });
+  }
 };
 
 const renderEmpty = (grid) => {
@@ -205,7 +296,12 @@ const initMenu = async () => {
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const selectFields = category === 'temporada' || category === 'bocadillos_carousel'
+  if (category === 'bocadillos_carousel') {
+    await loadProductGrid(supabaseClient);
+    return;
+  }
+
+  const selectFields = category === 'temporada'
     ? 'id,name,description,price,category,extras,available,image_url'
     : 'id,name,description,price,category,extras,available';
 
