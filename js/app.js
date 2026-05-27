@@ -137,6 +137,45 @@ const initMobileMenu = () => {
 };
 
 
+const NUMS_ES = { uno:1, dos:2, tres:3, cuatro:4, cinco:5, seis:6, siete:7, ocho:8, nueve:9, diez:10 };
+
+const getBoxQuantity = (product) => {
+  const text = `${product.name} ${product.description || ''}`.toLowerCase();
+  for (const [word, num] of Object.entries(NUMS_ES)) {
+    if (new RegExp(`\\b${word}\\b`).test(text)) return num;
+  }
+  const match = text.match(/\b(\d+)\b/);
+  return match ? parseInt(match[1]) : null;
+};
+
+const hasRefresco = (product) =>
+  `${product.name} ${product.description || ''}`.toLowerCase().includes('refresco');
+
+const hasFrutas = (product) =>
+  `${product.name} ${product.description || ''}`.toLowerCase().includes('fruta');
+
+const renderFilterButtons = (container, products, activeFilter) => {
+  if (!container) return;
+  const quantities = [...new Set(products.map(getBoxQuantity).filter(Boolean))].sort((a, b) => a - b);
+  const anyRefresco = products.some(hasRefresco);
+  const anyFrutas = products.some(hasFrutas);
+
+  const items = [
+    { label: 'Todos', value: 'all' },
+    ...quantities.map(q => ({ label: `${q} bocadillos`, value: `qty-${q}` })),
+    ...(anyRefresco ? [{ label: 'Con refresco', value: 'refresco' }] : []),
+    ...(anyFrutas ? [{ label: 'Con frutas', value: 'frutas' }] : []),
+  ];
+
+  container.innerHTML = items.map(({ label, value }) => {
+    const active = activeFilter === value;
+    const cls = active
+      ? 'px-3 py-1 rounded-full text-xs bg-brand-cocoa text-brand-cream btn-lift'
+      : 'px-3 py-1 rounded-full text-xs border border-brand-caramel/20 bg-brand-cream text-brand-cocoa btn-lift';
+    return `<button data-filter="${value}" class="${cls}">${label}</button>`;
+  }).join('');
+};
+
 const filterProducts = (products, query) => {
   const q = query.trim().toLowerCase();
   if (!q) return products;
@@ -223,6 +262,47 @@ const initMenu = async () => {
 
   if (!data || data.length === 0) {
     renderEmpty(grid);
+    return;
+  }
+
+  if (category === 'bocadillos_carousel') {
+    const filtersEl = document.getElementById('productFilters');
+    let activeFilter = 'all';
+
+    const applyAndRender = () => {
+      let result = filterProducts(data, searchInput?.value || '');
+      if (activeFilter.startsWith('qty-')) {
+        const qty = parseInt(activeFilter.replace('qty-', ''));
+        result = result.filter(p => getBoxQuantity(p) === qty);
+      } else if (activeFilter === 'refresco') {
+        result = result.filter(hasRefresco);
+      } else if (activeFilter === 'frutas') {
+        result = result.filter(hasFrutas);
+      }
+
+      renderFilterButtons(filtersEl, data, activeFilter);
+      grid.innerHTML = result.length ? result.map(renderCard).join('') : '';
+      grid.closest('[data-reveal]')?.classList.add('is-visible');
+      if (result.length) applyCardStagger(grid);
+      else renderEmpty(grid);
+    };
+
+    applyAndRender();
+
+    filtersEl?.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-filter]');
+      if (!btn) return;
+      activeFilter = btn.dataset.filter;
+      applyAndRender();
+    });
+
+    if (searchInput) {
+      let debounce;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(applyAndRender, 200);
+      });
+    }
     return;
   }
 
