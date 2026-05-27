@@ -228,13 +228,17 @@ const initMenu = async () => {
 
   const initial = filterProducts(data, searchInput?.value || '');
   grid.innerHTML = initial.map(renderCard).join('');
+  grid.closest('[data-reveal]')?.classList.add('is-visible');
   applyCardStagger(grid);
 
   if (searchInput) {
     searchInput.addEventListener('input', () => {
       const filtered = filterProducts(data, searchInput.value);
       grid.innerHTML = filtered.length ? filtered.map(renderCard).join('') : '';
-      if (filtered.length) applyCardStagger(grid);
+      if (filtered.length) {
+        grid.closest('[data-reveal]')?.classList.add('is-visible');
+        applyCardStagger(grid);
+      }
       if (!filtered.length) renderEmpty(grid);
     });
   }
