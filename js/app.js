@@ -354,5 +354,8 @@ const initMenu = async () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
-  initMenu();
+  initMenu().catch((err) => {
+    const grid = document.getElementById('productGrid');
+    if (grid) renderError(grid, err.message || 'Error inesperado. Intenta recargar la página.');
+  });
 });
