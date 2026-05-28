@@ -137,6 +137,65 @@
     });
   };
 
+  const initLightbox = () => {
+    const overlay = document.createElement('div');
+    overlay.id = 'lightbox-overlay';
+    overlay.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 opacity-0 pointer-events-none transition-opacity duration-300';
+    overlay.innerHTML = `
+      <button id="lightbox-close" aria-label="Cerrar" class="absolute top-3 right-3 w-11 h-11 rounded-full bg-white/20 hover:bg-white/35 flex items-center justify-center text-white text-2xl leading-none transition-colors">&times;</button>
+      <p class="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/50 text-xs select-none hidden" id="lightbox-hint">Desliza hacia abajo para cerrar</p>
+      <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[85vh] rounded-xl object-contain shadow-2xl select-none" draggable="false">
+    `;
+    document.body.appendChild(overlay);
+
+    const img = overlay.querySelector('#lightbox-img');
+    const hint = overlay.querySelector('#lightbox-hint');
+
+    const open = (src, alt) => {
+      img.src = src;
+      img.alt = alt || '';
+      if ('ontouchstart' in window) hint.classList.remove('hidden');
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      overlay.classList.add('opacity-100');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const close = () => {
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      overlay.classList.remove('opacity-100');
+      document.body.style.overflow = '';
+      img.style.transform = '';
+    };
+
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('[data-lightbox]');
+      if (trigger) open(trigger.dataset.lightbox, trigger.dataset.lightboxAlt);
+    });
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target.id === 'lightbox-close') close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+
+    // Swipe down to close
+    let touchStartY = 0;
+    overlay.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    overlay.addEventListener('touchmove', (e) => {
+      const dy = e.touches[0].clientY - touchStartY;
+      if (dy > 0) img.style.transform = `translateY(${dy * 0.4}px)`;
+    }, { passive: true });
+    overlay.addEventListener('touchend', (e) => {
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (dy > 80) close();
+      else img.style.transform = '';
+    }, { passive: true });
+  };
+
   document.addEventListener('DOMContentLoaded', async () => {
     await loadPartials();
     initTemporadaSection();
@@ -144,5 +203,6 @@
     initPageTransitions();
     initScrollReveal();
     initContactActions();
+    initLightbox();
   });
 })();
