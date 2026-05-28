@@ -28,8 +28,8 @@ const renderExtras = (extras) => {
 
 const renderAvailability = (available) => {
   return available
-    ? '<span class="px-3 py-1 rounded-full bg-brand-gold/15 text-xs text-brand-cocoa">Disponible</span>'
-    : '<span class="px-3 py-1 rounded-full bg-brand-caramel/15 text-xs text-brand-cocoa">Agotado</span>';
+    ? '<span class="inline-flex items-center gap-1.5 text-xs text-brand-cocoa/60"><span class="w-1.5 h-1.5 rounded-full bg-brand-gold inline-block"></span>Disponible</span>'
+    : '<span class="inline-flex items-center gap-1.5 text-xs text-brand-cocoa/40"><span class="w-1.5 h-1.5 rounded-full bg-brand-caramel/30 inline-block"></span>Agotado</span>';
 };
 
 const renderDescription = (description) => {
@@ -45,15 +45,16 @@ const renderDescription = (description) => {
 const renderCard = (product) => {
   if (product.category === 'bocadillos_carousel') {
     return `
-      <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft">
-        <div class="w-full">
-          <img src="${product.image_url}" alt="${product.name}" class="w-full block" loading="eager" decoding="async" />
+      <article class="card-reveal group overflow-hidden rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300">
+        <div class="w-full overflow-hidden relative">
+          <img src="${product.image_url}" alt="${product.name}" class="w-full block transition-transform duration-700 group-hover:scale-105" loading="eager" decoding="async" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
-        <div class="relative z-10 px-5 py-4">
-          <h3 class="font-serif text-xl leading-snug">${product.name}</h3>
-          <span class="mt-1 block text-base font-medium text-brand-caramel">${formatCRC(product.price)}</span>
+        <div class="px-5 py-5">
+          <h3 class="font-serif text-lg leading-snug">${product.name}</h3>
+          <span class="mt-1 block text-sm font-medium text-brand-caramel">${formatCRC(product.price)}</span>
           ${renderDescription(product.description)}
-          <div class="mt-4 h-px w-full bg-brand-caramel/15"></div>
+          <div class="mt-3 h-px w-full bg-brand-caramel/15"></div>
           <div class="mt-3 flex flex-wrap gap-2">
             ${renderExtras(product.extras)}
           </div>
@@ -63,17 +64,17 @@ const renderCard = (product) => {
   }
   if (product.image_url) {
     return `
-      <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft">
-        <div class="h-52 w-full overflow-hidden">
-          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" decoding="async" />
+      <article class="card-reveal group overflow-hidden rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300">
+        <div class="h-56 w-full overflow-hidden relative">
+          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
-        <div class="relative z-10 px-7 py-6">
-          <div class="flex items-start justify-between gap-4">
-            <h3 class="font-serif text-2xl leading-tight">${product.name}</h3>
-            <span class="text-lg font-medium shrink-0">${formatCRC(product.price)}</span>
+        <div class="px-5 py-5">
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-serif text-xl leading-snug">${product.name}</h3>
+            <span class="shrink-0 text-base font-medium text-brand-caramel">${formatCRC(product.price)}</span>
           </div>
-          <p class="mt-4 text-sm text-brand-cocoa/70">${product.description || 'Consulta por los sabores disponibles hoy.'}</p>
-          <div class="mt-5 h-px w-full bg-brand-caramel/15"></div>
+          <p class="mt-2 text-sm text-brand-cocoa/65 leading-relaxed line-clamp-2">${product.description || 'Consulta por los sabores disponibles hoy.'}</p>
           <div class="mt-4 flex flex-wrap gap-2">
             ${renderAvailability(product.available)}
             ${renderExtras(product.extras)}
@@ -83,15 +84,17 @@ const renderCard = (product) => {
     `;
   }
   return `
-    <article class="card-reveal relative overflow-hidden rounded-3xl border border-brand-caramel/20 bg-brand-cream shadow-soft px-7 py-8">
-      <div class="absolute inset-0 bg-gradient-to-br from-brand-cream via-brand-beige/30 to-brand-cream"></div>
-      <div class="relative z-10">
-        <div class="flex items-start justify-between gap-4">
-          <h3 class="font-serif text-2xl leading-tight">${product.name}</h3>
-          <span class="text-lg font-medium shrink-0">${formatCRC(product.price)}</span>
+    <article class="card-reveal group overflow-hidden rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300">
+      <div class="relative h-32 bg-gradient-to-br from-brand-beige/70 via-brand-beige/30 to-brand-cream overflow-hidden flex items-center justify-center">
+        <span class="font-serif text-9xl text-brand-cocoa/10 select-none leading-none pointer-events-none">${product.name.charAt(0)}</span>
+        <div class="absolute bottom-3 left-5 h-px w-8 bg-brand-gold/60"></div>
+      </div>
+      <div class="px-5 py-5">
+        <div class="flex items-start justify-between gap-3">
+          <h3 class="font-serif text-xl leading-snug text-brand-cocoa">${product.name}</h3>
+          <span class="shrink-0 text-base font-medium text-brand-caramel">${formatCRC(product.price)}</span>
         </div>
-        <p class="mt-4 text-sm text-brand-cocoa/70">${product.description || 'Consulta por los sabores disponibles hoy.'}</p>
-        <div class="mt-5 h-px w-full bg-brand-caramel/15"></div>
+        <p class="mt-2 text-sm text-brand-cocoa/65 leading-relaxed line-clamp-3">${product.description || 'Consulta por los sabores disponibles hoy.'}</p>
         <div class="mt-4 flex flex-wrap gap-2">
           ${renderAvailability(product.available)}
           ${renderExtras(product.extras)}
@@ -206,8 +209,12 @@ const applyCardStagger = (grid) => {
     card.style.transitionDelay = `${Math.min(index * 60, 420)}ms`;
   });
 
+  void grid.offsetHeight;
+
   requestAnimationFrame(() => {
-    cards.forEach((card) => card.classList.add('is-visible'));
+    requestAnimationFrame(() => {
+      cards.forEach((card) => card.classList.add('is-visible'));
+    });
   });
 };
 
