@@ -27,6 +27,8 @@
     const isModifiedClick = (event) =>
       event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
 
+    let isNavigating = false;
+
     document.querySelectorAll('a[href]').forEach((link) => {
       const href = link.getAttribute('href');
       if (!href || href.startsWith('#')) return;
@@ -35,8 +37,9 @@
       if (/^https?:\/\//i.test(href)) return;
 
       link.addEventListener('click', (event) => {
-        if (isModifiedClick(event)) return;
+        if (isModifiedClick(event) || isNavigating) return;
         event.preventDefault();
+        isNavigating = true;
         document.body.classList.add('page-exit');
         setTimeout(() => {
           window.location.href = href;

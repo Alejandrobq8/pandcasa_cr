@@ -128,6 +128,7 @@ const renderError = (grid, message) => {
     <div class="col-span-full rounded-3xl border border-brand-caramel/20 bg-brand-cream p-8 text-center">
       <p class="font-serif text-2xl">No se pudo cargar el menú</p>
       <p class="mt-3 text-sm text-brand-cocoa/70">${message}</p>
+      <button onclick="location.reload()" class="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-caramel text-brand-cream text-sm font-medium">Reintentar</button>
     </div>
   `;
 };
@@ -245,6 +246,10 @@ const initMenu = async () => {
   const category = grid.dataset.category;
   if (!isConfigured) {
     renderError(grid, 'Configura Supabase en app.js para ver los productos.');
+    return;
+  }
+  if (!window.supabase) {
+    renderError(grid, 'No se pudo cargar la conexión. Verifica tu red e intenta de nuevo.');
     return;
   }
 
