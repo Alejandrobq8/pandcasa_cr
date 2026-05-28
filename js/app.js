@@ -181,19 +181,27 @@ const renderFilterButtons = (container, products, activeFilter) => {
     ...(anyFrutas ? [{ label: 'Con frutas', value: 'frutas' }] : []),
   ];
 
-  const sep = `<span class="text-brand-caramel/40 select-none">·</span>`;
-  const btns = items.map(({ label, value }) => {
-    const active = activeFilter === value;
-    const cls = active
-      ? 'px-4 py-1 rounded-2xl text-xs font-medium bg-brand-gold text-brand-cocoa btn-lift'
-      : 'px-4 py-1 rounded-2xl text-xs bg-brand-beige text-brand-cocoa btn-lift';
-    return `<button data-filter="${value}" class="${cls}">${label}</button>`;
-  });
+  const activeLabel = items.find(i => i.value === activeFilter)?.label || 'Todos';
 
-  container.innerHTML =
-    `<span class="shrink-0 text-xs uppercase tracking-wide text-brand-caramel">Filtrar</span>` +
-    sep +
-    btns.join(sep);
+  const menuItems = items.map(({ label, value }) => {
+    const isActive = activeFilter === value;
+    return `<button data-filter="${value}" class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-brand-cocoa hover:bg-brand-beige/60 transition-colors duration-150 ${isActive ? 'font-medium' : ''}">
+      <span>${label}</span>
+      ${isActive ? '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-brand-caramel" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>' : '<span class="w-4 h-4"></span>'}
+    </button>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="relative inline-block">
+      <button data-dropdown-toggle class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-caramel/30 bg-brand-cream text-sm text-brand-cocoa hover:border-brand-caramel/60 transition-colors duration-150">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-brand-caramel/70 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"/></svg>
+        <span data-filter-label>${activeLabel}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-brand-caramel/60 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
+      </button>
+      <div data-dropdown-menu class="absolute top-full left-0 mt-2 w-52 bg-brand-cream rounded-xl border border-brand-caramel/20 shadow-lift z-20 overflow-hidden hidden">
+        ${menuItems}
+      </div>
+    </div>`;
 };
 
 const filterProducts = (products, query) => {
@@ -318,10 +326,20 @@ const initMenu = async () => {
     applyAndRender();
 
     filtersEl?.addEventListener('click', (e) => {
+      if (e.target.closest('[data-dropdown-toggle]')) {
+        filtersEl.querySelector('[data-dropdown-menu]')?.classList.toggle('hidden');
+        return;
+      }
       const btn = e.target.closest('[data-filter]');
       if (!btn) return;
       activeFilter = btn.dataset.filter;
       applyAndRender();
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#productFilters')) {
+        filtersEl?.querySelector('[data-dropdown-menu]')?.classList.add('hidden');
+      }
     });
 
     if (searchInput) {
