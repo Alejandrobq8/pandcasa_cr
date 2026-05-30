@@ -68,7 +68,7 @@ const renderCard = (product) => {
             ${renderExtras(product.extras)}
           </div>
         </div>
-        ${renderWhatsAppBtn(product.name, 'https://pandcasa.com/cajitas')}
+        ${renderWhatsAppBtn(product.name, `https://pandcasa.com/cajitas?q=${encodeURIComponent(product.name)}`)}
       </article>
     `;
   }
@@ -323,6 +323,8 @@ const initMenu = async () => {
       else renderEmpty(grid);
     };
 
+    const urlQ = new URLSearchParams(location.search).get('q');
+    if (urlQ && searchInput) searchInput.value = urlQ;
     applyAndRender();
 
     filtersEl?.addEventListener('click', (e) => {
