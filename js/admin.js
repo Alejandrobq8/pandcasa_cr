@@ -6,13 +6,32 @@ const isConfigured =
   !SUPABASE_URL.includes('YOUR_SUPABASE_URL') &&
   !SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY');
 
-const withTimeout = (promise, ms = 15000) =>
-  Promise.race([
-    promise,
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('La operación tardó demasiado. Verifica tu conexión e intenta de nuevo.')), ms)
-    )
-  ]);
+const adminFetch = (...args) => {
+  const [resource, config = {}] = args;
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), 20000);
+  return fetch(resource, { ...config, signal: controller.signal })
+    .finally(() => clearTimeout(id));
+};
+
+const withRetry = async (fn, retries = 2) => {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try { return await fn(); }
+    catch (err) {
+      if (attempt === retries) throw err;
+      await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+    }
+  }
+};
+
+const classifyError = (err) => {
+  const msg = (err?.message || String(err)).toLowerCase();
+  if (msg.includes('abort') || msg.includes('timeout') || msg.includes('demasiado'))
+    return 'La conexión tardó demasiado. Verifica tu red e intenta de nuevo.';
+  if (!navigator.onLine)
+    return 'Sin conexión a internet. Conéctate e intenta de nuevo.';
+  return err?.message || 'Error inesperado. Intenta de nuevo.';
+};
 
 const compressImage = (file, maxWidth = 1200, quality = 0.82) =>
   new Promise((resolve) => {
@@ -37,8 +56,17 @@ const formatCRC = (value) => {
 };
 
 const supabaseClient = isConfigured
-  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      global: { fetch: adminFetch }
+    })
   : null;
+
+window.addEventListener('offline', () =>
+  showToast('Sin conexión a internet. Los cambios no se guardarán.', 'error')
+);
+window.addEventListener('online', () =>
+  showToast('Conexión restablecida.')
+);
 
 const loginSection = document.getElementById('loginSection');
 const adminSection = document.getElementById('adminSection');
@@ -559,14 +587,15 @@ productForm.addEventListener('submit', async (event) => {
       updateStatsCounters();
       applyFilters();
 
-      const { error } = await withTimeout(supabaseClient.from('products').update(payload).eq('id', editingId));
-      if (error) {
-        // Revert
-        if (idx !== -1 && prev) allProducts[idx] = prev;
-        updateStatsCounters();
-        applyFilters();
-        throw error;
-      }
+      await withRetry(async () => {
+        const { error } = await supabaseClient.from('products').update(payload).eq('id', editingId);
+        if (error) {
+          if (idx !== -1 && prev) allProducts[idx] = prev;
+          updateStatsCounters();
+          applyFilters();
+          throw error;
+        }
+      });
       showToast('Producto actualizado.');
       showStatus(adminStatus, 'Producto actualizado.');
     } else {
@@ -577,7 +606,7 @@ productForm.addEventListener('submit', async (event) => {
       updateStatsCounters();
       applyFilters();
 
-      const { data, error } = await withTimeout(supabaseClient.from('products').insert(payload).select().single());
+      const { data, error } = await supabaseClient.from('products').insert(payload).select().single();
       if (error) {
         // Remove temp entry
         allProducts = allProducts.filter((p) => p.id !== tempId);
@@ -601,11 +630,10 @@ productForm.addEventListener('submit', async (event) => {
       resetForm();
     }
   } catch (err) {
-    showStatus(adminStatus, err.message, 'error');
+    showStatus(adminStatus, classifyError(err), 'error');
   } finally {
     submitBtn.disabled = false;
     if (saveAndAddAnotherBtn) saveAndAddAnotherBtn.disabled = false;
-    // Restore button label based on current editing state
     submitBtn.textContent = editingId ? 'Actualizar' : 'Guardar';
   }
 });
@@ -923,24 +951,28 @@ temporadaForm?.addEventListener('submit', async (event) => {
     if (fileToUpload) {
       showStatus(temporadaFormStatus, 'Subiendo imagen...');
       submitBtn.textContent = 'Subiendo imagen...';
-      image_url = await withTimeout(uploadTemporadaImage(fileToUpload), 30000);
+      image_url = await uploadTemporadaImage(fileToUpload);
     }
 
     const payload = { name, description, price, category: 'temporada', available, extras, image_url };
 
     const successMessage = editingTemporadaId ? 'Producto actualizado.' : 'Producto creado.';
-    const { error } = await withTimeout(editingTemporadaId
-      ? supabaseClient.from('products').update(payload).eq('id', editingTemporadaId)
-      : supabaseClient.from('products').insert(payload));
-
-    if (error) throw error;
+    if (editingTemporadaId) {
+      await withRetry(async () => {
+        const { error } = await supabaseClient.from('products').update(payload).eq('id', editingTemporadaId);
+        if (error) throw error;
+      });
+    } else {
+      const { error } = await supabaseClient.from('products').insert(payload);
+      if (error) throw error;
+    }
 
     showToast(successMessage);
     resetTemporadaForm();
     await fetchTemporadaProducts();
     showStatus(temporadaFormStatus, successMessage);
-  } catch (error) {
-    showStatus(temporadaFormStatus, error.message, 'error');
+  } catch (err) {
+    showStatus(temporadaFormStatus, classifyError(err), 'error');
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = 'Guardar';
@@ -1126,24 +1158,28 @@ carruselForm?.addEventListener('submit', async (event) => {
     if (fileToUpload) {
       showStatus(carruselFormStatus, 'Subiendo imagen...');
       submitBtn.textContent = 'Subiendo imagen...';
-      image_url = await withTimeout(uploadCarruselImage(fileToUpload), 30000);
+      image_url = await uploadCarruselImage(fileToUpload);
     }
 
     const payload = { name, description, price, category: 'bocadillos_carousel', available, extras: [], image_url };
     const successMessage = editingCarruselId ? 'Foto actualizada.' : 'Foto agregada al carrusel.';
 
-    const { error } = await withTimeout(editingCarruselId
-      ? supabaseClient.from('products').update(payload).eq('id', editingCarruselId)
-      : supabaseClient.from('products').insert(payload));
-
-    if (error) throw error;
+    if (editingCarruselId) {
+      await withRetry(async () => {
+        const { error } = await supabaseClient.from('products').update(payload).eq('id', editingCarruselId);
+        if (error) throw error;
+      });
+    } else {
+      const { error } = await supabaseClient.from('products').insert(payload);
+      if (error) throw error;
+    }
 
     showToast(successMessage);
     resetCarruselForm();
     await fetchCarruselProducts();
     showStatus(carruselFormStatus, successMessage);
-  } catch (error) {
-    showStatus(carruselFormStatus, error.message, 'error');
+  } catch (err) {
+    showStatus(carruselFormStatus, classifyError(err), 'error');
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = 'Guardar';
