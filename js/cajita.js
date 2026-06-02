@@ -34,9 +34,7 @@ const render = (product) => {
        </div>`
     : '';
 
-  const availability = product.available
-    ? '<span class="inline-flex items-center gap-1.5 text-xs text-brand-cocoa/60"><span class="w-1.5 h-1.5 rounded-full bg-brand-gold inline-block"></span>Disponible</span>'
-    : '<span class="inline-flex items-center gap-1.5 text-xs text-brand-cocoa/40"><span class="w-1.5 h-1.5 rounded-full bg-brand-caramel/30 inline-block"></span>Agotado</span>';
+  const availability = '';
 
   const waMsg = encodeURIComponent(`Hola, quisiera pedir la ${product.name}. pandcasa.com/cajita/${product.id}`);
 
