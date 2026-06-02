@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pan d' Casa | Cajita</title>
+  <link rel="icon" type="image/png" href="/assets/Logo Pandcasa.png">
+  <link rel="apple-touch-icon" href="/assets/Logo Pandcasa.png">
+  <link rel="stylesheet" href="/dist/tailwind.css">
+  <link rel="stylesheet" href="/css/site.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-brand-cream text-brand-cocoa font-sans antialiased selection:bg-brand-gold/20 selection:text-brand-cocoa overflow-x-hidden">
+  <div data-include="/partials/site-navbar.html"></div>
+
+  <main id="inicio" class="relative z-10">
+    <!-- Skeleton mientras carga -->
+    <div id="cajita-skeleton">
+      <div class="w-full h-[55vh] md:h-[70vh] bg-brand-beige/60 animate-pulse"></div>
+      <div class="max-w-2xl mx-auto px-6 lg:px-10 py-12 space-y-4">
+        <div class="h-3 w-24 bg-brand-beige rounded animate-pulse"></div>
+        <div class="h-10 w-3/4 bg-brand-beige rounded animate-pulse"></div>
+        <div class="h-6 w-20 bg-brand-beige rounded animate-pulse"></div>
+        <div class="h-4 w-full bg-brand-beige rounded animate-pulse"></div>
+        <div class="h-4 w-5/6 bg-brand-beige rounded animate-pulse"></div>
+        <div class="h-14 w-full bg-brand-beige rounded-full animate-pulse mt-10"></div>
+      </div>
+    </div>
+
+    <!-- Contenido renderizado por cajita.js -->
+    <div id="cajita-content" class="hidden"></div>
+  </main>
+
+  <div data-include="/partials/site-footer.html"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/js/site.js"></script>
+  <script>
+    // Mostrar contenido y ocultar skeleton cuando cajita.js termine
+    const _origInit = window.__cajitaReady;
+    document.addEventListener('DOMContentLoaded', () => {
+      const skeleton = document.getElementById('cajita-skeleton');
+      const content = document.getElementById('cajita-content');
+      const observer = new MutationObserver(() => {
+        if (content.innerHTML.trim()) {
+          skeleton.classList.add('hidden');
+          content.classList.remove('hidden');
+          observer.disconnect();
+        }
+      });
+      observer.observe(content, { childList: true });
+    });
+  </script>
+  <script src="/js/cajita.js"></script>
+</body>
+</html>
