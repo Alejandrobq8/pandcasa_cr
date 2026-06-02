@@ -41,10 +41,9 @@ const render = (product) => {
   const waMsg = encodeURIComponent(`Hola, quisiera pedir la ${product.name}. pandcasa.com/cajita/${product.id}`);
 
   el.innerHTML = `
-    <!-- Hero imagen -->
-    <div class="relative w-full h-[55vh] md:h-[70vh] overflow-hidden bg-brand-beige/40">
-      <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover" loading="eager" decoding="async" />
-      <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/40 via-transparent to-transparent"></div>
+    <!-- Imagen del producto -->
+    <div class="w-full bg-brand-beige/20">
+      <img src="${product.image_url}" alt="${product.name}" class="w-full block max-h-[85vh] object-contain mx-auto" loading="eager" decoding="async" />
     </div>
 
     <!-- Detalle -->
