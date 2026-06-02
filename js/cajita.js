@@ -42,7 +42,7 @@ const render = (product) => {
 
   el.innerHTML = `
     <!-- Layout: imagen izquierda + info derecha -->
-    <div class="max-w-6xl mx-auto px-6 lg:px-10 py-10 md:py-16">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10 pt-16 pb-10 md:pt-20 md:pb-16">
       <a href="/cajitas" class="inline-flex items-center gap-1.5 text-sm text-brand-caramel hover:text-brand-cocoa transition-colors mb-8">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
         Todas las cajitas
