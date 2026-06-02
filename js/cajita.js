@@ -6,7 +6,8 @@ const formatCRC = (value) => {
   return `₡${Number(value).toLocaleString('es-CR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 
-const productId = location.pathname.split('/').filter(Boolean).pop();
+const productId = new URLSearchParams(location.search).get('id') ||
+  location.pathname.split('/').filter(Boolean).pop();
 
 const showError = (msg) => {
   const el = document.getElementById('cajita-content');

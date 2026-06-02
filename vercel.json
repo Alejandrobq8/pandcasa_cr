@@ -2,10 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    { "source": "/cajita/:id", "destination": "/cajita.html" }
-  ],
   "redirects": [
+    {
+      "source": "/cajita/:id",
+      "destination": "/cajita?id=:id",
+      "permanent": false
+    },
     {
       "source": "/admin.html",
       "destination": "/admin",
