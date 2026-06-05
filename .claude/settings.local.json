@@ -12,7 +12,10 @@
       "Bash(curl -s --max-time 5 -I https://pandcasa.com)",
       "Bash(nslookup pandcasa.com 8.8.8.8)",
       "Bash(nslookup pandcasa.com 1.1.1.1)",
-      "Bash(nslookup -type=NS pandcasa.com 8.8.8.8)"
+      "Bash(nslookup -type=NS pandcasa.com 8.8.8.8)",
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\aleja\\\\OneDrive\\\\Documentos\\\\VS_Code\\\\pandcasa_cr\\\\docs\")",
+      "PowerShell(Move-Item \"c:\\\\Users\\\\aleja\\\\OneDrive\\\\Documentos\\\\VS_Code\\\\pandcasa_cr\\\\SUPABASE_SETUP.md\" \"c:\\\\Users\\\\aleja\\\\OneDrive\\\\Documentos\\\\VS_Code\\\\pandcasa_cr\\\\docs\\\\SUPABASE_SETUP.md\")",
+      "PowerShell(Move-Item \"c:\\\\Users\\\\aleja\\\\OneDrive\\\\Documentos\\\\VS_Code\\\\pandcasa_cr\\\\VERCEL_PRODUCTION_CHECKLIST.md\" \"c:\\\\Users\\\\aleja\\\\OneDrive\\\\Documentos\\\\VS_Code\\\\pandcasa_cr\\\\docs\\\\VERCEL_PRODUCTION_CHECKLIST.md\")"
     ]
   }
 }

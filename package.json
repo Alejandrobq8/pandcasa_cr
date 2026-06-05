@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "css:build": "npx tailwindcss -o dist/tailwind.css --minify",
-    "css:watch": "npx tailwindcss -o dist/tailwind.css --watch"
+    "css:build": "npx tailwindcss -i css/styles.css -o dist/tailwind.css --minify",
+    "css:watch": "npx tailwindcss -i css/styles.css -o dist/tailwind.css --watch"
   },
   "dependencies": {
     "@vercel/functions": "^3.4.3"
