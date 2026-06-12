@@ -217,13 +217,13 @@ const renderFilterButtons = (container, products, activeFilter) => {
   }).join('');
 
   container.innerHTML = `
-    <div class="relative inline-block">
+    <div data-filter-wrapper class="relative inline-block">
       <button data-dropdown-toggle class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-caramel/30 bg-brand-cream text-sm text-brand-cocoa hover:border-brand-caramel/60 transition-colors duration-150">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-brand-caramel/70 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"/></svg>
         <span data-filter-label>${activeLabel}</span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-brand-caramel/60 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
+        <svg data-filter-chevron xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-brand-caramel/60 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
       </button>
-      <div data-dropdown-menu class="absolute top-full left-0 mt-2 w-52 bg-brand-cream rounded-xl border border-brand-caramel/20 shadow-lift z-20 overflow-hidden hidden">
+      <div data-dropdown-menu class="absolute top-full left-0 mt-2 w-52 bg-brand-cream rounded-xl border border-brand-caramel/20 shadow-lift z-20 overflow-hidden">
         ${menuItems}
       </div>
     </div>`;
@@ -366,7 +366,7 @@ const initMenu = async () => {
 
     filtersEl?.addEventListener('click', (e) => {
       if (e.target.closest('[data-dropdown-toggle]')) {
-        filtersEl.querySelector('[data-dropdown-menu]')?.classList.toggle('hidden');
+        filtersEl.querySelector('[data-filter-wrapper]')?.classList.toggle('open');
         return;
       }
       const btn = e.target.closest('[data-filter]');
@@ -377,7 +377,7 @@ const initMenu = async () => {
 
     document.addEventListener('click', (e) => {
       if (!e.target.closest('#productFilters')) {
-        filtersEl?.querySelector('[data-dropdown-menu]')?.classList.add('hidden');
+        filtersEl?.querySelector('[data-filter-wrapper]')?.classList.remove('open');
       }
     });
 
