@@ -140,6 +140,19 @@
     });
   };
 
+  const initImageSkeletons = () => {
+    document.querySelectorAll('img').forEach((img) => {
+      const parent = img.parentElement;
+      if (!parent) return;
+      if (img.complete && img.naturalWidth > 0) return;
+      parent.classList.add('skeleton');
+      const remove = () => parent.classList.remove('skeleton');
+      if (img.complete) { remove(); return; }
+      img.addEventListener('load', remove, { once: true });
+      img.addEventListener('error', remove, { once: true });
+    });
+  };
+
   const initLightbox = () => {
     const overlay = document.createElement('div');
     overlay.id = 'lightbox-overlay';
@@ -207,5 +220,6 @@
     initScrollReveal();
     initContactActions();
     initLightbox();
+    initImageSkeletons();
   });
 })();

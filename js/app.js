@@ -114,6 +114,31 @@ const renderCard = (product) => {
   `;
 };
 
+const renderSkeletons = (grid, count = 4) => {
+  const withImage = ['bocadillos_carousel', 'temporada'].includes(grid.dataset.category);
+  grid.innerHTML = Array.from({ length: count }, () =>
+    withImage
+      ? `<article class="rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft overflow-hidden">
+          <div class="skeleton h-[340px] w-full bg-brand-beige/40"></div>
+          <div class="px-5 pt-5 pb-8 space-y-3">
+            <div class="skeleton h-5 w-3/4 rounded bg-brand-beige/60"></div>
+            <div class="skeleton h-4 w-1/3 rounded bg-brand-beige/40"></div>
+            <div class="skeleton h-3 w-full rounded bg-brand-beige/30 mt-2"></div>
+            <div class="skeleton h-3 w-5/6 rounded bg-brand-beige/30"></div>
+          </div>
+        </article>`
+      : `<article class="rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft overflow-hidden flex">
+          <div class="w-1.5 shrink-0 bg-brand-beige/60"></div>
+          <div class="px-5 pt-6 pb-10 flex-1 space-y-3">
+            <div class="skeleton h-5 w-3/4 rounded bg-brand-beige/60"></div>
+            <div class="skeleton h-4 w-1/3 rounded bg-brand-beige/40"></div>
+            <div class="skeleton h-3 w-full rounded bg-brand-beige/30 mt-2"></div>
+            <div class="skeleton h-3 w-5/6 rounded bg-brand-beige/30"></div>
+          </div>
+        </article>`
+  ).join('');
+};
+
 const renderEmpty = (grid) => {
   grid.innerHTML = `
     <div class="col-span-full rounded-3xl border border-brand-caramel/20 bg-brand-cream p-8 text-center">
@@ -257,9 +282,21 @@ const initMenu = async () => {
     return;
   }
   if (!window.supabase) {
-    renderError(grid, 'No se pudo cargar la conexión. Verifica tu red e intenta de nuevo.');
-    return;
+    try {
+      await new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    } catch {
+      renderError(grid, 'No se pudo cargar la conexión. Verifica tu red e intenta de nuevo.');
+      return;
+    }
   }
+
+  renderSkeletons(grid);
 
   if (category === 'temporada') {
     try {
