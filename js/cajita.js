@@ -27,6 +27,13 @@ const copyProductUrl = (btn) => {
   }).catch(() => {});
 };
 
+const renderDescription = (description) => {
+  if (!description) return '';
+  const lines = description.split('\n').map(l => l.trim()).filter(Boolean);
+  if (lines.length <= 1) return `<p class="mt-6 text-brand-cocoa/70 leading-relaxed">${description}</p>`;
+  return `<ul class="product-desc-list mt-6 text-brand-cocoa/70">${lines.map(l => `<li>${l}</li>`).join('')}</ul>`;
+};
+
 const render = (product) => {
   const el = document.getElementById('cajita-content');
   if (!el) return;
@@ -67,7 +74,7 @@ const render = (product) => {
           <p class="mt-2 text-lg sm:text-xl font-medium text-brand-caramel">${formatCRC(product.price)}</p>
           <div class="mt-3">${availability}</div>
 
-          ${product.description ? `<p class="mt-6 text-brand-cocoa/70 leading-relaxed">${product.description.replace(/\n/g, '<br>')}</p>` : ''}
+          ${renderDescription(product.description)}
 
           ${extras}
 
