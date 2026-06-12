@@ -293,6 +293,39 @@ body.page-exit main {
   .skeleton::after { animation: none; }
 }
 
+/* copy-url button animation */
+.copy-btn {
+  position: relative;
+  overflow: hidden;
+}
+.copy-btn .copy-idle,
+.copy-btn .copy-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+  will-change: transform, opacity;
+}
+.copy-btn .copy-done {
+  position: absolute;
+  inset: 0;
+  justify-content: center;
+  transform: translateY(110%);
+  opacity: 0;
+}
+.copy-btn.copied .copy-idle {
+  transform: translateY(-110%);
+  opacity: 0;
+}
+.copy-btn.copied .copy-done {
+  transform: translateY(0);
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .copy-btn .copy-idle,
+  .copy-btn .copy-done { transition: none; }
+}
+
 .line-clamp-2 {
   overflow: hidden;
   display: -webkit-box;

@@ -22,9 +22,8 @@ const showError = (msg) => {
 const copyProductUrl = (btn) => {
   const url = `https://pandcasa.com/cajita/${productId}`;
   navigator.clipboard.writeText(url).then(() => {
-    const original = btn.innerHTML;
-    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg> ¡Copiado!`;
-    setTimeout(() => { btn.innerHTML = original; }, 2000);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 2000);
   }).catch(() => {});
 };
 
@@ -79,9 +78,15 @@ const render = (product) => {
               Pedir por WhatsApp
             </a>
             <button onclick="copyProductUrl(this)"
-              class="flex items-center justify-center gap-2 px-5 rounded-full border border-brand-caramel/40 text-brand-caramel text-sm font-medium btn-lift hover:border-brand-caramel transition-colors whitespace-nowrap">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/></svg>
-              Copiar enlace
+              class="copy-btn flex items-center justify-center px-5 rounded-full border border-brand-caramel/40 text-brand-caramel text-sm font-medium btn-lift hover:border-brand-caramel whitespace-nowrap">
+              <span class="copy-idle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/></svg>
+                Copiar enlace
+              </span>
+              <span class="copy-done">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
+                ¡Copiado!
+              </span>
             </button>
           </div>
         </div>
