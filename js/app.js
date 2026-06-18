@@ -54,8 +54,8 @@ const renderCard = (product) => {
   if (product.category === 'bocadillos_carousel') {
     return `
       <article class="card-reveal group relative overflow-hidden rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300">
-        <a href="/cajita/${product.id}" class="block h-[260px] sm:h-[320px] md:h-[340px] w-full overflow-hidden relative">
-          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async"/>
+        <a href="/cajita/${product.id}" class="block h-[260px] sm:h-[320px] md:h-[340px] w-full overflow-hidden relative bg-brand-beige/40">
+          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/Logo Pandcasa.png';this.className='h-full w-full object-contain p-12 opacity-40';"/>
           <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div class="absolute bottom-3 left-4 text-brand-cream opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xs tracking-wide">Ver detalle →</div>
         </a>
@@ -75,8 +75,8 @@ const renderCard = (product) => {
   if (product.image_url) {
     return `
       <article class="card-reveal group relative overflow-hidden rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300">
-        <div class="h-[260px] sm:h-[320px] md:h-[340px] w-full overflow-hidden cursor-zoom-in relative" data-lightbox="${product.image_url}" data-lightbox-alt="${product.name}">
-          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async"/>
+        <div class="h-[260px] sm:h-[320px] md:h-[340px] w-full overflow-hidden cursor-zoom-in relative bg-brand-beige/40" data-lightbox="${product.image_url}" data-lightbox-alt="${product.name}">
+          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/Logo Pandcasa.png';this.className='h-full w-full object-contain p-12 opacity-40';"/>
           <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div class="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-black/40 flex items-center justify-center pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0Zm-3-3v6m-3-3h6"/></svg></div>
         </div>
@@ -240,8 +240,8 @@ const filterProducts = (products, query) => {
   });
 };
 
-const applyCardStagger = (grid) => {
-  const cards = Array.from(grid.querySelectorAll('.card-reveal'));
+const applyCardStagger = (grid, startIndex = 0) => {
+  const cards = Array.from(grid.querySelectorAll('.card-reveal')).slice(startIndex);
   if (!cards.length) return;
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReduced) {
@@ -342,6 +342,28 @@ const initMenu = async () => {
     const filtersEl = document.getElementById('productFilters');
     let activeFilter = 'all';
 
+    const PAGE_SIZE = 12;
+    let pageResult = [];
+    let renderedCount = 0;
+
+    const sentinel = document.createElement('div');
+    sentinel.className = 'col-span-full h-px';
+    grid.after(sentinel);
+
+    const renderNextPage = () => {
+      const next = pageResult.slice(renderedCount, renderedCount + PAGE_SIZE);
+      if (!next.length) return;
+      const startIndex = renderedCount;
+      grid.insertAdjacentHTML('beforeend', next.map(renderCard).join(''));
+      renderedCount += next.length;
+      applyCardStagger(grid, startIndex);
+      if (renderedCount >= pageResult.length) pageObserver.disconnect();
+    };
+
+    const pageObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) renderNextPage();
+    }, { rootMargin: '400px' });
+
     const applyAndRender = () => {
       let result = filterProducts(data, searchInput?.value || '');
       if (activeFilter.startsWith('qty-')) {
@@ -354,10 +376,20 @@ const initMenu = async () => {
       }
 
       renderFilterButtons(filtersEl, data, activeFilter);
-      grid.innerHTML = result.length ? result.map(renderCard).join('') : '';
+
+      pageObserver.disconnect();
+      pageResult = result;
+      renderedCount = 0;
+      grid.innerHTML = '';
+
+      if (!result.length) {
+        renderEmpty(grid);
+        return;
+      }
+
       grid.closest('[data-reveal]')?.classList.add('is-visible');
-      if (result.length) applyCardStagger(grid);
-      else renderEmpty(grid);
+      renderNextPage();
+      if (renderedCount < pageResult.length) pageObserver.observe(sentinel);
     };
 
     const urlQ = new URLSearchParams(location.search).get('q');
