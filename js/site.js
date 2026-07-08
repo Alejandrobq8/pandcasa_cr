@@ -4,6 +4,38 @@
 
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // --- Loader ---------------------------------------------------------
+  // Runs immediately (outside DOMContentLoaded) so the loader hides as
+  // soon as the page is interactive, not waiting for partials to load.
+  const initLoader = () => {
+    const loader = document.getElementById('page-loader');
+    if (!loader) return;
+
+    const hide = () => loader.classList.add('loader-out');
+
+    if (prefersReduced) { hide(); return; }
+
+    // Hide once the page is fully loaded, with a brief minimum display time
+    const MIN_MS = 1200;
+    const startedAt = Date.now();
+
+    const scheduleHide = () => {
+      const elapsed = Date.now() - startedAt;
+      const delay = Math.max(0, MIN_MS - elapsed);
+      setTimeout(hide, delay);
+    };
+
+    if (document.readyState === 'complete') {
+      scheduleHide();
+    } else {
+      window.addEventListener('load', scheduleHide, { once: true });
+    }
+
+    // Hard fallback: never block the user beyond 2.5s
+    setTimeout(hide, 2500);
+  };
+  initLoader();
+
   const initMobileMenu = () => {
     const menuBtn = document.getElementById('menuBtn');
     const menuClose = document.getElementById('menuClose');
@@ -212,6 +244,28 @@
     }, { passive: true });
   };
 
+  // --- Parallax (hero image) ------------------------------------------
+  const initParallax = () => {
+    if (prefersReduced) return;
+    const track = document.getElementById('hero-parallax-track');
+    if (!track) return;
+    const section = track.closest('section');
+    if (!section) return;
+
+    let raf;
+    const onScroll = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        // Stop updating once the hero is fully off-screen
+        if (scrollY > section.offsetHeight * 1.3) return;
+        track.style.transform = `translateY(${scrollY * 0.3}px)`;
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+  };
+
   document.addEventListener('DOMContentLoaded', async () => {
     await loadPartials();
     initTemporadaSection();
@@ -221,5 +275,6 @@
     initContactActions();
     initLightbox();
     initImageSkeletons();
+    initParallax();
   });
 })();

@@ -362,3 +362,273 @@ body.page-exit main {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
+
+/* =============================================================
+   FASE 1 — Page Loader
+   ============================================================= */
+#page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #FCFDFC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#page-loader.loader-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-bread {
+  width: 60px;
+  height: 56px;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bread-outline {
+  stroke: #F0A50A;
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  animation: loaderDraw 1s ease 0.15s forwards;
+}
+.bread-score {
+  stroke: #F0A50A;
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: loaderDraw 0.4s ease 0.9s forwards;
+}
+.steam-1 { stroke: #7E5B37; stroke-dasharray: 24; stroke-dashoffset: 24; animation: loaderDraw 0.3s ease 0.5s forwards; }
+.steam-2 { stroke: #7E5B37; stroke-dasharray: 24; stroke-dashoffset: 24; animation: loaderDraw 0.3s ease 0.65s forwards; }
+.steam-3 { stroke: #7E5B37; stroke-dasharray: 24; stroke-dashoffset: 24; animation: loaderDraw 0.3s ease 0.8s forwards; }
+@keyframes loaderDraw {
+  to { stroke-dashoffset: 0; }
+}
+.loader-wordmark {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  color: #502B1C;
+  opacity: 0;
+  animation: loaderFadeUp 0.45s ease 0.55s forwards;
+}
+@keyframes loaderFadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bread-outline, .bread-score, .steam-1, .steam-2, .steam-3 {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .loader-wordmark { animation: none; opacity: 1; }
+}
+
+/* =============================================================
+   FASE 1 — Hero Full-Screen
+   ============================================================= */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 580px;
+  max-height: 960px;
+  overflow: hidden;
+}
+#hero-parallax-track {
+  position: absolute;
+  top: -20%;
+  left: 0;
+  right: 0;
+  bottom: -20%;
+  will-change: transform;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(80, 43, 28, 0.06) 0%,
+    rgba(80, 43, 28, 0.03) 30%,
+    rgba(80, 43, 28, 0.52) 72%,
+    rgba(80, 43, 28, 0.78) 100%
+  );
+}
+.hero-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 1.5rem 5.5rem;
+  text-align: center;
+  color: #FCFDFC;
+}
+@media (min-width: 768px) {
+  .hero-content { padding-bottom: 6.5rem; }
+}
+.hero-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: rgba(240, 165, 10, 0.92);
+  opacity: 0;
+  transform: translateY(8px);
+  animation: heroTextIn 0.65s ease 0.55s forwards;
+}
+.hero-title {
+  margin-top: 0.75rem;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.6rem, 8vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: #FCFDFC;
+  text-shadow: 0 2px 28px rgba(80, 43, 28, 0.4);
+  opacity: 0;
+  transform: translateY(14px);
+  animation: heroTextIn 0.75s ease 0.7s forwards;
+}
+.hero-subtitle {
+  margin-top: 1.25rem;
+  max-width: 36rem;
+  font-size: clamp(0.9rem, 2.1vw, 1.1rem);
+  line-height: 1.7;
+  color: rgba(252, 253, 252, 0.8);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: heroTextIn 0.65s ease 0.85s forwards;
+}
+.hero-ctas {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: heroTextIn 0.6s ease 1s forwards;
+}
+@keyframes heroTextIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-eyebrow, .hero-title, .hero-subtitle, .hero-ctas {
+    animation: none; opacity: 1; transform: none;
+  }
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: rgba(252, 253, 252, 0.45);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: heroTextIn 0.5s ease 1.4s forwards;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 34px;
+  background: linear-gradient(to bottom, rgba(252,253,252,0.45), transparent);
+  transform-origin: top;
+  animation: scrollPulse 2s ease-in-out 1.8s infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.45; transform: scaleY(1); }
+  50%       { opacity: 0.9;  transform: scaleY(1.18); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-hint { animation: none; opacity: 1; }
+  .hero-scroll-line  { animation: none; }
+}
+
+/* =============================================================
+   FASE 1 — Marquee Separator
+   ============================================================= */
+.marquee-band {
+  overflow: hidden;
+  background: #ECD8B4;
+  border-top:    1px solid rgba(126, 91, 55, 0.18);
+  border-bottom: 1px solid rgba(126, 91, 55, 0.18);
+  padding: 0.8rem 0;
+  user-select: none;
+}
+.marquee-inner {
+  display: flex;
+  width: max-content;
+  animation: marqueeRun 28s linear infinite;
+}
+.marquee-text {
+  display: inline-block;
+  padding: 0 1.5rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #7E5B37;
+  white-space: nowrap;
+}
+@keyframes marqueeRun {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-inner { animation: none; }
+}
+
+/* =============================================================
+   FASE 1 — Floating WhatsApp Button
+   ============================================================= */
+.wa-float {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 200;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.wa-float:hover,
+.wa-float:focus-visible {
+  transform: scale(1.1);
+  box-shadow: 0 6px 28px rgba(37, 211, 102, 0.55);
+  outline: none;
+}
+.wa-float::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #25D366;
+  animation: waPulse 2.8s ease-out infinite;
+  z-index: -1;
+}
+@keyframes waPulse {
+  0%   { transform: scale(1);    opacity: 0.65; }
+  60%  { transform: scale(1.45); opacity: 0; }
+  100% { transform: scale(1.45); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wa-float::before { animation: none; }
+}
