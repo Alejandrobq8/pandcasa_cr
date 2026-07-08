@@ -123,7 +123,12 @@
         if (!url) return;
         const response = await fetch(url);
         if (!response.ok) return;
-        target.innerHTML = await response.text();
+        // Insertar el HTML como hermano del div y eliminar el div,
+        // para que <header> y <footer> sean hijos directos de su padre
+        // real (body / page-body-wrap) — necesario para que position:sticky
+        // no quede confinado a la altura del div envoltorio.
+        target.insertAdjacentHTML('afterend', await response.text());
+        target.remove();
       })
     );
   };
@@ -131,34 +136,170 @@
   const initTemporadaSection = async () => {
     const headers = { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } };
     try {
-      const [visRes, prodRes] = await Promise.all([
-        fetch(`${SUPABASE_URL}/rest/v1/site_settings?key=eq.temporada_visible&select=value`, headers),
-        fetch(`${SUPABASE_URL}/rest/v1/products?category=eq.bocadillos_carousel&image_url=not.is.null&available=eq.true&select=id,name,image_url&order=created_at.desc`, headers)
-      ]);
-      const [visData, products] = await Promise.all([visRes.json(), prodRes.json()]);
-
-      // Controla solo los links de navegacion — el carrusel siempre esta activo
-      const visible = Array.isArray(visData) && visData.length > 0 ? visData[0].value !== false : true;
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?key=eq.temporada_visible&select=value`, headers);
+      const data = await res.json();
+      const visible = Array.isArray(data) && data.length > 0 ? data[0].value !== false : true;
       if (!visible) {
         document.querySelectorAll('[data-temporada-link]').forEach((el) => { el.style.display = 'none'; });
       }
-
-      // Carga las fotos del carrusel de bocadillos independientemente de la visibilidad
-      const slider = document.querySelector('.seasonal-slider');
-      const list = document.querySelector('.seasonal-list');
-      if (slider && list && Array.isArray(products) && products.length > 0) {
-        slider.style.setProperty('--quantity', String(products.length));
-        list.innerHTML = products.map((p, i) => `
-          <div class="seasonal-item" style="--position: ${i + 1}">
-            <div class="block rounded-2xl overflow-hidden border border-brand-caramel/20 bg-brand-beige/40 shadow-soft h-full w-full">
-              <img src="${p.image_url}" alt="${p.name}" class="h-full w-full object-cover" loading="eager" decoding="async" />
-            </div>
-          </div>
-        `).join('');
-      }
     } catch {
-      // falla silenciosamente — mantiene el carrusel estatico
+      // fail silently
     }
+  };
+
+  // --- Tilt card (cajitas) ----------------------------------------
+  const initTiltCard = () => {
+    if (prefersReduced) return;
+    if (!window.matchMedia('(hover: hover)').matches) return;
+
+    const card = document.getElementById('tilt-card');
+    if (!card) return;
+
+    const MAX_DEG = 9;
+
+    card.addEventListener('mousemove', (e) => {
+      const { left, top, width, height } = card.getBoundingClientRect();
+      const x = (e.clientX - left) / width;
+      const y = (e.clientY - top) / height;
+      const rotateY =  (x - 0.5) * MAX_DEG * 2;
+      const rotateX = -(y - 0.5) * MAX_DEG * 2;
+      const shadowX = -(x - 0.5) * 24;
+      const shadowY = -(y - 0.5) * 24;
+      card.style.transition = 'transform 0.1s ease, box-shadow 0.1s ease';
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      card.style.boxShadow = `${shadowX}px ${shadowY}px 60px -12px rgba(80,43,28,0.45)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.6s ease, box-shadow 0.6s ease';
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+      card.style.boxShadow = '';
+    });
+  };
+
+  // --- Navbar scroll transform ----------------------------------------
+  const initNavScroll = () => {
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+
+    const THRESHOLD = 70;
+    let raf;
+
+    const update = () => {
+      header.classList.toggle('nav-scrolled', window.scrollY > THRESHOLD);
+    };
+
+    window.addEventListener('scroll', () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    }, { passive: true });
+
+    update(); // estado correcto si la página carga con scroll previo
+  };
+
+  // --- Indicador de sección activa ------------------------------------
+  const initActiveSection = () => {
+    const map = [
+      { id: 'nosotros', href: '/#nosotros' },
+      { id: 'contacto', href: '/#contacto' },
+    ];
+
+    const pairs = map.map(({ id, href }) => ({
+      section: document.getElementById(id),
+      link: document.querySelector(`.nav-link[href="${href}"]`),
+    })).filter(({ section, link }) => section && link);
+
+    if (!pairs.length) return;
+
+    const setActive = (activeLink) => {
+      pairs.forEach(({ link }) => link.classList.remove('nav-link--active'));
+      if (activeLink) activeLink.classList.add('nav-link--active');
+    };
+
+    // rootMargin: dispara cuando la sección entra en la franja central del viewport
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const pair = pairs.find(({ section }) => section === entry.target);
+        if (!pair) return;
+        if (entry.isIntersecting) {
+          setActive(pair.link);
+        } else if (pair.link.classList.contains('nav-link--active')) {
+          setActive(null);
+        }
+      });
+    }, { rootMargin: '-15% 0px -65% 0px', threshold: 0 });
+
+    pairs.forEach(({ section }) => observer.observe(section));
+  };
+
+  // --- Badge de estado abierto/cerrado (horario Costa Rica) -----------
+  const initOpenStatus = () => {
+    const badge = document.getElementById('open-status-badge');
+    if (!badge) return;
+
+    // Hora actual en Costa Rica (UTC-6, sin DST)
+    const now = new Date();
+    const cr  = new Date(now.toLocaleString('en-US', { timeZone: 'America/Costa_Rica' }));
+    const day = cr.getDay();                          // 0=dom … 6=sáb
+    const min = cr.getHours() * 60 + cr.getMinutes();
+
+    const WD_OPEN  = 7  * 60;       // 7:00
+    const WD_CLOSE = 18 * 60;       // 18:00
+    const SA_OPEN  = 8  * 60 + 30;  // 8:30
+    const SA_CLOSE = 17 * 60 + 30;  // 17:30
+
+    let isOpen = false;
+    let text   = '';
+
+    if (day === 0) {
+      text = 'Cerrado hoy · Abre mañana a las 7:00 a.m.';
+    } else if (day === 6) {
+      if (min < SA_OPEN)        { text = 'Cerrado · Abre a las 8:30 a.m.'; }
+      else if (min < SA_CLOSE)  { isOpen = true; text = 'Abierto ahora · Cierra a las 5:30 p.m.'; }
+      else                      { text = 'Cerrado · Abre el lunes a las 7:00 a.m.'; }
+    } else {
+      if (min < WD_OPEN)        { text = 'Cerrado · Abre a las 7:00 a.m.'; }
+      else if (min < WD_CLOSE)  { isOpen = true; text = 'Abierto ahora · Cierra a las 6:00 p.m.'; }
+      else                      { text = 'Cerrado · Abre mañana a las 7:00 a.m.'; }
+    }
+
+    const dot = isOpen ? '<span class="open-status-dot" aria-hidden="true"></span>' : '';
+    badge.innerHTML = `<span class="open-status-badge${isOpen ? ' open-status-badge--open' : ''}">${dot}${text}</span>`;
+  };
+
+  // --- Copiar número de teléfono al portapapeles ----------------------
+  const initCopyPhone = () => {
+    const btn = document.getElementById('copy-phone-btn');
+    if (!btn) return;
+
+    const PHONE = '+506 8337-6864';
+
+    const showFeedback = () => {
+      btn.classList.add('copy-btn--success');
+      setTimeout(() => btn.classList.remove('copy-btn--success'), 1200);
+    };
+
+    const copyPhone = () => {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(PHONE).then(showFeedback).catch(() => {});
+        return;
+      }
+      // Fallback para HTTP o navegadores sin Clipboard API
+      const ta = document.createElement('textarea');
+      ta.value = PHONE;
+      ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ta.setSelectionRange(0, 999999); // fix para iOS Safari
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) showFeedback();
+      } catch (_) {}
+      document.body.removeChild(ta);
+    };
+
+    btn.addEventListener('click', copyPhone);
   };
 
   const initContactActions = () => {
@@ -244,6 +385,27 @@
     }, { passive: true });
   };
 
+  // --- Sello de casa badge (stroke-draw on scroll) --------------------
+  const initSelloBadge = () => {
+    const wrap = document.querySelector('.sello-badge-wrap');
+    if (!wrap) return;
+
+    if (prefersReduced) {
+      wrap.classList.add('sello-is-drawn');
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        wrap.classList.add('sello-is-drawn');
+        observer.disconnect();
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(wrap);
+  };
+
   // --- Parallax (hero image) ------------------------------------------
   const initParallax = () => {
     if (prefersReduced) return;
@@ -257,7 +419,6 @@
       if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const scrollY = window.scrollY;
-        // Stop updating once the hero is fully off-screen
         if (scrollY > section.offsetHeight * 1.3) return;
         track.style.transform = `translateY(${scrollY * 0.3}px)`;
       });
@@ -268,13 +429,19 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     await loadPartials();
+    initNavScroll();
+    initActiveSection();
     initTemporadaSection();
     initMobileMenu();
     initPageTransitions();
     initScrollReveal();
+    initOpenStatus();
+    initCopyPhone();
     initContactActions();
     initLightbox();
     initImageSkeletons();
+    initSelloBadge();
+    initTiltCard();
     initParallax();
   });
 })();
