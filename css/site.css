@@ -181,6 +181,27 @@ body.page-exit main {
   }
 }
 
+.product-card-lift,
+.product-card-lift .card-icon-circle,
+.product-card-lift .card-icon {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+.product-card-lift:hover,
+.product-card-lift:focus-within {
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .product-card-lift,
+  .product-card-lift .card-icon-circle,
+  .product-card-lift .card-icon {
+    transition: box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  }
+  .product-card-lift:hover,
+  .product-card-lift:focus-within {
+    transform: none;
+  }
+}
+
 
 .product-desc-list {
   list-style: none;
@@ -984,4 +1005,33 @@ body.page-exit main {
   width: 100%;
   height: calc(100% + 4px);
   display: block;
+}
+
+/* =============================================================
+   Category page hero (Desayunos, Almuerzos, Panadería, Postres,
+   Queques, Temporada) — smaller variant of the home hero, reusing
+   #hero-parallax-track / .hero-overlay / .hero-zoom / .wave-divider.
+   ============================================================= */
+.hero-section--category {
+  height: 50vh;
+  min-height: 400px;
+  max-height: 640px;
+}
+.hero-content--category {
+  justify-content: center;
+  padding: 0 1.25rem;
+}
+.hero-category-icon {
+  filter: drop-shadow(0 2px 14px rgba(80, 43, 28, 0.45));
+}
+.hero-back-link {
+  color: rgba(255, 255, 255, 0.93);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
+}
+.hero-back-link:hover,
+.hero-back-link:focus-visible {
+  color: #FCFDFC;
 }
