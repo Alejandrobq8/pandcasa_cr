@@ -202,13 +202,13 @@ const render = (product) => {
             <button onclick="copyProductUrl(this)" aria-label="Copiar enlace"
               class="copy-btn shrink-0 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full border border-brand-caramel/40 text-brand-caramel btn-lift hover:border-brand-caramel">
               <span class="copy-idle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="!w-5 !h-5 sm:!w-6 sm:!h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M10 14a4 4 0 0 0 5.66 0l2-2a4 4 0 0 0-5.66-5.66l-1 1"/>
                   <path d="M14 10a4 4 0 0 0-5.66 0l-2 2a4 4 0 0 0 5.66 5.66l1-1"/>
                 </svg>
               </span>
               <span class="copy-done">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="!w-5 !h-5 sm:!w-6 sm:!h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 13l4 4L19 7"/>
                 </svg>
               </span>
