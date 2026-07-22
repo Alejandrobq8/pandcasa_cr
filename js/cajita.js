@@ -21,10 +21,29 @@ const showError = (msg) => {
 
 const copyProductUrl = (btn) => {
   const url = `https://pandcasa.com/cajita/${productId}`;
-  navigator.clipboard.writeText(url).then(() => {
+
+  const showCopied = () => {
     btn.classList.add('copied');
     setTimeout(() => btn.classList.remove('copied'), 2000);
-  }).catch(() => {});
+  };
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(url).then(showCopied).catch(() => {});
+    return;
+  }
+  // Fallback para HTTP o navegadores sin Clipboard API
+  const ta = document.createElement('textarea');
+  ta.value = url;
+  ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  ta.setSelectionRange(0, 999999); // fix para iOS Safari
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) showCopied();
+  } catch (_) {}
+  document.body.removeChild(ta);
 };
 
 const renderDescription = (description) => {
