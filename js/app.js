@@ -42,6 +42,42 @@ const renderDescription = (description) => {
   return `<ul class="product-desc-list mt-3 text-sm text-brand-cocoa/70">${items}</ul>`;
 };
 
+const CATEGORY_ICONS = {
+  desayunos: {
+    viewBox: '-2 0 20 20',
+    content: '<g fill="currentColor" fill-rule="evenodd"><path d="M94,7697 C90.692,7697 88,7694.308 88,7691 C88,7686.268 91.39,7681 93.688,7681 C96.539,7681 100,7687.241 100,7691 C100,7694.308 97.308,7697 94,7697 M93.688,7679 C89.27,7679 86,7686.582 86,7691 C86,7695.418 89.582,7699 94,7699 C98.418,7699 102,7695.418 102,7691 C102,7686.582 98.106,7679 93.688,7679" transform="translate(-142, -7839) translate(56, 160)"/></g>'
+  },
+  almuerzos: {
+    viewBox: '0 -3.84 122.88 122.88',
+    content: '<path fill="currentColor" d="M29.03,100.46l20.79-25.21l9.51,12.13L41,110.69C33.98,119.61,20.99,110.21,29.03,100.46L29.03,100.46z M53.31,43.05 c1.98-6.46,1.07-11.98-6.37-20.18L28.76,1c-2.58-3.03-8.66,1.42-6.12,5.09L37.18,24c2.75,3.34-2.36,7.76-5.2,4.32L16.94,9.8 c-2.8-3.21-8.59,1.03-5.66,4.7c4.24,5.1,10.8,13.43,15.04,18.53c2.94,2.99-1.53,7.42-4.43,3.69L6.96,18.32 c-2.19-2.38-5.77-0.9-6.72,1.88c-1.02,2.97,1.49,5.14,3.2,7.34L20.1,49.06c5.17,5.99,10.95,9.54,17.67,7.53 c1.03-0.31,2.29-0.94,3.64-1.77l44.76,57.78c2.41,3.11,7.06,3.44,10.08,0.93l0.69-0.57c3.4-2.83,3.95-8,1.04-11.34L50.58,47.16 C51.96,45.62,52.97,44.16,53.31,43.05L53.31,43.05z M65.98,55.65l7.37-8.94C63.87,23.21,99-8.11,116.03,6.29 C136.72,23.8,105.97,66,84.36,55.57l-8.73,11.09L65.98,55.65L65.98,55.65z"/>'
+  },
+  panaderia: {
+    viewBox: '0 0 160 160',
+    content: '<path fill="currentColor" d="M41,80c0,14.654,8.128,27.441,20.109,34.104C61.043,114.393,61,114.691,61,115v20c0,2.209,1.791,4,4,4 s4-1.791,4-4v-17.59c2.257,0.665,4.595,1.14,7,1.386V145c0,2.209,1.791,4,4,4s4-1.791,4-4v-26.204c2.404-0.246,4.743-0.721,7-1.386 V135c0,2.209,1.791,4,4,4s4-1.791,4-4v-20c0-0.309-0.043-0.607-0.109-0.896C110.872,107.441,119,94.654,119,80c0-2.209-1.791-4-4-4 c-2.203,0-4.359,0.193-6.465,0.545C115.021,69.578,119,60.247,119,50c0-2.209-1.791-4-4-4c-8.766,0-16.863,2.908-23.384,7.809 c5.372-13.957,2.45-30.4-8.788-41.637c-1.563-1.562-4.094-1.562-5.657,0c-7.366,7.367-11.423,17.161-11.423,27.578 c0,4.88,0.901,9.619,2.605,14.04C61.839,48.902,53.753,46,45,46c-2.209,0-4,1.791-4,4c0,10.248,3.979,19.579,10.465,26.546 C49.36,76.193,47.203,76,45,76C42.791,76,41,77.791,41,80z M80,89c0.007,0,0.013,0,0.02,0c0.002,0,0.004,0,0.007,0 c2.194-0.002,4.342-0.193,6.438-0.545c-2.584,2.773-4.768,5.922-6.462,9.355c-1.693-3.435-3.88-6.58-6.462-9.355 C75.643,88.809,77.799,89,80,89z M84.297,110.703c1.902-13.663,12.743-24.504,26.406-26.406 C108.801,97.96,97.96,108.801,84.297,110.703z M110.703,54.297C108.801,67.96,97.96,78.801,84.297,80.703 C86.199,67.04,97.04,56.199,110.703,54.297z M79.998,21.074c8.318,11.007,8.318,26.342,0,37.35 c-4.055-5.351-6.25-11.844-6.25-18.674C73.749,32.919,75.943,26.425,79.998,21.074z M75.703,80.703 C62.04,78.801,51.199,67.96,49.297,54.297C62.96,56.199,73.801,67.04,75.703,80.703z M75.703,110.703 C62.04,108.801,51.199,97.96,49.297,84.297C62.96,86.199,73.801,97.04,75.703,110.703z"/>'
+  },
+  postres: {
+    viewBox: '0 0 1024 1024',
+    content: '<path fill="currentColor" d="M128 416v-48a144 144 0 0 1 168.64-141.888 224.128 224.128 0 0 1 430.72 0A144 144 0 0 1 896 368v48a384 384 0 0 1-352 382.72V896h-64v-97.28A384 384 0 0 1 128 416zm287.104-32.064h193.792a143.808 143.808 0 0 1 58.88-132.736 160.064 160.064 0 0 0-311.552 0 143.808 143.808 0 0 1 58.88 132.8zm-72.896 0a72 72 0 1 0-140.48 0h140.48zm339.584 0h140.416a72 72 0 1 0-140.48 0zM512 736a320 320 0 0 0 318.4-288.064H193.6A320 320 0 0 0 512 736zM384 896.064h256a32 32 0 1 1 0 64H384a32 32 0 1 1 0-64z"/>'
+  },
+  queques: {
+    viewBox: '0 0 14 14',
+    content: '<path fill="currentColor" d="m 11.219592,3.3235446 -1.5624491,0.55347 c 0.066122,0.18123 0.1053061,0.37225 0.1053061,0.57062 0,0.90367 -0.7322449,1.64816 -1.6481633,1.64816 -0.7248979,0 -1.3420408,-0.4751 -1.562449,-1.12408 L 1,6.9137546 l 12,0 c 0,-1.3151 -0.646531,-2.54204 -1.780408,-3.59021 z m -3.5804083,0.0563 c -0.3991837,0.18122 -0.6857143,0.5902 -0.6857143,1.05796 0,0.63918 0.5240816,1.16082 1.1608163,1.16082 0.6367347,0 1.1608163,-0.52409 1.1608163,-1.16082 0,-0.63674 -0.5142857,-1.16082 -1.1608163,-1.16082 -0.3036735,-0.91347 -1.2391837,-1.70449 -1.2857143,-1.74367 -0.1053061,-0.0857 -0.2571428,-0.0759 -0.3428571,0.0294 -0.085714,0.1053 -0.075918,0.25714 0.029388,0.34285 0.2669388,0.21796 0.8938776,0.84735 1.1240817,1.47429 z M 1,10.200285 l 12,0 0,2.32408 -12,0 z m 0,-2.8016304 12,0 0,2.32408 -12,0 z"/>'
+  },
+  temporada: {
+    viewBox: '0 0 24 24',
+    stroke: true,
+    content: '<path d="M12 3 13.3 10.7 20 12 13.3 13.3 12 21 10.7 13.3 4 12 10.7 10.7Z"/>'
+  }
+};
+
+const renderCategoryIcon = (category) => {
+  const icon = CATEGORY_ICONS[category] || CATEGORY_ICONS.temporada;
+  if (icon.stroke) {
+    return `<svg class="card-icon w-5 h-5 text-brand-caramel group-hover:text-white" viewBox="${icon.viewBox}" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${icon.content}</svg>`;
+  }
+  return `<svg class="card-icon w-5 h-5 text-brand-caramel group-hover:text-white" viewBox="${icon.viewBox}" xmlns="http://www.w3.org/2000/svg">${icon.content}</svg>`;
+};
+
 const renderWhatsAppBtn = (name, pageUrl) => {
   const text = pageUrl
     ? `Hola, quisiera información sobre ${name}.\nVer más en: ${pageUrl}`
@@ -110,8 +146,12 @@ const renderCard = (product) => {
     `;
   }
   return `
-    <article class="card-reveal group relative rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300 overflow-hidden flex">
-      <div class="w-1.5 shrink-0 bg-brand-caramel"></div>
+    <article class="card-reveal product-card-lift group relative rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300 overflow-hidden flex">
+      <div class="flex items-center pl-5 shrink-0">
+        <div class="card-icon-circle w-10 h-10 rounded-full bg-brand-beige/70 flex items-center justify-center group-hover:bg-brand-caramel">
+          ${renderCategoryIcon(product.category)}
+        </div>
+      </div>
       <div class="px-5 pt-6 pb-14 flex-1 min-w-0">
         <div class="flex items-start justify-between gap-3">
           <h3 class="font-serif text-xl leading-snug text-brand-cocoa">${product.name}</h3>
@@ -142,7 +182,9 @@ const renderSkeletons = (grid, count = 4) => {
           </div>
         </article>`
       : `<article class="rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft overflow-hidden flex">
-          <div class="w-1.5 shrink-0 bg-brand-beige/60"></div>
+          <div class="flex items-center pl-5 shrink-0">
+            <div class="skeleton w-10 h-10 rounded-full bg-brand-beige/60"></div>
+          </div>
           <div class="px-5 pt-6 pb-10 flex-1 space-y-3">
             <div class="skeleton h-5 w-3/4 rounded bg-brand-beige/60"></div>
             <div class="skeleton h-4 w-1/3 rounded bg-brand-beige/40"></div>

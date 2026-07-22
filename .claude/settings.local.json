@@ -16,7 +16,21 @@
       "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\Users\\\\aleja\\\\OneDrive\\\\Documentos\\\\VS_Code\\\\pandcasa_cr\\\\docs\")",
       "PowerShell(Move-Item \"c:\\\\Users\\\\aleja\\\\OneDrive\\\\Documentos\\\\VS_Code\\\\pandcasa_cr\\\\SUPABASE_SETUP.md\" \"c:\\\\Users\\\\aleja\\\\OneDrive\\\\Documentos\\\\VS_Code\\\\pandcasa_cr\\\\docs\\\\SUPABASE_SETUP.md\")",
       "PowerShell(Move-Item \"c:\\\\Users\\\\aleja\\\\OneDrive\\\\Documentos\\\\VS_Code\\\\pandcasa_cr\\\\VERCEL_PRODUCTION_CHECKLIST.md\" \"c:\\\\Users\\\\aleja\\\\OneDrive\\\\Documentos\\\\VS_Code\\\\pandcasa_cr\\\\docs\\\\VERCEL_PRODUCTION_CHECKLIST.md\")",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(where playwright *)",
+      "Bash(npx playwright *)",
+      "Bash(node *)",
+      "Bash(where npx *)",
+      "Bash(npm root *)",
+      "Bash(ls \"$\\(npm root -g\\)/playwright\")",
+      "Bash(ls \"$\\(npm root -g\\)/@playwright\")",
+      "Bash(npm install *)",
+      "Bash(ls .claude)",
+      "Bash(cat package.json)",
+      "Bash(ls .claude/launch.json)",
+      "Bash(cat .claude/launch.json)",
+      "Bash(ls *.html)",
+      "Bash(ls pages *)"
     ]
   }
 }

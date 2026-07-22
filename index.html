@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -28,22 +28,85 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-
 </head>
-<body class="bg-brand-cream text-brand-cocoa font-sans antialiased selection:bg-brand-gold/20 selection:text-brand-cocoa overflow-x-hidden">
+<body class="bg-brand-cream text-brand-cocoa font-sans antialiased selection:bg-brand-gold/20 selection:text-brand-cocoa">
+
+  <!-- Page Loader -->
+  <div id="page-loader" role="status" aria-label="Cargando Pan d' Casa">
+    <svg class="loader-bread" viewBox="0 3 60 52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- Steam wisps -->
+      <path class="steam-1" d="M19 13 C17 10 21 7 19 4" />
+      <path class="steam-2" d="M30 11 C28 8 32 5 30 2" />
+      <path class="steam-3" d="M41 13 C39 10 43 7 41 4" />
+      <!-- Bread loaf outline -->
+      <path class="bread-outline" d="M7 38 C7 24 15 16 30 16 C45 16 53 24 53 38 L51 46 L9 46 Z" />
+      <!-- Score line -->
+      <path class="bread-score" d="M13 34 Q30 28 47 34" />
+    </svg>
+    <span class="loader-wordmark">Pan d' Casa</span>
+  </div>
+
   <!-- Navbar -->
   <div data-include="/partials/site-navbar.html"></div>
 
-  <!-- Full width hero image -->
-  <section class="w-full">
-    <div class="relative h-80 md:h-[520px] w-full bg-brand-beige/40 border-b border-brand-caramel/15 overflow-hidden">
-      <img width="2000" height="1125" src="assets/TardeCafe.JPG" alt="Tarde de café" class="absolute inset-0 w-full h-full object-cover object-center hero-zoom" loading="eager" decoding="async" fetchpriority="high" />
-      <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+  <!-- Wrapper: overflow-x:hidden aquí para no romper position:sticky del header -->
+  <div class="page-body-wrap">
+
+  <!-- Hero: Full Screen -->
+  <section class="hero-section">
+    <div id="hero-parallax-track">
+      <img
+        width="2000"
+        height="1125"
+        src="assets/TardeCafe.JPG"
+        alt="Tarde de café en Pan d' Casa"
+        class="hero-zoom w-full h-full object-cover object-center"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Recién salido del horno</p>
+      <h1 class="hero-title">Siempre fresco,<br>siempre Pan d' Casa.</h1>
+      <p class="hero-subtitle">Originado del ritual de compartir pan: piezas artesanales que se disfrutan hoy, con calma y carácter.</p>
+      <div class="hero-ctas">
+        <a
+          href="https://wa.me/50683376864?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido."
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-brand-gold text-brand-cocoa text-sm font-medium tracking-wide btn-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/80"
+        >
+          <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Ordenar por WhatsApp
+        </a>
+        <a
+          href="/#nosotros"
+          class="px-7 py-3.5 rounded-full border border-brand-cream/55 text-brand-cream text-sm tracking-wide btn-lift hover:border-brand-cream hover:bg-brand-cream/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cream/50"
+        >
+          Conócenos
+        </a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
     </div>
   </section>
 
+  <!-- Marquee separator -->
+  <div class="marquee-band" aria-hidden="true">
+    <div class="marquee-inner">
+      <span class="marquee-text">· ARTESANAL · FRESCO · HECHO HOY · PAN D' CASA · SIN CONSERVANTES · HORNEADO DIARIO · MASA VIVA · CON AMOR · INGREDIENTES REALES · RECIÉN HORNEADO · PANADERÍA BOUTIQUE · SAN JOSÉ, CR ·</span>
+      <span class="marquee-text">· ARTESANAL · FRESCO · HECHO HOY · PAN D' CASA · SIN CONSERVANTES · HORNEADO DIARIO · MASA VIVA · CON AMOR · INGREDIENTES REALES · RECIÉN HORNEADO · PANADERÍA BOUTIQUE · SAN JOSÉ, CR ·</span>
+    </div>
+  </div>
+
   <main id="inicio" class="relative z-10">
-    <!-- Hero -->
+    <!-- Hero text + galería + ubicación -->
     <section class="max-w-6xl mx-auto px-6 lg:px-10 pt-16 lg:pt-24 pb-16 reveal" data-reveal>
       <div class="text-center">
         <p class="text-sm uppercase tracking-[0.35em] text-brand-caramel">Recién salido del horno</p>
@@ -51,43 +114,72 @@
         <p class="mt-6 text-lg text-brand-cocoa/80 leading-relaxed max-w-2xl mx-auto">Originado del ritual de compartir pan: piezas artesanales que se disfrutan hoy, con calma y carácter.</p>
         <div class="mt-8 flex flex-wrap justify-center gap-4">
           <a href="/#nosotros" class="px-6 py-3 rounded-full bg-brand-cocoa text-brand-cream text-sm tracking-wide btn-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">Conócenos</a>
-          <a href="https://wa.me/50680001234?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="px-6 py-3 rounded-full border border-brand-caramel/50 text-sm tracking-wide btn-lift hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">Ordenar por WhatsApp</a>
+          <a href="https://wa.me/50683376864?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener" class="px-6 py-3 rounded-full border border-brand-caramel/50 text-sm tracking-wide btn-lift hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50">Ordenar por WhatsApp</a>
         </div>
       </div>
       <div class="mt-12 grid lg:grid-cols-12 gap-4">
         <div class="lg:col-span-7">
-          <div class="card-reveal relative h-72 md:h-[420px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center" data-reveal>
+          <div class="card-reveal gallery-card relative h-72 md:h-[420px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden" data-reveal
+               data-lightbox="assets/mostradorlocal.jpeg" data-lightbox-alt="Mostrador de Pan d' Casa">
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
-            <div class="absolute -top-16 -left-10 w-40 h-40 bg-white/35 rotate-12 blur-2xl"></div>
-            <img width="2000" height="3556" src="assets/mostradorlocal.jpeg" alt="Pan d' Casa" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+            <img width="2000" height="3556" src="assets/mostradorlocal.jpeg" alt="Mostrador de Pan d' Casa" class="gallery-img absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+            <div class="card-overlay">
+              <span class="card-overlay-label">Ver más</span>
+              <svg class="card-overlay-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M13 3h4v4M17 3l-5 5M7 17H3v-4M3 17l5-5"/></svg>
+            </div>
           </div>
         </div>
         <div class="lg:col-span-5 grid gap-4">
-          <div class="card-reveal relative h-36 md:h-[200px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center" data-reveal>
+          <div class="card-reveal gallery-card relative h-36 md:h-[200px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden" data-reveal
+               data-lightbox="assets/tamalmaicena.JPG" data-lightbox-alt="Tamales de maicena">
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
-            <img width="2000" height="3556" src="assets/tamalmaicena.JPG" alt="Pan d' Casa" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+            <img width="2000" height="3556" src="assets/tamalmaicena.JPG" alt="Tamales de maicena" class="gallery-img absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+            <div class="card-overlay">
+              <span class="card-overlay-label">Ver más</span>
+              <svg class="card-overlay-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M13 3h4v4M17 3l-5 5M7 17H3v-4M3 17l5-5"/></svg>
+            </div>
           </div>
-          <div class="card-reveal relative h-36 md:h-[200px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center" data-reveal>
+          <div class="card-reveal gallery-card relative h-36 md:h-[200px] rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden" data-reveal
+               data-lightbox="assets/cuadroslocal.jpeg" data-lightbox-alt="Interior del local">
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
-            <img width="2000" height="3556" src="assets/cuadroslocal.jpeg" alt="Pan d' Casa" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
-          </div>
-        </div>
-        <div class="lg:col-span-4">
-          <div class="card-reveal relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center" data-reveal>
-            <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
-            <img width="2000" height="3556" src="assets/coronapan.jpeg" alt="Pan d' Casa" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
-          </div>
-        </div>
-        <div class="lg:col-span-4">
-          <div class="card-reveal relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center" data-reveal>
-            <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
-            <img width="2000" height="3556" src="assets/quequezanahoria.JPG" alt="Pan d' Casa" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+            <img width="2000" height="3556" src="assets/cuadroslocal.jpeg" alt="Interior del local" class="gallery-img absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+            <div class="card-overlay">
+              <span class="card-overlay-label">Ver más</span>
+              <svg class="card-overlay-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M13 3h4v4M17 3l-5 5M7 17H3v-4M3 17l5-5"/></svg>
+            </div>
           </div>
         </div>
         <div class="lg:col-span-4">
-          <div class="card-reveal relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden flex items-center justify-center" data-reveal>
+          <div class="card-reveal gallery-card relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden" data-reveal
+               data-lightbox="assets/coronapan.jpeg" data-lightbox-alt="Corona de pan artesanal">
             <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
-            <img width="2000" height="3556" src="assets/brownie3.jpeg" alt="Pan d' Casa" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+            <img width="2000" height="3556" src="assets/coronapan.jpeg" alt="Corona de pan artesanal" class="gallery-img absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+            <div class="card-overlay">
+              <span class="card-overlay-label">Ver más</span>
+              <svg class="card-overlay-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M13 3h4v4M17 3l-5 5M7 17H3v-4M3 17l5-5"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-4">
+          <div class="card-reveal gallery-card relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden" data-reveal
+               data-lightbox="assets/quequezanahoria.JPG" data-lightbox-alt="Queque de zanahoria">
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+            <img width="2000" height="3556" src="assets/quequezanahoria.JPG" alt="Queque de zanahoria" class="gallery-img absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+            <div class="card-overlay">
+              <span class="card-overlay-label">Ver más</span>
+              <svg class="card-overlay-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M13 3h4v4M17 3l-5 5M7 17H3v-4M3 17l5-5"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-4">
+          <div class="card-reveal gallery-card relative h-44 md:h-56 rounded-3xl border border-brand-caramel/20 bg-brand-beige/40 overflow-hidden" data-reveal
+               data-lightbox="assets/brownie3.jpeg" data-lightbox-alt="Brownies artesanales">
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
+            <img width="2000" height="3556" src="assets/brownie3.jpeg" alt="Brownies artesanales" class="gallery-img absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async" />
+            <div class="card-overlay">
+              <span class="card-overlay-label">Ver más</span>
+              <svg class="card-overlay-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M13 3h4v4M17 3l-5 5M7 17H3v-4M3 17l5-5"/></svg>
+            </div>
           </div>
         </div>
       </div>
@@ -106,9 +198,16 @@
         </div>
       </div>
     </section>
+
     <!-- Nosotros -->
     <section id="nosotros" class="bg-brand-beige scroll-mt-24">
-      <div class="max-w-6xl mx-auto px-6 lg:px-10 py-16 reveal" data-reveal>
+      <!-- Wave top: cream arriba sobre fondo beige -->
+      <div class="wave-divider wave-divider--cream" aria-hidden="true">
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,20 C80,55 160,8 260,48 C320,65 370,18 400,20 L400,0 L0,0 Z" fill="#FCFDFC"/>
+        </svg>
+      </div>
+      <div class="max-w-6xl mx-auto px-6 lg:px-10 pt-8 pb-16 reveal" data-reveal>
         <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
           <div>
             <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Nosotros</p>
@@ -116,9 +215,10 @@
             <p class="mt-6 text-brand-cocoa/75 leading-relaxed">Pan d' Casa nace de un ritual diario: masa viva, ingredientes reales y un diseño que se siente en cada miga. Lo premium es simple cuando está bien hecho.</p>
             <div class="mt-8 grid md:grid-cols-3 gap-6">
               <div class="flex items-start gap-4">
-                <svg class="w-7 h-7 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                  <path d="M12 4c3 2 5 4 6 8-4 1-8 1-12 0 1-4 3-6 6-8z" />
-                  <path d="M6 14c2 2 10 2 12 0" />
+                <!-- Bread loaf: artesanal -->
+                <svg class="w-7 h-7 text-brand-caramel shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 15c0-4 3-7 8-7s8 3 8 7l-1 3H5l-1-3z"/>
+                  <path d="M7 14q5 2 10 0"/>
                 </svg>
                 <div>
                   <p class="font-medium">Artesanal</p>
@@ -126,10 +226,10 @@
                 </div>
               </div>
               <div class="flex items-start gap-4">
-                <svg class="w-7 h-7 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                  <path d="M5 12h14" />
-                  <path d="M7 8h10" />
-                  <path d="M9 16h6" />
+                <!-- Leaf: ingredientes naturales -->
+                <svg class="w-7 h-7 text-brand-caramel shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/>
+                  <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
                 </svg>
                 <div>
                   <p class="font-medium">Ingredientes reales</p>
@@ -137,9 +237,10 @@
                 </div>
               </div>
               <div class="flex items-start gap-4">
-                <svg class="w-7 h-7 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                  <path d="M12 6v12" />
-                  <path d="M6 12h12" />
+                <!-- Sun: hecho hoy -->
+                <svg class="w-7 h-7 text-brand-caramel shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="4"/>
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
                 </svg>
                 <div>
                   <p class="font-medium">Hecho hoy</p>
@@ -149,49 +250,195 @@
             </div>
           </div>
           <div class="rounded-3xl bg-brand-cocoa2 text-brand-cream p-8 shadow-soft">
-            <div class="flex items-center gap-3">
-              <span class="w-12 h-px bg-brand-gold"></span>
-              <p class="text-sm uppercase tracking-[0.3em] text-brand-gold">Sello de casa</p>
+            <div class="sello-badge-wrap">
+              <svg class="sello-svg" viewBox="0 0 60 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <!-- Steam wisps -->
+                <path class="sello-steam-1" d="M 19 13 C 17 10 21 7 19 4" stroke="#F0A50A" stroke-width="1.2" stroke-linecap="round" />
+                <path class="sello-steam-2" d="M 30 11 C 28 8 32 5 30 2" stroke="#F0A50A" stroke-width="1.2" stroke-linecap="round" />
+                <path class="sello-steam-3" d="M 41 13 C 39 10 43 7 41 4" stroke="#F0A50A" stroke-width="1.2" stroke-linecap="round" />
+                <!-- Bread loaf -->
+                <path class="sello-bread" d="M 7 38 C 7 24 15 16 30 16 C 45 16 53 24 53 38 L 51 46 L 9 46 Z" stroke="#F0A50A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <!-- Score line -->
+                <path class="sello-score" d="M 13 34 Q 30 28 47 34" stroke="#F0A50A" stroke-width="1.2" stroke-linecap="round" />
+              </svg>
             </div>
-            <h3 class="mt-4 font-serif text-3xl">Hecho hoy, vendido hoy</h3>
-            <p class="mt-4 text-brand-cream/80">Porque lo premium es la frescura absoluta, sin compromisos ni almacenajes.</p>
+            <h3 class="font-serif text-3xl text-center">Hecho hoy, vendido hoy</h3>
+            <p class="mt-4 text-brand-cream/80 text-center">Porque lo premium es la frescura absoluta, sin compromisos ni almacenajes.</p>
           </div>
         </div>
       </div>
+      <!-- Wave bottom: cream abajo sobre fondo beige -->
+      <div class="wave-divider wave-divider--beige" aria-hidden="true">
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,44 C80,14 180,58 280,22 C340,5 375,46 400,44 L400,64 L0,64 Z" fill="#FCFDFC"/>
+        </svg>
+      </div>
     </section>
 
-    <!-- Cajitas / Carousel -->
-    <section id="temporada" class="py-16">
-      <div class="max-w-6xl mx-auto px-6 lg:px-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6 reveal" data-reveal>
-        <div>
+    <!-- Storytelling editorial -->
+    <section class="editorial-section">
+      <div class="max-w-6xl mx-auto px-6 lg:px-10">
+
+        <div class="text-center mb-16 reveal" data-reveal>
+          <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">El proceso</p>
+          <h2 class="mt-3 font-serif text-3xl md:text-4xl title-reveal">Del horno a tus manos</h2>
+        </div>
+
+        <!-- 01 — La masa -->
+        <div class="editorial-block reveal" data-reveal>
+          <div class="editorial-img">
+            <img src="assets/coronapan.jpeg" alt="Corona de pan artesanal" loading="lazy" decoding="async" />
+          </div>
+          <div class="editorial-text">
+            <span class="editorial-step">01 — La masa</span>
+            <h3 class="editorial-title">Masa viva, tiempo real</h3>
+            <p class="editorial-body">Nada de mejorantes ni atajos. Harina, agua, levadura, sal — ingredientes que se pueden nombrar. El tiempo lento y las manos hacen el resto, igual que siempre.</p>
+          </div>
+        </div>
+
+        <!-- 02 — El horneado -->
+        <div class="editorial-block editorial-block--reverse reveal" data-reveal>
+          <div class="editorial-img">
+            <img src="assets/instagram/queque_manjar.jpeg" alt="Queque de manjar" loading="lazy" decoding="async" />
+          </div>
+          <div class="editorial-text">
+            <span class="editorial-step">02 — El horneado</span>
+            <h3 class="editorial-title">Del horno, directo</h3>
+            <p class="editorial-body">Horneamos en tandas cada mañana. Sin stock de días anteriores, sin conservantes que extiendan lo que ya pasó. Lo que ves en el mostrador es lo de hoy.</p>
+          </div>
+        </div>
+
+        <!-- 03 — El mostrador -->
+        <div class="editorial-block reveal" data-reveal>
+          <div class="editorial-img">
+            <img src="assets/cuadroslocal.jpeg" alt="Interior de Pan d' Casa" loading="lazy" decoding="async" />
+          </div>
+          <div class="editorial-text">
+            <span class="editorial-step">03 — El mostrador</span>
+            <h3 class="editorial-title">Vendido hoy, sin excepciones</h3>
+            <p class="editorial-body">Nuestro control de calidad es directo: si no salió hoy, no regresa mañana. Eso nos obliga a hacerlo bien cada vez, sin excusas.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Cajitas mixtas -->
+    <section id="temporada" class="bg-brand-beige scroll-mt-24">
+      <!-- Wave top: cream arriba sobre fondo beige -->
+      <div class="wave-divider wave-divider--cream" aria-hidden="true">
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,20 C80,55 160,8 260,48 C320,65 370,18 400,20 L400,0 L0,0 Z" fill="#FCFDFC"/>
+        </svg>
+      </div>
+      <div class="max-w-6xl mx-auto px-6 lg:px-10 pt-8 pb-16">
+
+        <div class="reveal" data-reveal>
           <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Bocadillos</p>
           <h2 class="mt-3 font-serif text-3xl md:text-4xl title-reveal">Cajitas mixtas</h2>
-          <p class="mt-4 text-brand-cocoa/75 max-w-xl">Bocadillos artesanales seleccionados y listos para compartir. Pedila por WhatsApp.</p>
+          <p class="mt-4 text-brand-cocoa/75 max-w-xl">Bocadillos artesanales, seleccionados y listos para compartir.</p>
         </div>
+
+        <div class="tilt-wrap mt-10 reveal" data-reveal>
+          <div class="tilt-card" id="tilt-card">
+            <img src="assets/TardeCafe.JPG" alt="Cajitas mixtas Pan d' Casa" class="tilt-img" loading="lazy" decoding="async" />
+            <div class="tilt-overlay"></div>
+            <div class="tilt-content">
+              <h3 class="tilt-title">Una cajita,<br>un momento.</h3>
+              <a href="https://pandcasa.com/cajitas"
+                 class="tilt-btn focus-visible:ring-2 focus-visible:ring-brand-gold/60 focus-visible:outline-none">
+                Ver cajitas mixtas
+                <svg class="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 8h10M9 4l4 4-4 4"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div class="mt-10 w-full">
-        <div class="seasonal-slider" style="--width: clamp(260px, 28vw, 560px); --height: clamp(200px, 22vw, 440px); --quantity: 1;">
-          <div class="seasonal-list"></div>
+      <!-- Wave bottom: cream abajo sobre fondo beige -->
+      <div class="wave-divider wave-divider--beige" aria-hidden="true">
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,44 C80,14 180,58 280,22 C340,5 375,46 400,44 L400,64 L0,64 Z" fill="#FCFDFC"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Badges: servicio express / venta a empresas / pago fácil -->
+    <section class="pb-16">
+      <div class="max-w-6xl mx-auto px-6 lg:px-10">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 reveal" data-reveal>
+          <div class="flex flex-col items-center text-center gap-3">
+            <svg class="w-9 h-9 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 19.5c0-5.5 3-9.5 8-9.5s8 4 8 9.5l-1.5 2.5H6.5z"/>
+              <path d="M8 17.5Q13 15 18 17.5"/>
+              <path d="M2.5 12h2M0.5 16h4M1.5 20h3"/>
+            </svg>
+            <div>
+              <p class="font-medium">Servicio express</p>
+              <p class="mt-1 text-sm text-brand-cocoa/60">Con cargo adicional según la zona.</p>
+            </div>
+          </div>
+          <div class="flex flex-col items-center text-center gap-3">
+            <svg class="w-9 h-9 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>
+              <path d="M4 8h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8zM4 13h16"/>
+            </svg>
+            <div>
+              <p class="font-medium">Venta a empresas</p>
+              <p class="mt-1 text-sm text-brand-cocoa/60">Cajitas mixtas y más para tu oficina.</p>
+            </div>
+          </div>
+          <div class="flex flex-col items-center text-center gap-3">
+            <svg class="w-9 h-9 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 2h8a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/>
+              <path d="M10 12l1.5 1.5 3-3M12 20h.01"/>
+            </svg>
+            <div>
+              <p class="font-medium">Pago fácil</p>
+              <p class="mt-1 text-sm text-brand-cocoa/60">Sinpe, transferencia o link de pago.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Contacto -->
     <section id="contacto" class="bg-brand-beige scroll-mt-36">
-      <div class="max-w-6xl mx-auto px-6 lg:px-10 py-16 reveal" data-reveal>
+      <!-- Wave top: cream arriba sobre fondo beige -->
+      <div class="wave-divider wave-divider--cream" aria-hidden="true">
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,25 C60,5 180,58 280,18 C340,5 380,42 400,25 L400,0 L0,0 Z" fill="#FCFDFC"/>
+        </svg>
+      </div>
+      <div class="max-w-6xl mx-auto px-6 lg:px-10 pt-8 pb-16 reveal" data-reveal>
         <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-10">
           <div>
             <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Contacto</p>
-            <h2 class="mt-3 font-serif text-3xl md:text-4xl title-reveal">Siempre cerca, siempre cálido</h2>
+            <div id="open-status-badge" class="mt-2"></div>
+            <h2 class="mt-2 font-serif text-3xl md:text-4xl title-reveal">Siempre cerca, siempre cálido</h2>
             <div class="mt-6 space-y-3 text-brand-cocoa/80">
               <p><strong>Dirección:</strong> San Francisco, Goicoechea, San José, CR</p>
-              <p><strong>Tel:</strong> +506 8337-6864</p>
+              <p class="flex items-center gap-1.5">
+                <strong>Tel:</strong>
+                <span>+506 8337-6864</span>
+                <button id="copy-phone-btn" class="copy-btn" aria-label="Copiar número de teléfono">
+                  <svg class="copy-icon-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="5" y="5" width="8" height="9" rx="1.5"/>
+                    <path d="M3 11V3a1 1 0 0 1 1-1h7"/>
+                  </svg>
+                  <svg class="copy-icon-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 8.5l3.5 3.5L13 5"/>
+                  </svg>
+                </button>
+              </p>
             </div>
             <div class="mt-6 flex flex-wrap gap-3">
-            <a href="https://wa.me/50683376864" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift hover:bg-brand-cocoa/90">WhatsApp</a>
-            <a href="https://www.instagram.com/pandcasa" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift hover:bg-brand-cocoa/90">Instagram</a>
-            <a href="https://www.facebook.com/pandcasacr" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift hover:bg-brand-cocoa/90">Facebook</a>
-            <a href="https://www.tiktok.com/@pandcasa" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift hover:bg-brand-cocoa/90">TikTok</a>
+              <a href="https://wa.me/50683376864" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift hover:bg-brand-cocoa/90">WhatsApp</a>
+              <a href="https://www.instagram.com/pandcasa" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift hover:bg-brand-cocoa/90">Instagram</a>
+              <a href="https://www.facebook.com/pandcasacr" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift hover:bg-brand-cocoa/90">Facebook</a>
+              <a href="https://www.tiktok.com/@pandcasa" target="_blank" rel="noopener" class="px-4 py-2 rounded-full bg-brand-cocoa text-brand-cream text-sm btn-lift hover:bg-brand-cocoa/90">TikTok</a>
             </div>
           </div>
           <div class="grid gap-3">
@@ -203,7 +450,7 @@
                   <p class="font-serif text-base text-brand-cocoa">Hacer un pedido</p>
                   <p class="mt-1 text-sm text-brand-cocoa/60 leading-snug">Te ayudamos a elegir y coordinar tu pedido.</p>
                 </div>
-                <span class="shrink-0 text-brand-caramel/30 group-hover:text-brand-caramel/70 transition">&#8594;</span>
+                <span class="wa-arrow shrink-0 text-brand-caramel/30 group-hover:text-brand-caramel/70 transition">&#8594;</span>
               </div>
             </button>
             <button
@@ -214,7 +461,7 @@
                   <p class="font-serif text-base text-brand-cocoa">Catalogo de bocadillos</p>
                   <p class="mt-1 text-sm text-brand-cocoa/60 leading-snug">Te enviamos el PDF con todas las opciones.</p>
                 </div>
-                <span class="shrink-0 text-brand-caramel/30 group-hover:text-brand-caramel/70 transition">&#8594;</span>
+                <span class="wa-arrow shrink-0 text-brand-caramel/30 group-hover:text-brand-caramel/70 transition">&#8594;</span>
               </div>
             </button>
             <button
@@ -225,16 +472,38 @@
                   <p class="font-serif text-base text-brand-cocoa">Otra consulta</p>
                   <p class="mt-1 text-sm text-brand-cocoa/60 leading-snug">Con gusto te respondemos.</p>
                 </div>
-                <span class="shrink-0 text-brand-caramel/30 group-hover:text-brand-caramel/70 transition">&#8594;</span>
+                <span class="wa-arrow shrink-0 text-brand-caramel/30 group-hover:text-brand-caramel/70 transition">&#8594;</span>
               </div>
             </button>
           </div>
         </div>
       </div>
+      <!-- Wave 4: beige → cream (dentro de la sección contacto, sobre fondo beige) -->
+      <div class="wave-divider wave-divider--beige" aria-hidden="true">
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,40 C80,62 200,18 300,52 C355,68 385,30 400,40 L400,64 L0,64 Z" fill="#FCFDFC"/>
+        </svg>
+      </div>
     </section>
   </main>
+
+  <!-- Floating WhatsApp Button -->
+  <a
+    href="https://wa.me/50683376864?text=Hola%20Pan%20d%27%20Casa%2C%20quiero%20hacer%20un%20pedido."
+    target="_blank"
+    rel="noopener"
+    class="wa-float"
+    aria-label="Ordenar por WhatsApp"
+  >
+    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
   <!-- Footer -->
   <div data-include="/partials/site-footer.html"></div>
+
+  </div><!-- /page-body-wrap -->
 
   <script src="js/site.js"></script>
 </body>

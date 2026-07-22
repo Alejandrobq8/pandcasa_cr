@@ -22,29 +22,36 @@
   
   <main id="inicio" class="relative z-10">
     <!-- Hero -->
-    <section class="pt-0 pb-12 reveal" data-reveal>
-      <div class="w-full">
-        <div class="relative h-80 md:h-[520px] w-full bg-brand-beige/40 border-y border-brand-caramel/15 overflow-hidden">
-          <img fetchpriority="high" src="/assets/TardeCafe.JPG" alt="Pan d’ Casa" class="absolute inset-0 w-full h-full object-cover" loading="eager" decoding="async" />
-          <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/85 via-brand-cocoa/35 to-transparent"></div>
-          <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
-          <div class="relative h-full w-full flex items-end px-5 sm:px-8 md:px-14 pb-8 sm:pb-10 md:pb-16">
-            <div class="text-brand-cream">
-              <p class="text-xs uppercase tracking-[0.35em] text-brand-cream">Pan d’ Casa</p>
-              <h1 class="mt-2 font-serif text-3xl sm:text-4xl md:text-6xl title-reveal leading-tight">Panadería</h1>
-              <p class="mt-3 text-sm md:text-base text-brand-cream/70 max-w-sm md:max-w-md">Pan artesanal, fermentación lenta y aroma de casa en cada miga.</p>
-              <div class="mt-5">
-                <a href="https://wa.me/50683376864?text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%20la%20panader%C3%ADa%20disponible%20hoy." target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-gold text-brand-cocoa text-sm tracking-wide btn-lift font-medium">Pedir por WhatsApp</a>
-              </div>
-            </div>
-          </div>
-        </div>
+    <section class="hero-section hero-section--category">
+      <div id="hero-parallax-track">
+        <img
+          width="2000"
+          height="1125"
+          src="/assets/TardeCafe.JPG"
+          alt="Tarde de café en Pan d' Casa"
+          class="hero-zoom w-full h-full object-cover object-center"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
       </div>
-
+      <div class="hero-overlay"></div>
+      <a href="/" class="hero-back-link absolute top-20 md:top-24 left-5 sm:left-8 md:left-14 z-20 text-sm">&larr; Volver al inicio</a>
+      <div class="hero-content hero-content--category">
+        <svg class="hero-category-icon w-16 h-16 md:w-20 md:h-20 text-brand-cream mx-auto mb-4" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="currentColor" d="M41,80c0,14.654,8.128,27.441,20.109,34.104C61.043,114.393,61,114.691,61,115v20c0,2.209,1.791,4,4,4 s4-1.791,4-4v-17.59c2.257,0.665,4.595,1.14,7,1.386V145c0,2.209,1.791,4,4,4s4-1.791,4-4v-26.204c2.404-0.246,4.743-0.721,7-1.386 V135c0,2.209,1.791,4,4,4s4-1.791,4-4v-20c0-0.309-0.043-0.607-0.109-0.896C110.872,107.441,119,94.654,119,80c0-2.209-1.791-4-4-4 c-2.203,0-4.359,0.193-6.465,0.545C115.021,69.578,119,60.247,119,50c0-2.209-1.791-4-4-4c-8.766,0-16.863,2.908-23.384,7.809 c5.372-13.957,2.45-30.4-8.788-41.637c-1.563-1.562-4.094-1.562-5.657,0c-7.366,7.367-11.423,17.161-11.423,27.578 c0,4.88,0.901,9.619,2.605,14.04C61.839,48.902,53.753,46,45,46c-2.209,0-4,1.791-4,4c0,10.248,3.979,19.579,10.465,26.546 C49.36,76.193,47.203,76,45,76C42.791,76,41,77.791,41,80z M80,89c0.007,0,0.013,0,0.02,0c0.002,0,0.004,0,0.007,0 c2.194-0.002,4.342-0.193,6.438-0.545c-2.584,2.773-4.768,5.922-6.462,9.355c-1.693-3.435-3.88-6.58-6.462-9.355 C75.643,88.809,77.799,89,80,89z M84.297,110.703c1.902-13.663,12.743-24.504,26.406-26.406 C108.801,97.96,97.96,108.801,84.297,110.703z M110.703,54.297C108.801,67.96,97.96,78.801,84.297,80.703 C86.199,67.04,97.04,56.199,110.703,54.297z M79.998,21.074c8.318,11.007,8.318,26.342,0,37.35 c-4.055-5.351-6.25-11.844-6.25-18.674C73.749,32.919,75.943,26.425,79.998,21.074z M75.703,80.703 C62.04,78.801,51.199,67.96,49.297,54.297C62.96,56.199,73.801,67.04,75.703,80.703z M75.703,110.703 C62.04,108.801,51.199,97.96,49.297,84.297C62.96,86.199,73.801,97.04,75.703,110.703z"/>
+        </svg>
+        <h1 class="hero-title">Panadería</h1>
+      </div>
     </section>
 
     <!-- Lista -->
     <section class="bg-brand-beige">
+      <div class="wave-divider" aria-hidden="true">
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,20 C80,55 160,8 260,48 C320,65 370,18 400,20 L400,0 L0,0 Z" fill="#502B1C"/>
+        </svg>
+      </div>
       <div class="max-w-6xl mx-auto px-6 lg:px-10 py-16 reveal" data-reveal>
         <div class="mb-10">
           <p class="text-xs uppercase tracking-[0.35em] text-brand-caramel">Selección del día</p>

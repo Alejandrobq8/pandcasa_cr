@@ -1,0 +1,15 @@
+commit cff43e605d06db4daab7193625d445af542a6fbd
+Author: alejandro <alejandrobarquero08@gmial.com>
+Date:   Thu Jun 18 16:47:35 2026 -0600
+
+    Paginar carrusel de cajitas mixtas y agregar fallback de imagen
+    
+    Las 65 cajitas se renderizaban todas de una vez (65 imagenes), lo que
+    en conexiones lentas o equipos limitados dejaba bloques sin imagen.
+    Ahora se cargan en lotes de 12 via IntersectionObserver, y si una
+    imagen falla se muestra el logo en vez del icono roto.
+    
+    Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+ js/app.js | 50 +++++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 41 insertions(+), 9 deletions(-)

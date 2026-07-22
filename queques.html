@@ -22,29 +22,36 @@
   
   <main id="inicio" class="relative z-10">
     <!-- Hero -->
-    <section class="pt-0 pb-12 reveal" data-reveal>
-      <div class="w-full">
-        <div class="relative h-80 md:h-[520px] w-full bg-brand-beige/40 border-y border-brand-caramel/15 overflow-hidden">
-          <img fetchpriority="high" src="/assets/TardeCafe.JPG" alt="Pan d’ Casa" class="absolute inset-0 w-full h-full object-cover" loading="eager" decoding="async" />
-          <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/85 via-brand-cocoa/35 to-transparent"></div>
-          <div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/10 via-transparent to-brand-gold2/10"></div>
-          <div class="relative h-full w-full flex items-end px-5 sm:px-8 md:px-14 pb-8 sm:pb-10 md:pb-16">
-            <div class="text-brand-cream">
-              <p class="text-xs uppercase tracking-[0.35em] text-brand-cream">Pan d’ Casa</p>
-              <h1 class="mt-2 font-serif text-3xl sm:text-4xl md:text-6xl title-reveal leading-tight">Queques</h1>
-              <p class="mt-3 text-sm md:text-base text-brand-cream/70 max-w-sm md:max-w-md">Queques de casa, húmedos y delicados, horneados cada mañana.</p>
-              <div class="mt-5">
-                <a href="https://wa.me/50683376864?text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%20los%20queques%20disponibles%20hoy." target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-gold text-brand-cocoa text-sm tracking-wide btn-lift font-medium">Pedir por WhatsApp</a>
-              </div>
-            </div>
-          </div>
-        </div>
+    <section class="hero-section hero-section--category">
+      <div id="hero-parallax-track">
+        <img
+          width="2000"
+          height="1125"
+          src="/assets/TardeCafe.JPG"
+          alt="Tarde de café en Pan d' Casa"
+          class="hero-zoom w-full h-full object-cover object-center"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
       </div>
-
+      <div class="hero-overlay"></div>
+      <a href="/" class="hero-back-link absolute top-20 md:top-24 left-5 sm:left-8 md:left-14 z-20 text-sm">&larr; Volver al inicio</a>
+      <div class="hero-content hero-content--category">
+        <svg class="hero-category-icon w-16 h-16 md:w-20 md:h-20 text-brand-cream mx-auto mb-4" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="currentColor" d="m 11.219592,3.3235446 -1.5624491,0.55347 c 0.066122,0.18123 0.1053061,0.37225 0.1053061,0.57062 0,0.90367 -0.7322449,1.64816 -1.6481633,1.64816 -0.7248979,0 -1.3420408,-0.4751 -1.562449,-1.12408 L 1,6.9137546 l 12,0 c 0,-1.3151 -0.646531,-2.54204 -1.780408,-3.59021 z m -3.5804083,0.0563 c -0.3991837,0.18122 -0.6857143,0.5902 -0.6857143,1.05796 0,0.63918 0.5240816,1.16082 1.1608163,1.16082 0.6367347,0 1.1608163,-0.52409 1.1608163,-1.16082 0,-0.63674 -0.5142857,-1.16082 -1.1608163,-1.16082 -0.3036735,-0.91347 -1.2391837,-1.70449 -1.2857143,-1.74367 -0.1053061,-0.0857 -0.2571428,-0.0759 -0.3428571,0.0294 -0.085714,0.1053 -0.075918,0.25714 0.029388,0.34285 0.2669388,0.21796 0.8938776,0.84735 1.1240817,1.47429 z M 1,10.200285 l 12,0 0,2.32408 -12,0 z m 0,-2.8016304 12,0 0,2.32408 -12,0 z"/>
+        </svg>
+        <h1 class="hero-title">Queques</h1>
+      </div>
     </section>
 
     <!-- Lista -->
     <section class="bg-brand-beige">
+      <div class="wave-divider" aria-hidden="true">
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,20 C80,55 160,8 260,48 C320,65 370,18 400,20 L400,0 L0,0 Z" fill="#502B1C"/>
+        </svg>
+      </div>
       <div class="max-w-6xl mx-auto px-6 lg:px-10 py-16 reveal" data-reveal>
         <div class="mb-10">
           <p class="text-xs uppercase tracking-[0.35em] text-brand-caramel">Selección del día</p>
