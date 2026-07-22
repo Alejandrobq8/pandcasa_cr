@@ -1,0 +1,15 @@
+commit 2a5e35a65155dc5872242e16c623555a6a947597
+Author: alejandro <alejandrobarquero08@gmial.com>
+Date:   Thu Jun 18 19:23:29 2026 -0600
+
+    Reintentar carga de imagen antes de mostrar placeholder
+    
+    Las imagenes de Supabase Storage son validas (verificado byte a byte),
+    pero fallos de red transitorios disparaban el fallback al logo de
+    inmediato. Ahora se reintenta la carga 2 veces con backoff antes de
+    darse por vencido.
+    
+    Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+ js/app.js | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)

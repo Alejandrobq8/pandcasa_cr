@@ -738,6 +738,9 @@ body.page-exit main {
   margin-bottom: 4rem;
   align-items: center;
 }
+.editorial-block:last-child {
+  margin-bottom: 0;
+}
 @media (min-width: 768px) {
   .editorial-block {
     grid-template-columns: 1fr 1fr;

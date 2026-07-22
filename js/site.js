@@ -182,6 +182,15 @@
     const header = document.querySelector('.site-header');
     if (!header) return;
 
+    // Páginas sin hero de foto grande (ej. cajita.html) no tienen fondo
+    // oscuro detrás del navbar al cargar, así que el navbar arranca
+    // siempre en su estado sólido/legible, sin depender del scroll.
+    const hasHero = !!document.querySelector('.hero-section');
+    if (!hasHero) {
+      header.classList.add('nav-scrolled');
+      return;
+    }
+
     const THRESHOLD = 70;
     let raf;
 

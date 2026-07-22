@@ -90,8 +90,8 @@ const renderCard = (product) => {
   if (product.category === 'bocadillos_carousel') {
     return `
       <article class="card-reveal group relative overflow-hidden rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300">
-        <a href="/cajita/${product.id}" class="block h-[260px] sm:h-[320px] md:h-[340px] w-full overflow-hidden relative">
-          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async"/>
+        <a href="/cajita/${product.id}" class="block h-[260px] sm:h-[320px] md:h-[340px] w-full overflow-hidden relative bg-brand-beige/40">
+          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/Logo Pandcasa.png';this.className='h-full w-full object-contain p-12 opacity-40';"/>
           <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div class="absolute bottom-3 left-4 text-brand-cream opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xs tracking-wide">Ver detalle →</div>
         </a>
@@ -111,8 +111,8 @@ const renderCard = (product) => {
   if (product.image_url) {
     return `
       <article class="card-reveal group relative overflow-hidden rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300">
-        <div class="h-[260px] sm:h-[320px] md:h-[340px] w-full overflow-hidden cursor-zoom-in relative" data-lightbox="${product.image_url}" data-lightbox-alt="${product.name}">
-          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async"/>
+        <div class="h-[260px] sm:h-[320px] md:h-[340px] w-full overflow-hidden cursor-zoom-in relative bg-brand-beige/40" data-lightbox="${product.image_url}" data-lightbox-alt="${product.name}">
+          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/Logo Pandcasa.png';this.className='h-full w-full object-contain p-12 opacity-40';"/>
           <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div class="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-black/40 flex items-center justify-center pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0Zm-3-3v6m-3-3h6"/></svg></div>
         </div>
@@ -282,16 +282,27 @@ const filterProducts = (products, query) => {
   });
 };
 
-const applyCardStagger = (grid) => {
+const applyCardStagger = (grid, startIndex = 0) => {
   const cards = Array.from(grid.querySelectorAll('.card-reveal'));
   if (!cards.length) return;
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Cards de lotes anteriores: ya se mostraron, quedan visibles al instante
+  // sin transición (para que no vuelvan a parpadear en cada nuevo lote).
+  cards.slice(0, startIndex).forEach((card) => {
+    card.style.transition = 'none';
+    card.classList.add('is-visible');
+  });
+
+  const newCards = cards.slice(startIndex);
+  if (!newCards.length) return;
+
   if (prefersReduced) {
-    cards.forEach((card) => card.classList.add('is-visible'));
+    newCards.forEach((card) => card.classList.add('is-visible'));
     return;
   }
 
-  cards.forEach((card, index) => {
+  newCards.forEach((card, index) => {
     card.style.transitionDelay = `${Math.min(index * 60, 420)}ms`;
   });
 
@@ -299,7 +310,7 @@ const applyCardStagger = (grid) => {
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      cards.forEach((card) => card.classList.add('is-visible'));
+      newCards.forEach((card) => card.classList.add('is-visible'));
     });
   });
 };
@@ -384,7 +395,11 @@ const initMenu = async () => {
     const filtersEl = document.getElementById('productFilters');
     let activeFilter = 'all';
 
-    const applyAndRender = () => {
+    const BATCH_SIZE = 12;
+    let visibleCount = BATCH_SIZE;
+    let sentinelObserver = null;
+
+    const getFilteredResult = () => {
       let result = filterProducts(data, searchInput?.value || '');
       if (activeFilter.startsWith('qty-')) {
         const qty = parseInt(activeFilter.replace('qty-', ''));
@@ -394,12 +409,57 @@ const initMenu = async () => {
       } else if (activeFilter === 'frutas') {
         result = result.filter(hasFrutas);
       }
+      return result;
+    };
+
+    // Sentinel al final del grid: cuando se acerca al viewport, revela
+    // el siguiente lote de 12 (mismo patrón de IntersectionObserver que
+    // usa initScrollReveal() en site.js).
+    const attachSentinel = (result) => {
+      sentinelObserver?.disconnect();
+      if (visibleCount >= result.length) return;
+
+      const sentinel = document.createElement('div');
+      sentinel.className = 'col-span-full h-px';
+      sentinel.setAttribute('aria-hidden', 'true');
+      grid.appendChild(sentinel);
+
+      sentinelObserver = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            obs.disconnect();
+            const startIndex = visibleCount;
+            visibleCount = Math.min(visibleCount + BATCH_SIZE, result.length);
+            renderBatch(result, startIndex);
+          });
+        },
+        { rootMargin: '400px' }
+      );
+      sentinelObserver.observe(sentinel);
+    };
+
+    const renderBatch = (result, startIndex) => {
+      const toShow = result.slice(0, visibleCount);
+      grid.innerHTML = toShow.map(renderCard).join('');
+      grid.closest('[data-reveal]')?.classList.add('is-visible');
+      applyCardStagger(grid, startIndex);
+      attachSentinel(result);
+    };
+
+    const applyAndRender = () => {
+      const result = getFilteredResult();
+      visibleCount = Math.min(BATCH_SIZE, result.length);
+      sentinelObserver?.disconnect();
 
       renderFilterButtons(filtersEl, data, activeFilter);
-      grid.innerHTML = result.length ? result.map(renderCard).join('') : '';
-      grid.closest('[data-reveal]')?.classList.add('is-visible');
-      if (result.length) applyCardStagger(grid);
-      else renderEmpty(grid);
+
+      if (!result.length) {
+        renderEmpty(grid);
+        return;
+      }
+
+      renderBatch(result, 0);
     };
 
     const urlQ = new URLSearchParams(location.search).get('q');

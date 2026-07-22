@@ -324,8 +324,14 @@
     </section>
 
     <!-- Cajitas mixtas -->
-    <section id="temporada" class="py-20 scroll-mt-24">
-      <div class="max-w-6xl mx-auto px-6 lg:px-10">
+    <section id="temporada" class="bg-brand-beige scroll-mt-24">
+      <!-- Wave top: cream arriba sobre fondo beige -->
+      <div class="wave-divider wave-divider--cream" aria-hidden="true">
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,20 C80,55 160,8 260,48 C320,65 370,18 400,20 L400,0 L0,0 Z" fill="#FCFDFC"/>
+        </svg>
+      </div>
+      <div class="max-w-6xl mx-auto px-6 lg:px-10 pt-8 pb-16">
 
         <div class="reveal" data-reveal>
           <p class="text-sm uppercase tracking-[0.3em] text-brand-caramel">Bocadillos</p>
@@ -350,6 +356,51 @@
           </div>
         </div>
 
+      </div>
+      <!-- Wave bottom: cream abajo sobre fondo beige -->
+      <div class="wave-divider wave-divider--beige" aria-hidden="true">
+        <svg viewBox="0 0 400 64" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,44 C80,14 180,58 280,22 C340,5 375,46 400,44 L400,64 L0,64 Z" fill="#FCFDFC"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Badges: servicio express / venta a empresas / pago fácil -->
+    <section class="pb-16">
+      <div class="max-w-6xl mx-auto px-6 lg:px-10">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 reveal" data-reveal>
+          <div class="flex flex-col items-center text-center gap-3">
+            <svg class="w-9 h-9 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 19.5c0-5.5 3-9.5 8-9.5s8 4 8 9.5l-1.5 2.5H6.5z"/>
+              <path d="M8 17.5Q13 15 18 17.5"/>
+              <path d="M2.5 12h2M0.5 16h4M1.5 20h3"/>
+            </svg>
+            <div>
+              <p class="font-medium">Servicio express</p>
+              <p class="mt-1 text-sm text-brand-cocoa/60">Con cargo adicional según la zona.</p>
+            </div>
+          </div>
+          <div class="flex flex-col items-center text-center gap-3">
+            <svg class="w-9 h-9 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>
+              <path d="M4 8h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8zM4 13h16"/>
+            </svg>
+            <div>
+              <p class="font-medium">Venta a empresas</p>
+              <p class="mt-1 text-sm text-brand-cocoa/60">Cajitas mixtas y más para tu oficina.</p>
+            </div>
+          </div>
+          <div class="flex flex-col items-center text-center gap-3">
+            <svg class="w-9 h-9 text-brand-caramel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 2h8a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/>
+              <path d="M10 12l1.5 1.5 3-3M12 20h.01"/>
+            </svg>
+            <div>
+              <p class="font-medium">Pago fácil</p>
+              <p class="mt-1 text-sm text-brand-cocoa/60">Sinpe, transferencia o link de pago.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
