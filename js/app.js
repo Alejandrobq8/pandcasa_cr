@@ -86,12 +86,26 @@ const renderWhatsAppBtn = (name, pageUrl) => {
   return `<a href="https://wa.me/50683376864?text=${msg}" target="_blank" rel="noopener" title="Consultar por WhatsApp" class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-brand-caramel flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-200"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>`;
 };
 
+window.handleProductImgError = (img) => {
+  const attempts = Number(img.dataset.retryCount || 0);
+  if (attempts < 2) {
+    img.dataset.retryCount = String(attempts + 1);
+    const url = new URL(img.src, location.href);
+    url.searchParams.set('retry', Date.now());
+    setTimeout(() => { img.src = url.toString(); }, 600 * (attempts + 1));
+    return;
+  }
+  img.onerror = null;
+  img.src = '/assets/Logo Pandcasa.png';
+  img.className = 'h-full w-full object-contain p-12 opacity-40';
+};
+
 const renderCard = (product) => {
   if (product.category === 'bocadillos_carousel') {
     return `
       <article class="card-reveal group relative overflow-hidden rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300">
         <a href="/cajita/${product.id}" class="block h-[260px] sm:h-[320px] md:h-[340px] w-full overflow-hidden relative bg-brand-beige/40">
-          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/Logo Pandcasa.png';this.className='h-full w-full object-contain p-12 opacity-40';"/>
+          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" onerror="handleProductImgError(this)"/>
           <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div class="absolute bottom-3 left-4 text-brand-cream opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-xs tracking-wide">Ver detalle →</div>
         </a>
@@ -112,7 +126,7 @@ const renderCard = (product) => {
     return `
       <article class="card-reveal group relative overflow-hidden rounded-2xl border border-brand-caramel/20 bg-brand-cream shadow-soft hover:shadow-lift transition-shadow duration-300">
         <div class="h-[260px] sm:h-[320px] md:h-[340px] w-full overflow-hidden cursor-zoom-in relative bg-brand-beige/40" data-lightbox="${product.image_url}" data-lightbox-alt="${product.name}">
-          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/assets/Logo Pandcasa.png';this.className='h-full w-full object-contain p-12 opacity-40';"/>
+          <img src="${product.image_url}" alt="${product.name}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" onerror="handleProductImgError(this)"/>
           <div class="absolute inset-0 bg-gradient-to-t from-brand-cocoa/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div class="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-black/40 flex items-center justify-center pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0Zm-3-3v6m-3-3h6"/></svg></div>
         </div>
@@ -283,26 +297,15 @@ const filterProducts = (products, query) => {
 };
 
 const applyCardStagger = (grid, startIndex = 0) => {
-  const cards = Array.from(grid.querySelectorAll('.card-reveal'));
+  const cards = Array.from(grid.querySelectorAll('.card-reveal')).slice(startIndex);
   if (!cards.length) return;
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Cards de lotes anteriores: ya se mostraron, quedan visibles al instante
-  // sin transición (para que no vuelvan a parpadear en cada nuevo lote).
-  cards.slice(0, startIndex).forEach((card) => {
-    card.style.transition = 'none';
-    card.classList.add('is-visible');
-  });
-
-  const newCards = cards.slice(startIndex);
-  if (!newCards.length) return;
-
   if (prefersReduced) {
-    newCards.forEach((card) => card.classList.add('is-visible'));
+    cards.forEach((card) => card.classList.add('is-visible'));
     return;
   }
 
-  newCards.forEach((card, index) => {
+  cards.forEach((card, index) => {
     card.style.transitionDelay = `${Math.min(index * 60, 420)}ms`;
   });
 
@@ -310,7 +313,7 @@ const applyCardStagger = (grid, startIndex = 0) => {
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      newCards.forEach((card) => card.classList.add('is-visible'));
+      cards.forEach((card) => card.classList.add('is-visible'));
     });
   });
 };
@@ -395,11 +398,29 @@ const initMenu = async () => {
     const filtersEl = document.getElementById('productFilters');
     let activeFilter = 'all';
 
-    const BATCH_SIZE = 12;
-    let visibleCount = BATCH_SIZE;
-    let sentinelObserver = null;
+    const PAGE_SIZE = 12;
+    let pageResult = [];
+    let renderedCount = 0;
 
-    const getFilteredResult = () => {
+    const sentinel = document.createElement('div');
+    sentinel.className = 'col-span-full h-px';
+    grid.after(sentinel);
+
+    const renderNextPage = () => {
+      const next = pageResult.slice(renderedCount, renderedCount + PAGE_SIZE);
+      if (!next.length) return;
+      const startIndex = renderedCount;
+      grid.insertAdjacentHTML('beforeend', next.map(renderCard).join(''));
+      renderedCount += next.length;
+      applyCardStagger(grid, startIndex);
+      if (renderedCount >= pageResult.length) pageObserver.disconnect();
+    };
+
+    const pageObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) renderNextPage();
+    }, { rootMargin: '400px' });
+
+    const applyAndRender = () => {
       let result = filterProducts(data, searchInput?.value || '');
       if (activeFilter.startsWith('qty-')) {
         const qty = parseInt(activeFilter.replace('qty-', ''));
@@ -409,57 +430,22 @@ const initMenu = async () => {
       } else if (activeFilter === 'frutas') {
         result = result.filter(hasFrutas);
       }
-      return result;
-    };
-
-    // Sentinel al final del grid: cuando se acerca al viewport, revela
-    // el siguiente lote de 12 (mismo patrón de IntersectionObserver que
-    // usa initScrollReveal() en site.js).
-    const attachSentinel = (result) => {
-      sentinelObserver?.disconnect();
-      if (visibleCount >= result.length) return;
-
-      const sentinel = document.createElement('div');
-      sentinel.className = 'col-span-full h-px';
-      sentinel.setAttribute('aria-hidden', 'true');
-      grid.appendChild(sentinel);
-
-      sentinelObserver = new IntersectionObserver(
-        (entries, obs) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            obs.disconnect();
-            const startIndex = visibleCount;
-            visibleCount = Math.min(visibleCount + BATCH_SIZE, result.length);
-            renderBatch(result, startIndex);
-          });
-        },
-        { rootMargin: '400px' }
-      );
-      sentinelObserver.observe(sentinel);
-    };
-
-    const renderBatch = (result, startIndex) => {
-      const toShow = result.slice(0, visibleCount);
-      grid.innerHTML = toShow.map(renderCard).join('');
-      grid.closest('[data-reveal]')?.classList.add('is-visible');
-      applyCardStagger(grid, startIndex);
-      attachSentinel(result);
-    };
-
-    const applyAndRender = () => {
-      const result = getFilteredResult();
-      visibleCount = Math.min(BATCH_SIZE, result.length);
-      sentinelObserver?.disconnect();
 
       renderFilterButtons(filtersEl, data, activeFilter);
+
+      pageObserver.disconnect();
+      pageResult = result;
+      renderedCount = 0;
+      grid.innerHTML = '';
 
       if (!result.length) {
         renderEmpty(grid);
         return;
       }
 
-      renderBatch(result, 0);
+      grid.closest('[data-reveal]')?.classList.add('is-visible');
+      renderNextPage();
+      if (renderedCount < pageResult.length) pageObserver.observe(sentinel);
     };
 
     const urlQ = new URLSearchParams(location.search).get('q');
