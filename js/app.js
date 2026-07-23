@@ -249,17 +249,27 @@ const hasRefresco = (product) =>
 const hasFrutas = (product) =>
   `${product.name} ${product.description || ''}`.toLowerCase().includes('fruta');
 
+const PRICE_RANGES = [
+  { label: 'Hasta ₡2.000', min: 0, max: 2000 },
+  { label: '₡2.000 - ₡3.000', min: 2000, max: 3000 },
+  { label: '₡3.000 - ₡4.000', min: 3000, max: 4000 },
+  { label: '₡4.000 - ₡5.000', min: 4000, max: 5000 },
+  { label: 'Más de ₡5.000', min: 5000, max: Infinity },
+];
+
 const renderFilterButtons = (container, products, activeFilter) => {
   if (!container) return;
   const quantities = [...new Set(products.map(getBoxQuantity).filter(Boolean))].sort((a, b) => a - b);
   const anyRefresco = products.some(hasRefresco);
   const anyFrutas = products.some(hasFrutas);
+  const priceRanges = PRICE_RANGES.filter(r => products.some(p => p.price >= r.min && p.price < r.max));
 
   const items = [
     { label: 'Todos', value: 'all' },
     ...quantities.map(q => ({ label: `${q} bocadillos`, value: `qty-${q}` })),
     ...(anyRefresco ? [{ label: 'Con refresco', value: 'refresco' }] : []),
     ...(anyFrutas ? [{ label: 'Con frutas', value: 'frutas' }] : []),
+    ...priceRanges.map(r => ({ label: r.label, value: `price-${r.min}-${r.max}` })),
   ];
 
   const activeLabel = items.find(i => i.value === activeFilter)?.label || 'Todos';
@@ -429,6 +439,9 @@ const initMenu = async () => {
         result = result.filter(hasRefresco);
       } else if (activeFilter === 'frutas') {
         result = result.filter(hasFrutas);
+      } else if (activeFilter.startsWith('price-')) {
+        const [min, max] = activeFilter.replace('price-', '').split('-').map(Number);
+        result = result.filter(p => p.price >= min && p.price < max);
       }
 
       renderFilterButtons(filtersEl, data, activeFilter);
