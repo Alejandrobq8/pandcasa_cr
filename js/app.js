@@ -249,6 +249,29 @@ const hasRefresco = (product) =>
 const hasFrutas = (product) =>
   `${product.name} ${product.description || ''}`.toLowerCase().includes('fruta');
 
+const hasYogurt = (product) =>
+  `${product.name} ${product.description || ''}`.toLowerCase().includes('yogurt');
+
+const hasJugoEmbotellado = (product) =>
+  `${product.name} ${product.description || ''}`.toLowerCase().includes('embotellado');
+
+const hasQueque = (product) =>
+  `${product.name} ${product.description || ''}`.toLowerCase().includes('queque');
+
+const hasCupcake = (product) =>
+  `${product.name} ${product.description || ''}`.toLowerCase().includes('cupcake');
+
+const EXTRA_OPTIONS = [
+  { label: 'Con refresco', value: 'refresco', test: hasRefresco },
+  { label: 'Con frutas', value: 'frutas', test: hasFrutas },
+  { label: 'Yogurt', value: 'yogurt', test: hasYogurt },
+  { label: 'Jugo embotellado', value: 'jugo-embotellado', test: hasJugoEmbotellado },
+  { label: 'Queque', value: 'queque', test: hasQueque },
+  { label: 'Cupcake', value: 'cupcake', test: hasCupcake },
+];
+
+const EXTRA_MATCHERS = Object.fromEntries(EXTRA_OPTIONS.map(o => [o.value, o.test]));
+
 const PRICE_RANGES = [
   { label: 'Hasta ₡2.000', min: 0, max: 2000 },
   { label: '₡2.000 - ₡3.000', min: 2000, max: 3000 },
@@ -257,41 +280,49 @@ const PRICE_RANGES = [
   { label: 'Más de ₡5.000', min: 5000, max: Infinity },
 ];
 
-const renderFilterButtons = (container, products, activeFilter) => {
-  if (!container) return;
-  const quantities = [...new Set(products.map(getBoxQuantity).filter(Boolean))].sort((a, b) => a - b);
-  const anyRefresco = products.some(hasRefresco);
-  const anyFrutas = products.some(hasFrutas);
-  const priceRanges = PRICE_RANGES.filter(r => products.some(p => p.price >= r.min && p.price < r.max));
-
-  const items = [
-    { label: 'Todos', value: 'all' },
-    ...quantities.map(q => ({ label: `${q} bocadillos`, value: `qty-${q}` })),
-    ...(anyRefresco ? [{ label: 'Con refresco', value: 'refresco' }] : []),
-    ...(anyFrutas ? [{ label: 'Con frutas', value: 'frutas' }] : []),
-    ...priceRanges.map(r => ({ label: r.label, value: `price-${r.min}-${r.max}` })),
-  ];
-
-  const activeLabel = items.find(i => i.value === activeFilter)?.label || 'Todos';
+const renderFilterDropdown = (facetKey, facetLabel, items, activeValue) => {
+  const isFilterActive = activeValue !== 'all';
 
   const menuItems = items.map(({ label, value }) => {
-    const isActive = activeFilter === value;
-    return `<button data-filter="${value}" class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-brand-cocoa hover:bg-brand-beige/60 transition-colors duration-150 ${isActive ? 'font-medium' : ''}">
+    const isActive = activeValue === value;
+    return `<button data-facet="${facetKey}" data-filter="${value}" class="w-full flex items-center justify-between px-4 py-2.5 text-sm text-brand-cocoa hover:bg-brand-beige/60 transition-colors duration-150 ${isActive ? 'font-medium' : ''}">
       <span>${label}</span>
       ${isActive ? '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-brand-caramel" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>' : '<span class="w-4 h-4"></span>'}
     </button>`;
   }).join('');
 
-  container.innerHTML = `
-    <div data-filter-wrapper class="relative inline-block">
-      <button data-dropdown-toggle class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-caramel/30 bg-brand-cream text-sm text-brand-cocoa hover:border-brand-caramel/60 transition-colors duration-150">
+  return `
+    <div data-filter-wrapper="${facetKey}" class="relative flex-1 sm:flex-none min-w-0">
+      <button data-dropdown-toggle class="relative w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-brand-caramel/30 bg-brand-cream text-sm text-brand-cocoa hover:border-brand-caramel/60 transition-colors duration-150">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-brand-caramel/70 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"/></svg>
-        <span data-filter-label>${activeLabel}</span>
+        <span data-filter-label>${facetLabel}</span>
         <svg data-filter-chevron xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-brand-caramel/60 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
+        ${isFilterActive ? '<span data-filter-active-dot class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-brand-gold" aria-hidden="true"></span>' : ''}
       </button>
       <div data-dropdown-menu class="absolute top-full left-0 mt-2 w-52 bg-brand-cream rounded-xl border border-brand-caramel/20 shadow-lift z-20 overflow-hidden">
         ${menuItems}
       </div>
+    </div>`;
+};
+
+const renderFilterBar = (container, products, activeFilters) => {
+  if (!container) return;
+  const quantities = [...new Set(products.map(getBoxQuantity).filter(Boolean))].sort((a, b) => a - b);
+  const priceRanges = PRICE_RANGES.filter(r => products.some(p => p.price >= r.min && p.price < r.max));
+  const extraOptions = EXTRA_OPTIONS.filter(o => products.some(o.test));
+
+  const qtyItems = [{ label: 'Todos', value: 'all' }, ...quantities.map(q => ({ label: `${q} bocadillos`, value: `qty-${q}` }))];
+  const priceItems = [{ label: 'Todos', value: 'all' }, ...priceRanges.map(r => ({ label: r.label, value: `price-${r.min}-${r.max}` }))];
+  const extraItems = [{ label: 'Todos', value: 'all' }, ...extraOptions.map(o => ({ label: o.label, value: o.value }))];
+
+  const hasActiveFilter = Object.values(activeFilters).some(v => v !== 'all');
+
+  container.innerHTML = `
+    <div class="flex flex-wrap gap-2 sm:gap-3 items-center">
+      ${renderFilterDropdown('qty', 'Cantidad', qtyItems, activeFilters.qty)}
+      ${renderFilterDropdown('price', 'Precio', priceItems, activeFilters.price)}
+      ${renderFilterDropdown('extra', 'Extras', extraItems, activeFilters.extra)}
+      ${hasActiveFilter ? '<button data-clear-filters class="shrink-0 text-sm text-brand-caramel hover:text-brand-cocoa underline underline-offset-2 transition-colors duration-150">Limpiar filtros</button>' : ''}
     </div>`;
 };
 
@@ -406,7 +437,7 @@ const initMenu = async () => {
 
   if (category === 'bocadillos_carousel') {
     const filtersEl = document.getElementById('productFilters');
-    let activeFilter = 'all';
+    const activeFilters = { qty: 'all', price: 'all', extra: 'all' };
 
     const PAGE_SIZE = 12;
     let pageResult = [];
@@ -432,19 +463,20 @@ const initMenu = async () => {
 
     const applyAndRender = () => {
       let result = filterProducts(data, searchInput?.value || '');
-      if (activeFilter.startsWith('qty-')) {
-        const qty = parseInt(activeFilter.replace('qty-', ''));
+
+      if (activeFilters.qty !== 'all') {
+        const qty = parseInt(activeFilters.qty.replace('qty-', ''));
         result = result.filter(p => getBoxQuantity(p) === qty);
-      } else if (activeFilter === 'refresco') {
-        result = result.filter(hasRefresco);
-      } else if (activeFilter === 'frutas') {
-        result = result.filter(hasFrutas);
-      } else if (activeFilter.startsWith('price-')) {
-        const [min, max] = activeFilter.replace('price-', '').split('-').map(Number);
+      }
+      if (activeFilters.price !== 'all') {
+        const [min, max] = activeFilters.price.replace('price-', '').split('-').map(Number);
         result = result.filter(p => p.price >= min && p.price < max);
       }
+      if (activeFilters.extra !== 'all') {
+        result = result.filter(EXTRA_MATCHERS[activeFilters.extra]);
+      }
 
-      renderFilterButtons(filtersEl, data, activeFilter);
+      renderFilterBar(filtersEl, data, activeFilters);
 
       pageObserver.disconnect();
       pageResult = result;
@@ -466,19 +498,30 @@ const initMenu = async () => {
     applyAndRender();
 
     filtersEl?.addEventListener('click', (e) => {
-      if (e.target.closest('[data-dropdown-toggle]')) {
-        filtersEl.querySelector('[data-filter-wrapper]')?.classList.toggle('open');
+      if (e.target.closest('[data-clear-filters]')) {
+        activeFilters.qty = 'all';
+        activeFilters.price = 'all';
+        activeFilters.extra = 'all';
+        applyAndRender();
+        return;
+      }
+      const toggle = e.target.closest('[data-dropdown-toggle]');
+      if (toggle) {
+        const wrapper = toggle.closest('[data-filter-wrapper]');
+        const willOpen = !wrapper.classList.contains('open');
+        filtersEl.querySelectorAll('[data-filter-wrapper]').forEach(w => w.classList.remove('open'));
+        if (willOpen) wrapper.classList.add('open');
         return;
       }
       const btn = e.target.closest('[data-filter]');
       if (!btn) return;
-      activeFilter = btn.dataset.filter;
+      activeFilters[btn.dataset.facet] = btn.dataset.filter;
       applyAndRender();
     });
 
     document.addEventListener('click', (e) => {
       if (!e.target.closest('#productFilters')) {
-        filtersEl?.querySelector('[data-filter-wrapper]')?.classList.remove('open');
+        filtersEl?.querySelectorAll('[data-filter-wrapper]').forEach(w => w.classList.remove('open'));
       }
     });
 
