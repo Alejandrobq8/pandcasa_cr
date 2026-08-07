@@ -54,7 +54,7 @@ Prueba este flujo:
 ## 6) Pruebas del sitio publico
 
 - Verifica que `/` cargue bien
-- Verifica paginas en `/pages/...`
+- Verifica las paginas de categoria (`/postres`, `/almuerzos`, `/desayunos`, `/panaderia`, `/queques`, `/cajitas`, `/temporada`, `/para-entrega`)
 - Verifica que el formulario de contacto abra WhatsApp
 - Verifica que `robots.txt` apunte al dominio correcto
 
